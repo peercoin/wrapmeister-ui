@@ -5,10 +5,10 @@
 </template>
 
 <style lang="scss">
-
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Text&display=swap");
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Red Hat Text", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -16,7 +16,7 @@
 }
 
 html {
-  font-family: Roboto, sans-serif;
+  font-family: "Red Hat Text", sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.7;
@@ -27,8 +27,6 @@ html {
 body {
   font-size: 1.5rem;
   min-height: 800px;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
   background: url("./assets/efficient-and-sustainable.svg") bottom left
     no-repeat;

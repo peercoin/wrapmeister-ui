@@ -47,7 +47,7 @@ app.post("/unwrap-peercoin", function(req, res, next) {
     success: true,
     message: "unwrap request received and is being processed",
     data: {
-      _id: "someunwrapid",//is it the same id?
+      _id: "someunwrapid", 
       network: "BSC_TESTNET",
       wrapping: false,
       signed: true,
@@ -65,7 +65,7 @@ app.post("/unwrap-peercoin", function(req, res, next) {
 
 
 app.get("/retrieve-peercoin", function(req, res, next) {
-  var id = req.query.id; // $_GET["id"]
+  var id = req.query.id;  
   var tx = req.query.transactionHash;
   var ret ={
         success: true,
@@ -133,4 +133,4 @@ app.get("/get-transaction/:transactionId", function(req, res, next) {
   res.json(ret);
 });
 
-app.listen(8083);
+app.listen(3000);
