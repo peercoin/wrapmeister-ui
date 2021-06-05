@@ -19,6 +19,26 @@
   </button>
 </template>
 <script type="text/javascript">
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this,
+      args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
 export default {
   name: "m-button",
   props: {
@@ -59,6 +79,7 @@ export default {
   data() {
     return {
       clicked: false,
+      dbclick: null,
     };
   },
   methods: {
@@ -72,11 +93,17 @@ export default {
           return false;
         }
       }
-      this.clicked = true;
-      this.$emit("click", e);
-      setTimeout(() => {
-        this.clicked = false;
-      }, 500);
+
+      if (!this.dbclick)
+        this.dbclick = debounce(function() {
+          this.clicked = true;
+          this.$emit("mbclick", e);
+          setTimeout(() => {
+            this.clicked = false;
+          }, 500);
+        }, 200);
+
+      this.dbclick();
     },
   },
 };
@@ -108,7 +135,7 @@ a.m-button {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   user-select: none;
-  moz-user-select: -moz-none;
+
   -moz-user-select: none;
   -o-user-select: none;
   -khtml-user-select: none;
