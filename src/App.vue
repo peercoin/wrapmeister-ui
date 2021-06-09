@@ -1,8 +1,19 @@
 <template>
+  <notifications />
   <div class="maincontainer">
     <router-view />
   </div>
 </template>
+
+<script>
+import Notifications from "@/components/Notifications.vue";
+ 
+export default {
+  components: {
+    Notifications
+  },
+};
+</script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Text&display=swap");

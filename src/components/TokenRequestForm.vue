@@ -5,7 +5,7 @@
         <div class="form-group">
           <p>Surname<span>*</span></p>
           <span class="icon-case">
-            <font-awesome-icon icon="user-secret"
+            <font-awesome-icon icon="frown-open"
           /></span>
           <input type="text" name="nom" id="nom" />
           <div class="validation"></div>
@@ -14,7 +14,7 @@
         <div class="form-group">
           <p>Amount</p>
           <span class="icon-case">
-            <font-awesome-icon icon="user-secret"
+            <font-awesome-icon icon="frown-open"
           /></span>
           <input type="number" name="prenom" id="prenom" />
           <div class="validation"></div>

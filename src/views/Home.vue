@@ -19,39 +19,45 @@
       </column>
       <column :xs="12" :lg="9">
         <div class="body-column">
-          <div v-if="!currentSessionId">
-            <p v-if="!enteringSession">
-              <m-button size="max" type="success"
-                >Peercoin to token on ETH</m-button
-              >
-            </p>
-            <p v-if="!enteringSession">
-              <m-button size="max" type="success"
-                >Token on ETH to Peercoin</m-button
-              >
-            </p>
-            <p>
-              <m-button size="max" type="success" @mbclick="test"
-                >I have a sessionId</m-button
-              >
-            </p>
+          <collapse-transition>
+            <div v-if="!currentSessionId">
+              <p v-if="!enteringSession">
+                <m-button size="max" type="success"
+                  >Peercoin to token on ETH</m-button
+                >
+              </p>
+              <p v-if="!enteringSession">
+                <m-button size="max" type="success"
+                  >Token on ETH to Peercoin</m-button
+                >
+              </p>
+              <p>
+                <m-button size="max" type="success" @mbclick="test"
+                  >I have a sessionId</m-button
+                >
+              </p>
 
-            <div v-if="enteringSession" class="form-group">
-              <input
-                type="text"
-                placeholder="Enter sessionId"
-                v-model="sessionId"
-              />
-              &nbsp;
-              <m-button
-                type="success"
-                size="mini"
-                @mbclick="onSessionEntered"
-                :disabled="!sessionId"
-                >View session</m-button
-              >
+              <collapse-transition>
+                <div v-if="enteringSession" class="form-group">
+                  <input
+                    type="text"
+                    placeholder="Enter sessionId"
+                    v-model="sessionId"
+                  />
+                  &nbsp;
+                  <m-button
+                    type="success"
+                    size="mini"
+                    @mbclick="onSessionEntered"
+                    :disabled="!sessionId"
+                    >View session</m-button
+                  >
+                </div>
+              </collapse-transition>
             </div>
-          </div>
+          </collapse-transition>
+
+          <session :sessionId="currentSessionId" />
         </div>
       </column>
     </row>
@@ -62,7 +68,9 @@
 // @ is an alias to /src
 import MButton from "@/components/Button.vue";
 import Steps from "@/components/Steps.vue";
-
+import Session from "@/components/Session.vue";
+import CollapseTransition from "@/components/CollapseTransition.vue";
+ 
 export default {
   name: "Home",
   data() {
@@ -102,6 +110,8 @@ export default {
   components: {
     MButton,
     Steps,
+    Session,
+    CollapseTransition,
   },
 };
 </script>
