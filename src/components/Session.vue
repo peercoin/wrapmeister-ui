@@ -1,49 +1,143 @@
 <template>
   <div>
     <div class="form-style-2">
-      <div class="form-style-2-heading">Peercoin to ETH token</div>
-      <div>
-        <label for="field1"
-          ><span>Name <span class="required">*</span></span
-          ><input type="text" class="input-field" name="field1" value=""
-        /></label>
-        <label for="field2"
-          ><span>Email <span class="required">*</span></span
-          ><input type="text" class="input-field" name="field2" value=""
-        /></label>
-        <label
-          ><span>Telephone</span
-          ><input
-            type="text"
-            class="tel-number-field"
-            name="tel_no_1"
-            value=""
-            maxlength="4"/>-<input
-            type="text"
-            class="tel-number-field"
-            name="tel_no_2"
-            value=""
-            maxlength="4"/>-<input
-            type="text"
-            class="tel-number-field"
-            name="tel_no_3"
-            value=""
-            maxlength="10"
-        /></label>
-        <label for="field4"
-          ><span>Regarding</span
-          ><select name="field4" class="select-field">
-            <option value="General Question">General</option>
-            <option value="Advertise">Advertisement</option>
-            <option value="Partnership">Partnership</option>
-          </select></label
-        >
-        <label for="field5"
-          ><span>Message <span class="required">*</span></span
-          ><textarea name="field5" class="textarea-field"></textarea
-        ></label>
+      <div class="form-style-2-heading">{{ sessionHeader }}</div>
 
-        <label><span> </span><input type="submit" value="Submit"/></label>
+      <countdown :status="0.01 * countDown"></countdown>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <span class="icon-case">
+            <font-awesome-icon :icon="completedIcon"
+          /></span>
+        </div>
+        <p>Completed</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <input
+            type="text"
+            disabled="true"
+            class="row-input-field"
+            :value="transaction.network"
+          />
+        </div>
+        <p>Network</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <input
+            type="text"
+            disabled="true"
+            class="row-input-field"
+            :value="transaction.amount"
+          />
+        </div>
+        <p>Amount</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <vue-q-r-code-component
+            v-if="!!transaction.ppcAddress && !!transaction.wrapping"
+            :size="250"
+            :text="transaction.ppcAddress"
+          />
+
+          <small>{{ transaction.ppcAddress }}</small>
+        </div>
+        <p>{{ peercoinAddressLabel }}</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <input
+            type="text"
+            :disabled="1 == 1"
+            class="row-input-field"
+            placeholder="waiting for deposit..."
+            :value="transaction.ppcTransactionHash"
+          />
+        </div>
+        <p>Peercoin transaction</p>
+      </div>
+
+      <div class="form-row" v-if="!!transaction.erc20Address">
+        <div class="form-row-right">
+          <vue-q-r-code-component
+            :size="250"
+            :text="transaction.erc20Address"
+          />
+
+          <small>{{ transaction.erc20Address }}</small>
+        </div>
+        <p>ERC-20 address</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <input
+            type="text"
+            :disabled="!!transaction.wrapping"
+            :placeholder="
+              !!transaction.wrapping
+                ? 'processing...'
+                : 'please input the transaction hash'
+            "
+            class="row-input-field"
+            :value="transaction.erc20TransactionHash"
+          />
+          <m-button
+            class="m-top-sm"
+            v-if="!transaction.wrapping"
+            type="success"
+            :disabled="
+              !!transaction.erc20TransactionHash &&
+                transaction.erc20TransactionHash.length > 64
+            "
+            >Retrieve Peercoin</m-button
+          >
+        </div>
+        <p>ERC-20 transaction</p>
+      </div>
+
+      <div class="form-row" v-if="!!transaction.signature">
+        <div class="form-row-right">
+          <vue-q-r-code-component :size="250" :text="transaction.signature" />
+          <textarea
+            disabled
+            class="row-input-field row-textarea-field m-top-sm"
+            v-model="transaction.signature"
+          ></textarea>
+        </div>
+        <p>Signature</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <span class="icon-case">
+            <font-awesome-icon :icon="signedIcon"
+          /></span>
+        </div>
+        <p>Signed</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row-right">
+          <select class="row-input-field">
+            <option value="BSC_TESTNET"
+              >Binance Smart Chain (BSC) - Testnet</option
+            >
+            <option value="BSC_MAINNET">Binance Smart Chain (BSC)</option>
+            <option value="MATIC_TESTNET">Polygon (Matic) - Testnet</option>
+            <option value="MATIC_MAINNET">Polygon (Matic)</option>
+            <option value="ETH_TESTNET">Ethereum (ETH) - Testnet</option>
+            <option value="ETH_MAINNET">Ethereum (ETH)</option>
+          </select>
+        </div>
+        <p>Choose network to bridge</p>
       </div>
     </div>
   </div>
@@ -52,20 +146,31 @@
 <script>
 import axios from "axios";
 import { wrapEndpoints } from "@/Endpoints.js";
+import VueQRCodeComponent from "vue-qrcode-component";
+import MButton from "@/components/Button.vue";
+import Countdown from "@/components/Countdown.vue";
 
 export default {
   props: ["sessionId"],
+  components: {
+    VueQRCodeComponent,
+    MButton,
+    Countdown,
+  },
 
   watch: {
     sessionId(newval, oldVal) {
       if (newval !== oldVal) {
         this.getTransaction(newval);
+        this.countDown = 100;
       }
     },
   },
 
   data() {
     return {
+      countDown: 100,
+      countDownHandle: 0,
       endpoints: wrapEndpoints,
       transaction: {
         _id: null,
@@ -85,23 +190,86 @@ export default {
   },
 
   mounted() {
-    //console.warn("mounted", this.sessionId);
+    console.warn("mounted", this.sessionId);
+    clearInterval(this.countDownHandle);
+    this.countDownHandle = 0;
+    this.countDownHandle = setInterval(this.onCountDown, 300);
     this.getTransaction(this.sessionId);
+  },
+
+  unmounted() {
+    console.warn("unnnnnnnmounted", this.sessionId);
+    clearInterval(this.countDownHandle);
+    this.countDownHandle = 0;
   },
   //   created() {
   //     console.warn("created", this.sessionId);
   //     this.getTransaction(this.sessionId);
   //   },
 
+  computed: {
+    completedIcon() {
+      if (
+        !!this.transaction &&
+        !!this.transaction._id &&
+        this.transaction.completed
+      ) {
+        return "check-square";
+      }
+      return "times";
+    },
+
+    signedIcon() {
+      if (
+        !!this.transaction &&
+        !!this.transaction._id &&
+        this.transaction.signed
+      ) {
+        return "check-square";
+      }
+      return "times";
+    },
+    peercoinAddressLabel() {
+      return this.transaction.wrapping
+        ? "Peercoin deposit address"
+        : "Peercoin receive address";
+    },
+    sessionHeader() {
+      //console.log(this.transaction);
+      if (!!this.transaction && !!this.transaction._id) {
+        if (!!this.transaction.network) {
+          if (this.transaction.wrapping) {
+            return "Send Peercoin to " + this.transaction.network;
+          } else {
+            return "Get Peercoin from " + this.transaction.network;
+          }
+        }
+      }
+
+      return "No details available";
+    },
+  },
+
   methods: {
+    // async copy(s) {
+    //   await navigator.clipboard.writeText(s);
+    //   alert("Copied!");
+    // },
+    onCountDown() {
+      if (!!this.transaction && !!this.transaction._id) {
+        this.countDown = this.countDown - 1;
+        if (this.countDown < 0.001) {
+          this.getTransaction(this.transaction._id);
+          this.countDown = 100;
+        }
+      }
+    },
     getTransaction(id) {
       if (!id) return;
 
       axios
         .get(this.endpoints(id).session)
         .then((res) => {
-  
-
           if (!!res && !!res.data && !!res.data.data) {
             this.transaction = res.data.data;
             this.eventBus.emit("add-toastr", {
@@ -110,7 +278,10 @@ export default {
             });
           } else {
             this.eventBus.emit("add-toastr", {
-              text: !!res && !!res.data && !!res.data.message ? res.data.message :`Unable to retrieve session ${id}`,
+              text:
+                !!res && !!res.data && !!res.data.message
+                  ? res.data.message
+                  : `Unable to retrieve session ${id}`,
               type: "error",
             });
           }
@@ -132,8 +303,59 @@ export default {
   },
 };
 </script>
-
+<style>
+.form-style-2 .form-row-right img {
+  position: relative;
+  left: 100px;
+}
+</style>
 <style lang="scss" scoped>
+.form-row {
+  overflow: auto;
+}
+.form-row-right {
+  float: right;
+  min-width: 372px;
+  padding-top: 16px;
+  text-align: right;
+}
+
+.icon-case {
+  width: 35px;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  // background: #eeeeee;
+  height: 42px;
+  position: relative;
+  text-align: center;
+  line-height: 40px;
+}
+
+.row-input-field {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border: 1px solid #c2c2c2;
+  box-shadow: 1px 1px 4px #ebebeb;
+  -moz-box-shadow: 1px 1px 4px #ebebeb;
+  -webkit-box-shadow: 1px 1px 4px #ebebeb;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  padding: 7px;
+  outline: none;
+
+  &:focus {
+    border: 1px solid #0c0;
+  }
+}
+
+.row-textarea-field {
+  height: 100px;
+  width: 100%;
+}
+
 .form-style-2 {
   // text-align: center;
   //max-width: 500px;
@@ -151,72 +373,5 @@ export default {
   margin-bottom: 20px;
   font-size: 15px;
   padding-bottom: 3px;
-}
-.form-style-2 label {
-  display: block;
-  margin: 0px 0px 15px 0px;
-}
-.form-style-2 label > span {
-  width: 100px;
-  font-weight: bold;
-  float: left;
-  padding-top: 8px;
-  padding-right: 5px;
-}
-.form-style-2 span.required {
-  color: red;
-}
-.form-style-2 .tel-number-field {
-  width: 40px;
-  text-align: center;
-}
-.form-style-2 input.input-field,
-.form-style-2 .select-field {
-  width: 48%;
-}
-.form-style-2 input.input-field,
-.form-style-2 .tel-number-field,
-.form-style-2 .textarea-field,
-.form-style-2 .select-field {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  border: 1px solid #c2c2c2;
-  box-shadow: 1px 1px 4px #ebebeb;
-  -moz-box-shadow: 1px 1px 4px #ebebeb;
-  -webkit-box-shadow: 1px 1px 4px #ebebeb;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  padding: 7px;
-  outline: none;
-}
-.form-style-2 .input-field:focus,
-.form-style-2 .tel-number-field:focus,
-.form-style-2 .textarea-field:focus,
-.form-style-2 .select-field:focus {
-  border: 1px solid #0c0;
-}
-.form-style-2 .textarea-field {
-  height: 100px;
-  width: 55%;
-}
-.form-style-2 input[type="submit"],
-.form-style-2 input[type="button"] {
-  border: none;
-  padding: 8px 15px 8px 15px;
-  background: #ff8500;
-  color: #fff;
-  box-shadow: 1px 1px 4px #dadada;
-  -moz-box-shadow: 1px 1px 4px #dadada;
-  -webkit-box-shadow: 1px 1px 4px #dadada;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-}
-.form-style-2 input[type="submit"]:hover,
-.form-style-2 input[type="button"]:hover {
-  background: #ea7b00;
-  color: #fff;
 }
 </style>

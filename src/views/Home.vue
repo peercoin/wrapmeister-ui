@@ -8,6 +8,7 @@
     <row :gutter="12">
       <column :md="8" :mdOffset="2" :lg="6" :lgOffset="3">
         <img alt="Vue logo" height="75" src="../assets/logo-white.svg" />
+        <span class="page-title">Token bridge</span>
       </column>
     </row>
 
@@ -57,7 +58,7 @@
             </div>
           </collapse-transition>
 
-          <session :sessionId="currentSessionId" />
+          <session v-if="inSession" :sessionId="currentSessionId" />
         </div>
       </column>
     </row>
@@ -100,13 +101,18 @@ export default {
       this.enteringSession = false;
     },
   },
+  
   computed: {
-    currentSessionId: function() {
+    inSession() {
+      return !!this.$route.params.id;
+    },
+    currentSessionId() {
       if (this.enteringSession) return "";
 
       return this.sessionId || this.$route.params.id;
     },
   },
+
   components: {
     MButton,
     Steps,
@@ -125,7 +131,11 @@ export default {
   font-weight: 400;
   line-height: 1.7;
 }
-
+.page-title{
+  color :antiquewhite;
+  font-size: 50px;
+  margin-left: 25px;
+}
 .form-group {
   overflow: hidden;
   clear: both;

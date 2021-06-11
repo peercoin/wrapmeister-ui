@@ -48,4 +48,186 @@ body {
   margin-left: 85px;
   margin-right: 85px;
 }
+
+/*
+  Dynamic spacing classes
+  Spacers that grow and shrink based off ratios between the breakpoints
+
+  Margins:
+  <div class="m-top-sm m-right-md m-bottom-sm m-left-md">...</div>
+  <div class="m-sm">...</div>
+
+  Padding:
+  <div class="p-top-sm p-right-md p-bottop-sm p-left-md">...</div>
+  <div class="p-sm">...</div>
+
+  ---
+
+  Rigid spacing classes
+  Spacers that stay the same size in all breakpoints
+
+  Margins:
+  <div class="m-rigid-top-sm m-rigid-right-md m-rigid-bottom-rigid-sm m-rigid-left-md">...</div>
+  <div class="m-rigid-sm">...</div>
+
+  Padding:
+  <div class="p-rigid-top-sm p-rigid-right-md p-rigid-bottop-rigid-sm p-rigid-left-md">...</div>
+  <div class="p-rigid-sm">...</div>
+*/
+@mixin spaces {
+
+  // Spaces based on breakpoints
+  $spaces: (
+    xs: 5,
+    sm: 10,
+    md: 15,
+    lg: 30,
+    xl: 45,
+  );
+
+  $directions: (
+    top,
+    right,
+    bottom,
+    left
+  );
+
+  // Responsive stepped percentages
+  $xs-percentage: .55;
+  $sm-percentage: $xs-percentage / 3 + $xs-percentage;
+  $md-percentage: $sm-percentage / 3 + $sm-percentage;
+
+  @each $direction in $directions {
+    @each $name, $space in $spaces {
+
+      // .m-top-md
+      .m-#{$direction}-#{$name} {
+        margin-#{$direction}: rem($space * $xs-percentage);
+
+        @include breakpoint(sm) {
+          margin-#{$direction}: rem($space * $sm-percentage);
+        }
+
+        @include breakpoint(md) {
+          margin-#{$direction}: rem($space * $md-percentage);
+        }
+
+        @include breakpoint(lg) {
+          margin-#{$direction}: rem($space);
+        }
+      }
+
+      // .m-rigid-top-md
+      .m-rigid-#{$direction}-#{$name} {
+        margin-#{$direction}: rem($space);
+      }
+
+      // .m-md
+      .m-#{$name} {
+        margin: rem($space * $xs-percentage);
+
+        @include breakpoint(sm) {
+          margin: rem($space * $sm-percentage);
+        }
+
+        @include breakpoint(md) {
+          margin: rem($space * $md-percentage);
+        }
+
+        @include breakpoint(lg) {
+          margin: rem($space);
+        }
+      }
+
+      // .m-rigid-md
+      .m-rigid-#{$name} {
+        margin: rem($space);
+      }
+
+      // .p-top-sm
+      .p-#{$direction}-#{$name} {
+        padding-#{$direction}: rem($space * $xs-percentage);
+
+        @include breakpoint(sm) {
+          padding-#{$direction}: rem($space * $sm-percentage);
+        }
+
+        @include breakpoint(md) {
+          padding-#{$direction}: rem($space * $md-percentage);
+        }
+
+        @include breakpoint(lg) {
+          padding-#{$direction}: rem($space);
+        }
+      }
+
+      // .p-rigid-top-md
+      .p-rigid-#{$direction}-#{$name} {
+        padding-#{$direction}: rem($space);
+      }
+
+      // .p-sm
+      .p-#{$name} {
+        padding: rem($space * $xs-percentage);
+
+        @include breakpoint(sm) {
+          padding: rem($space * $sm-percentage);
+        }
+
+        @include breakpoint(md) {
+          padding: rem($space * $md-percentage);
+        }
+
+        @include breakpoint(lg) {
+          padding: rem($space);
+        }
+      }
+
+      // .p-rigid-sm
+      .p-rigid-#{$name} {
+        padding: rem($space);
+      }
+    }
+  }
+}
+
+// px to rem converter
+@function rem($pxval) {
+  $default-font-size-base: 16;
+
+  @return ($pxval / $default-font-size-base) * 1rem;
+}
+
+// breakpoint helper
+@mixin breakpoint($point: xs) {
+
+  $screen-xs-max-width: 767;
+  $screen-sm-min-width: 768;
+  $screen-sm-max-width: 991;
+  $screen-md-min-width: 992;
+  $screen-md-max-width: 1199;
+  $screen-lg-min-width: 1200;
+
+  @if $point == xs {
+    @media (max-width: rem($screen-xs-max-width)) {
+      @content;
+    }
+  } @else if $point == sm {
+    @media (min-width: rem($screen-sm-min-width)) {
+      @content;
+    }
+  } @else if $point == md {
+    @media (min-width: rem($screen-md-min-width)) {
+      @content;
+    }
+  } @else if $point == lg {
+    @media (min-width: rem($screen-lg-min-width)) {
+      @content;
+    }
+  }
+}
+
+@include spaces;
+
+
 </style>
