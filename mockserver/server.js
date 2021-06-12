@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("mockserver");
 });
 
-app.post("/peercoin/wrap", function(req, res, next) {
+app.post("/api/v1/peercoin/wrap", function(req, res, next) {
   console.log(req.body); // {'amount':"1984.42", 'destinationAddress': "0xeee84A4E17eaA817e72FED60EEd579eE8cb5BBcC"}
   res.json({
     //error: false,
@@ -43,7 +43,7 @@ app.post("/peercoin/wrap", function(req, res, next) {
   });
 });
 
-app.post("/peercoin/unwrap", function(req, res, next) {
+app.post("/api/v1/peercoin/unwrap", function(req, res, next) {
   console.log(req.body); // // {'amount':"1984.42", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     success: true,
@@ -66,7 +66,7 @@ app.post("/peercoin/unwrap", function(req, res, next) {
 
 
 
-app.get("/peercoin/retrieve", function(req, res, next) {
+app.get("/api/v1/peercoin/retrieve", function(req, res, next) {
   var id = req.query.id;  
   var tx = req.query.transactionHash;
   var ret ={
@@ -92,7 +92,7 @@ app.get("/peercoin/retrieve", function(req, res, next) {
 
 
 
-app.get("/transaction/:transactionId", function(req, res, next) {
+app.get("/api/v1/transaction/:transactionId", function(req, res, next) {
   // Retrieve the tag from our URL path
   var id = req.params.transactionId;
   var ret =

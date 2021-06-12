@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="form-style-2">
-      <div class="form-style-2-heading">{{ sessionHeader }}</div>
+    <div class="session-container">
+      <div class="session-container-heading">{{ sessionHeader }}</div>
 
-      <countdown :status="0.01 * countDown"></countdown>
+      <countdown v-if="!completed" :status="0.01 * countDown"></countdown>
 
       <div class="form-row">
         <div class="form-row-right">
@@ -208,6 +208,14 @@ export default {
   //   },
 
   computed: {
+    completed() {
+      return (
+        !!this.transaction &&
+        !!this.transaction._id &&
+        this.transaction.completed
+      );
+    },
+
     completedIcon() {
       if (
         !!this.transaction &&
@@ -256,7 +264,7 @@ export default {
     //   alert("Copied!");
     // },
     onCountDown() {
-      if (!!this.transaction && !!this.transaction._id) {
+      if (!this.completed) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
           this.getTransaction(this.transaction._id);
@@ -264,6 +272,7 @@ export default {
         }
       }
     },
+    
     getTransaction(id) {
       if (!id) return;
 
@@ -272,10 +281,10 @@ export default {
         .then((res) => {
           if (!!res && !!res.data && !!res.data.data) {
             this.transaction = res.data.data;
-            this.eventBus.emit("add-toastr", {
-              text: res.data.message,
-              type: "success",
-            });
+            // this.eventBus.emit("add-toastr", {
+            //   text: res.data.message,
+            //   type: "success",
+            // });
           } else {
             this.eventBus.emit("add-toastr", {
               text:
@@ -304,69 +313,19 @@ export default {
 };
 </script>
 <style>
-.form-style-2 .form-row-right img {
+.session-container .form-row-right img {
   position: relative;
   left: 100px;
 }
 </style>
+
 <style lang="scss" scoped>
-.form-row {
-  overflow: auto;
-}
-.form-row-right {
-  float: right;
-  min-width: 372px;
-  padding-top: 16px;
-  text-align: right;
-}
-
-.icon-case {
-  width: 35px;
-  float: left;
-  border-radius: 5px 0px 0px 5px;
-  // background: #eeeeee;
-  height: 42px;
-  position: relative;
-  text-align: center;
-  line-height: 40px;
-}
-
-.row-input-field {
-  width: 100%;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  border: 1px solid #c2c2c2;
-  box-shadow: 1px 1px 4px #ebebeb;
-  -moz-box-shadow: 1px 1px 4px #ebebeb;
-  -webkit-box-shadow: 1px 1px 4px #ebebeb;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  padding: 7px;
-  outline: none;
-
-  &:focus {
-    border: 1px solid #0c0;
-  }
-}
-
-.row-textarea-field {
-  height: 100px;
-  width: 100%;
-}
-
-.form-style-2 {
-  // text-align: center;
-  //max-width: 500px;
+.session-container {
   padding: 20px 12px 10px 20px;
-  //font: 13px Arial, Helvetica, sans-serif;
   margin: auto;
   width: 50%;
-  // border: 3px solid green;
-  //padding: 10px;
 }
-.form-style-2-heading {
+.session-container-heading {
   font-weight: bold;
   font-style: italic;
   border-bottom: 2px solid #ddd;

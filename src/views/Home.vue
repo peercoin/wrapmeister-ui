@@ -7,8 +7,13 @@
     </row>
     <row :gutter="12">
       <column :md="8" :mdOffset="2" :lg="6" :lgOffset="3">
-        <img alt="Vue logo" height="75" src="../assets/logo-white.svg" />
-        <span class="page-title">Token bridge</span>
+        <img
+          @click="gotoHome"
+          alt="Vue logo"
+          height="75"
+          src="../assets/logo-white.svg"
+        />
+        <span class="page-title">Ethereum ↔ Peercoin Bridge</span>
       </column>
     </row>
 
@@ -21,20 +26,28 @@
       <column :xs="12" :lg="9">
         <div class="body-column">
           <collapse-transition>
-            <div v-if="!currentSessionId">
+            <div class="body-mid center" v-if="!currentSessionId">
               <p v-if="!enteringSession">
-                <m-button size="max" type="success"
-                  >Peercoin to token on ETH</m-button
+                <m-button block size="max" type="success" @mbclick="toggleWrap"
+                  >Bridge Peercoin to token</m-button
                 >
               </p>
               <p v-if="!enteringSession">
-                <m-button size="max" type="success"
-                  >Token on ETH to Peercoin</m-button
+                <m-button
+                  block
+                  size="max"
+                  type="success"
+                  @mbclick="toggleUnwrap"
+                  >Unbridge token back to Peercoin</m-button
                 >
               </p>
               <p>
-                <m-button size="max" type="success" @mbclick="test"
-                  >I have a sessionId</m-button
+                <m-button
+                  block
+                  size="max"
+                  type="success"
+                  @mbclick="toggleEnterSession"
+                  >Continue session</m-button
                 >
               </p>
 
@@ -58,7 +71,17 @@
             </div>
           </collapse-transition>
 
-          <session v-if="inSession" :sessionId="currentSessionId" />
+          <collapse-transition>
+            <div v-if="inSession">
+              <session :sessionId="currentSessionId" />
+            </div>
+          </collapse-transition>
+
+          <collapse-transition>
+            <div v-if="iswrapping">
+              <wrap-peercoin />
+            </div>
+          </collapse-transition>
         </div>
       </column>
     </row>
@@ -70,38 +93,62 @@
 import MButton from "@/components/Button.vue";
 import Steps from "@/components/Steps.vue";
 import Session from "@/components/Session.vue";
+import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
- 
+
 export default {
   name: "Home",
+
   data() {
     return {
       enteringSession: false,
       sessionId: "",
+      iswrapping: false,
+      isUnwrapping: false,
     };
   },
+
+  // mounted() {
+  //   console.log('home mounted')
+  // },
+
   methods: {
-    test() {
-      console.log("now:" + new Date().getTime());
-      console.warn("toggleEnterSession: ", this.enteringSession);
-      this.enteringSession = !this.enteringSession;
+    gotoHome() {
+      this.enteringSession = false;
+      this.sessionId = "";
+      this.iswrapping = false;
+      this.isUnwrapping = false;
+      this.$router.push({
+        name: "Home",
+      });
     },
+
     gotoSession(id) {
       this.$router.push({
         name: "Session",
         params: { id: id },
       });
     },
+
     toggleEnterSession() {
       this.enteringSession = !this.enteringSession;
     },
+
+    toggleWrap() {
+      this.iswrapping = !this.iswrapping;
+    },
+
+    toggleUnwrap() {
+      this.isUnwrapping = !this.isUnwrapping;
+    },
+
     onSessionEntered() {
       if (!this.sessionId) return;
       this.gotoSession(this.sessionId);
       this.enteringSession = false;
     },
   },
-  
+
   computed: {
     inSession() {
       return !!this.$route.params.id;
@@ -118,10 +165,20 @@ export default {
     Steps,
     Session,
     CollapseTransition,
+    WrapPeercoin,
   },
 };
 </script>
 <style lang="scss" scoped>
+.center {
+  margin: auto;
+  width: 50%;
+
+  padding: 10px;
+}
+.body-mid {
+  width: 50%;
+}
 .body-column {
   padding: 25px;
   background-color: rgba(255, 255, 255, 0.85);
@@ -131,8 +188,8 @@ export default {
   font-weight: 400;
   line-height: 1.7;
 }
-.page-title{
-  color :antiquewhite;
+.page-title {
+  color: rgb(251, 251, 251);
   font-size: 50px;
   margin-left: 25px;
 }

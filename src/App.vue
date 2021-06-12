@@ -44,9 +44,55 @@ body {
   background-position: 15% 75%;
   background-size: 40%;
 }
+
 .maincontainer {
   margin-left: 85px;
   margin-right: 85px;
+}
+
+.form-row {
+  overflow: auto;
+}
+.form-row-right {
+  float: right;
+  min-width: 372px;
+  padding-top: 16px;
+  text-align: right;
+}
+
+.icon-case {
+  width: 35px;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  height: 42px;
+  position: relative;
+  text-align: center;
+  line-height: 40px;
+}
+
+.row-input-field {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border: 1px solid #c2c2c2;
+  box-shadow: 1px 1px 4px #ebebeb;
+  -moz-box-shadow: 1px 1px 4px #ebebeb;
+  -webkit-box-shadow: 1px 1px 4px #ebebeb;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  padding: 7px;
+  outline: none;
+
+  &:focus {
+    border: 1px solid #0c0;
+  }
+}
+
+.row-textarea-field {
+  height: 100px;
+  width: 100%;
 }
 
 /*
