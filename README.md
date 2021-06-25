@@ -1,4 +1,4 @@
-# ppceth
+# wrapmeister-ui
 
 ## Project setup
 ```
