@@ -7,10 +7,10 @@
 
 <script>
 import Notifications from "@/components/Notifications.vue";
- 
+
 export default {
   components: {
-    Notifications
+    Notifications,
   },
 };
 </script>
@@ -55,7 +55,7 @@ body {
 }
 .form-row-right {
   float: right;
-  min-width: 372px;
+  min-width: 272px;
   padding-top: 16px;
   text-align: right;
 }
@@ -87,6 +87,10 @@ body {
 
   &:focus {
     border: 1px solid #0c0;
+  }
+
+  &.invalid {
+    border: 1px solid rgb(223, 98, 98);
   }
 }
 
@@ -121,7 +125,6 @@ body {
   <div class="p-rigid-sm">...</div>
 */
 @mixin spaces {
-
   // Spaces based on breakpoints
   $spaces: (
     xs: 5,
@@ -131,21 +134,15 @@ body {
     xl: 45,
   );
 
-  $directions: (
-    top,
-    right,
-    bottom,
-    left
-  );
+  $directions: (top, right, bottom, left);
 
   // Responsive stepped percentages
-  $xs-percentage: .55;
+  $xs-percentage: 0.55;
   $sm-percentage: $xs-percentage / 3 + $xs-percentage;
   $md-percentage: $sm-percentage / 3 + $sm-percentage;
 
   @each $direction in $directions {
     @each $name, $space in $spaces {
-
       // .m-top-md
       .m-#{$direction}-#{$name} {
         margin-#{$direction}: rem($space * $xs-percentage);
@@ -246,7 +243,6 @@ body {
 
 // breakpoint helper
 @mixin breakpoint($point: xs) {
-
   $screen-xs-max-width: 767;
   $screen-sm-min-width: 768;
   $screen-sm-max-width: 991;
@@ -274,6 +270,4 @@ body {
 }
 
 @include spaces;
-
-
 </style>

@@ -20,7 +20,7 @@
             type="text"
             disabled="true"
             class="row-input-field"
-            :value="transaction.network"
+            :value="mapNetworks(transaction.network)"
           />
         </div>
         <p>Network</p>
@@ -93,9 +93,13 @@
             class="m-top-sm"
             v-if="!transaction.wrapping"
             type="success"
+            @mbclick="submitRetrievePeercoin"
             :disabled="
-              !!transaction.erc20TransactionHash &&
+              !(
+                !!transaction._id &&
+                !!transaction.erc20TransactionHash &&
                 transaction.erc20TransactionHash.length > 64
+              )
             "
             >Retrieve Peercoin</m-button
           >
@@ -123,29 +127,13 @@
         </div>
         <p>Signed</p>
       </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
-          <select class="row-input-field">
-            <option value="BSC_TESTNET"
-              >Binance Smart Chain (BSC) - Testnet</option
-            >
-            <option value="BSC_MAINNET">Binance Smart Chain (BSC)</option>
-            <option value="MATIC_TESTNET">Polygon (Matic) - Testnet</option>
-            <option value="MATIC_MAINNET">Polygon (Matic)</option>
-            <option value="ETH_TESTNET">Ethereum (ETH) - Testnet</option>
-            <option value="ETH_MAINNET">Ethereum (ETH)</option>
-          </select>
-        </div>
-        <p>Choose network to bridge</p>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { wrapEndpoints } from "@/Endpoints.js";
+import { wrapEndpoints, getNetworks } from "@/Endpoints.js";
 import VueQRCodeComponent from "vue-qrcode-component";
 import MButton from "@/components/Button.vue";
 import Countdown from "@/components/Countdown.vue";
@@ -169,6 +157,7 @@ export default {
 
   data() {
     return {
+      requestId: null,
       countDown: 100,
       countDownHandle: 0,
       endpoints: wrapEndpoints,
@@ -190,7 +179,7 @@ export default {
   },
 
   mounted() {
-    console.warn("mounted", this.sessionId);
+    this.requestId = this.newId();
     clearInterval(this.countDownHandle);
     this.countDownHandle = 0;
     this.countDownHandle = setInterval(this.onCountDown, 300);
@@ -198,14 +187,9 @@ export default {
   },
 
   unmounted() {
-    console.warn("unnnnnnnmounted", this.sessionId);
     clearInterval(this.countDownHandle);
     this.countDownHandle = 0;
   },
-  //   created() {
-  //     console.warn("created", this.sessionId);
-  //     this.getTransaction(this.sessionId);
-  //   },
 
   computed: {
     completed() {
@@ -247,9 +231,13 @@ export default {
       if (!!this.transaction && !!this.transaction._id) {
         if (!!this.transaction.network) {
           if (this.transaction.wrapping) {
-            return "Send Peercoin to " + this.transaction.network;
+            return (
+              "Send Peercoin to " + this.mapNetworks(this.transaction.network)
+            );
           } else {
-            return "Get Peercoin from " + this.transaction.network;
+            return (
+              "Get Peercoin from " + this.mapNetworks(this.transaction.network)
+            );
           }
         }
       }
@@ -259,10 +247,16 @@ export default {
   },
 
   methods: {
-    // async copy(s) {
-    //   await navigator.clipboard.writeText(s);
-    //   alert("Copied!");
-    // },
+    newId() {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+        c
+      ) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    },
+
     onCountDown() {
       if (!this.completed) {
         this.countDown = this.countDown - 1;
@@ -272,7 +266,12 @@ export default {
         }
       }
     },
-    
+
+    mapNetworks(key) {
+      let network = getNetworks().find((nw) => nw.key === key);
+      return !!network ? network.description : key;
+    },
+
     getTransaction(id) {
       if (!id) return;
 
@@ -281,10 +280,6 @@ export default {
         .then((res) => {
           if (!!res && !!res.data && !!res.data.data) {
             this.transaction = res.data.data;
-            // this.eventBus.emit("add-toastr", {
-            //   text: res.data.message,
-            //   type: "success",
-            // });
           } else {
             this.eventBus.emit("add-toastr", {
               text:
@@ -300,14 +295,50 @@ export default {
             text: `Unable to retrieve session ${id}`,
             type: "error",
           });
-          // if (err.response) {
-          //   // client received an error response (5xx, 4xx)
-          // } else if (err.request) {
-          //   // client never received a response, or request never left
-          // } else {
-          //   // anything else
-          // }
         });
+    },
+
+    async submitRetrievePeercoin() {
+      const config = {
+        headers: {
+          network: this.transaction.network,
+          "Idempotency-Key": this.requestId,
+        },
+      };
+
+      let response = await axios.get(
+        this.endpoints(
+          this.transaction._id,
+          this.transaction.erc20TransactionHash
+        ).retrieve,
+        config
+      );
+
+      if (
+        (!!response && !!response.error) ||
+        !(
+          !!response &&
+          !!response.data &&
+          !!response.data.data &&
+          !!response.data.data._id
+        )
+      ) {
+        this.eventBus.emit("add-toastr", {
+          text:
+            !!response && !!response.data && !!response.data.message
+              ? response.data.message
+              : `Unable to request peercoins`,
+          type: "error",
+        });
+        return;
+      }
+      this.eventBus.emit("add-toastr", {
+        text:
+          !!response && !!response.data && !!response.data.message
+            ? response.data.message
+            : `getting peercoins...`,
+        type: "success",
+      });
     },
   },
 };

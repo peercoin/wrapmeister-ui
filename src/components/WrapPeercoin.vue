@@ -4,15 +4,13 @@
 
     <div class="form-row">
       <div class="form-row-right">
-        <select class="row-input-field" v-model="network">
-          <option value="BSC_TESTNET"
-            >Binance Smart Chain (BSC) - Testnet</option
-          >
-          <option value="BSC_MAINNET">Binance Smart Chain (BSC)</option>
-          <option value="MATIC_TESTNET">Polygon (Matic) - Testnet</option>
-          <option value="MATIC_MAINNET">Polygon (Matic)</option>
-          <option value="ETH_TESTNET">Ethereum (ETH) - Testnet</option>
-          <option value="ETH_MAINNET">Ethereum (ETH)</option>
+        <select
+          :class="{ 'row-input-field': true, invalid: !network }"
+          v-model="network"
+        >
+          <option v-for="item in networks" :value="item.key" :key="item.key">
+            {{ item.description }}
+          </option>
         </select>
       </div>
       <p>Choose network to bridge</p>
@@ -22,7 +20,7 @@
       <div class="form-row-right">
         <input
           type="text"
-          class="row-input-field"
+          :class="{ 'row-input-field': true, invalid: !validAddress }"
           v-model="destinationAddress"
         />
       </div>
@@ -31,14 +29,22 @@
 
     <div class="form-row">
       <div class="form-row-right">
-        <input type="text" class="row-input-field" v-model="amount" />
+        <input
+          type="text"
+          :class="{ 'row-input-field': true, invalid: !validAmount }"
+          v-model="amount"
+        />
       </div>
       <p>Amount</p>
     </div>
 
     <div class="form-row">
       <div class="form-row-right">
-        <m-button class="m-top-sm" type="success" :disabled="1 == 2"
+        <m-button
+          class="m-top-sm"
+          type="success"
+          @mbclick="submitWrap"
+          :disabled="!validForm"
           >Tokenise Peercoin</m-button
         >
       </div>
@@ -50,26 +56,48 @@
 <script>
 import axios from "axios";
 import MButton from "@/components/Button.vue";
-import { wrapEndpoints } from "@/Endpoints.js";
+import { wrapEndpoints, getNetworks } from "@/Endpoints.js";
+import { validate } from "wallet-address-validator";
 
 export default {
   data() {
     return {
       requestId: null,
-      amount: 0,
+      amount: "",
       destinationAddress: "",
       network: "",
       endpoints: wrapEndpoints,
+      networks: [],
     };
   },
 
   mounted() {
     this.requestId = this.newId();
+    this.networks = getNetworks().filter((nw) => nw.active);
   },
 
   computed: {
     header() {
       return "Bridge Peercoin";
+    },
+
+    validAddress() {
+      return (
+        !!this.destinationAddress && validate(this.destinationAddress, "ETH")
+      );
+    },
+
+    validAmount() {
+      if (!this.amount) return false;
+      let pattern = /^\d*(\.\d+)?$/;
+      if (!pattern.test(this.amount)) return false;
+
+      let n = parseFloat(this.amount);
+
+      return typeof n == "number" && !isNaN(n) && isFinite(n) && n > 0;
+    },
+    validForm() {
+      return this.validAmount && this.validAddress && !!this.network;
     },
   },
 
@@ -82,6 +110,47 @@ export default {
           v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
       });
+    },
+
+    gotoSession(id) {
+      this.$router.push({
+        name: "Session",
+        params: { id: id },
+      });
+    },
+
+    async submitWrap() {
+      const config = {
+        headers: {
+          network: this.network,
+          "Idempotency-Key": this.requestId,
+        },
+      };
+      const data = {
+        amount: this.amount,
+        destinationAddress: this.destinationAddress,
+      };
+      let response = await axios.post(this.endpoints().wrap, data, config);
+
+      if (
+        (!!response && !!response.error) ||
+        !(
+          !!response &&
+          !!response.data &&
+          !!response.data.data &&
+          !!response.data.data._id
+        )
+      ) {
+        this.eventBus.emit("add-toastr", {
+          text:
+            !!response && !!response.data && !!response.data.message
+              ? response.data.message
+              : `Unable to start session`,
+          type: "error",
+        });
+        return;
+      }
+      this.gotoSession(response.data.data._id);
     },
   },
 

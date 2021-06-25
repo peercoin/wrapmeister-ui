@@ -9,7 +9,8 @@
       <column :md="8" :mdOffset="2" :lg="6" :lgOffset="3">
         <img
           @click="gotoHome"
-          alt="Vue logo"
+          alt="Peercoin"
+          class="logopeercoin"
           height="75"
           src="../assets/logo-white.svg"
         />
@@ -26,13 +27,13 @@
       <column :xs="12" :lg="9">
         <div class="body-column">
           <collapse-transition>
-            <div class="body-mid center" v-if="!currentSessionId">
-              <p v-if="!enteringSession">
+            <div class="body-mid center" v-if="showMenu">
+              <p>
                 <m-button block size="max" type="success" @mbclick="toggleWrap"
                   >Bridge Peercoin to token</m-button
                 >
               </p>
-              <p v-if="!enteringSession">
+              <p>
                 <m-button
                   block
                   size="max"
@@ -50,36 +51,41 @@
                   >Continue session</m-button
                 >
               </p>
-
-              <collapse-transition>
-                <div v-if="enteringSession" class="form-group">
-                  <input
-                    type="text"
-                    placeholder="Enter sessionId"
-                    v-model="sessionId"
-                  />
-                  &nbsp;
-                  <m-button
-                    type="success"
-                    size="mini"
-                    @mbclick="onSessionEntered"
-                    :disabled="!sessionId"
-                    >View session</m-button
-                  >
-                </div>
-              </collapse-transition>
             </div>
           </collapse-transition>
 
           <collapse-transition>
-            <div v-if="inSession">
+            <div v-if="enteringSession" class="form-group">
+              <input
+                type="text"
+                placeholder="Enter sessionId"
+                v-model="sessionId"
+              />
+              &nbsp;
+              <m-button
+                type="success"
+                size="mini"
+                @mbclick="onSessionEntered"
+                :disabled="!sessionId"
+                >View session</m-button
+              >
+            </div>
+          </collapse-transition>
+
+          <collapse-transition>
+            <div v-if="showSession">
               <session :sessionId="currentSessionId" />
             </div>
           </collapse-transition>
 
           <collapse-transition>
-            <div v-if="iswrapping">
-              <wrap-peercoin />
+            <div v-if="!showSession">
+              <div v-if="iswrapping">
+                <wrap-peercoin />
+              </div>
+              <div v-if="isUnwrapping">
+                <unwrap-peercoin />
+              </div>
             </div>
           </collapse-transition>
         </div>
@@ -94,6 +100,7 @@ import MButton from "@/components/Button.vue";
 import Steps from "@/components/Steps.vue";
 import Session from "@/components/Session.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
+import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 
 export default {
@@ -107,10 +114,6 @@ export default {
       isUnwrapping: false,
     };
   },
-
-  // mounted() {
-  //   console.log('home mounted')
-  // },
 
   methods: {
     gotoHome() {
@@ -150,9 +153,20 @@ export default {
   },
 
   computed: {
-    inSession() {
+    showMenu() {
+      return (
+        !this.currentSessionId &&
+        !this.iswrapping &&
+        !this.isUnwrapping &&
+        !this.enteringSession &&
+        !this.showSession
+      );
+    },
+
+    showSession() {
       return !!this.$route.params.id;
     },
+
     currentSessionId() {
       if (this.enteringSession) return "";
 
@@ -166,6 +180,7 @@ export default {
     Session,
     CollapseTransition,
     WrapPeercoin,
+    UnwrapPeercoin,
   },
 };
 </script>
@@ -190,11 +205,16 @@ export default {
 }
 .page-title {
   color: rgb(251, 251, 251);
-  font-size: 50px;
+  font-size: 34px;
   margin-left: 25px;
 }
 .form-group {
   overflow: hidden;
   clear: both;
+}
+.logopeercoin {
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>

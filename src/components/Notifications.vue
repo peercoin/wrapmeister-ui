@@ -47,7 +47,6 @@ export default {
   },
 
   created() {
-
     this.eventBus.on('add-toastr', this.addItem) 
   },
 
