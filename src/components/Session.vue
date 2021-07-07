@@ -301,6 +301,9 @@ export default {
     async submitRetrievePeercoin() {
       const config = {
         headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
           network: this.transaction.network,
           "Idempotency-Key": this.requestId,
         },
