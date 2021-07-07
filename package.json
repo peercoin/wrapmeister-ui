@@ -19,7 +19,8 @@
     "vue-grid-responsive": "^1.1.0",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^4.0.0-0",
-    "wallet-address-validator": "^0.2.4"
+    "wallet-address-validator": "^0.2.4",
+    "web3": "^1.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
