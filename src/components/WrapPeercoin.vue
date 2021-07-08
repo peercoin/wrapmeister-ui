@@ -129,8 +129,9 @@ export default {
           "Idempotency-Key": this.requestId,
         },
       };
+      let n = parseFloat(this.amount);
       const data = {
-        amount: this.amount,
+        amount: n,
         destinationAddress: this.destinationAddress,
       };
       let response = await axios.post(this.endpoints().wrap, data, config);

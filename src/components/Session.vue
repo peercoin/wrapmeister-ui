@@ -309,16 +309,14 @@ export default {
         },
       };
 
-      let response = await axios.get(
-        this.endpoints(
-          this.transaction._id,
-          this.transaction.erc20TransactionHash
-        ).retrieve,
-        config
-      );
+      const data = {
+        erc20TransactionHash: this.transaction.erc20TransactionHash,
+      };
+      let response = await axios.post(this.endpoints().retrieve, data, config);
 
       if (
         (!!response && !!response.error) ||
+        (!!response && !!response.data.error) ||
         !(
           !!response &&
           !!response.data &&
@@ -342,6 +340,7 @@ export default {
             : `getting peercoins...`,
         type: "success",
       });
+      //todo reset to homepage
     },
   },
 };
