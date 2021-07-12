@@ -310,7 +310,9 @@ export default {
       };
 
       const data = {
-        erc20TransactionHash: this.transaction.erc20TransactionHash,
+        erc20TransactionHash: "",// (gotten as response from the transaction that burns wppc) 
+        signedMessage: "", //(use users address to sign transaction hash)
+        sessionID: this.transaction._id //todo verify endpoint /peercoin/retrieve
       };
       let response = await axios.post(this.endpoints().retrieve, data, config);
 
