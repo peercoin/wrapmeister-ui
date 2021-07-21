@@ -1,15 +1,17 @@
 export function wrapEndpoints(id) {
   //todo change
-  let _host = "http://localhost:9000";
+  let _host = process.env.VUE_APP_WRAPPERHOST; //"http://localhost:9000";
   return {
     wrap: `${_host}/api/v1/peercoin/wrap`,
     unwrap: `${_host}/api/v1/peercoin/unwrap`,
     retrieve: `${_host}/api/v1/peercoin/retrieve`,
-    session: `${_host}/api/v1/transaction/${id}`,
+    session: `${_host}/api/v1/session/${id}`,
   };
 }
 
 export function getNetworks() {
+  return JSON.parse(process.env.VUE_APP_NETWORKS);
+  /*
   return [
     {
       key: "BSC_TESTNET",
@@ -41,5 +43,5 @@ export function getNetworks() {
       description: "Ethereum (ETH)",
       active: true,
     },
-  ];
+  ];*/
 }

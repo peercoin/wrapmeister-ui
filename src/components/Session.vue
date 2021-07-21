@@ -144,7 +144,7 @@ export default {
   watch: {
     sessionId(newval, oldVal) {
       if (newval !== oldVal) {
-        this.getTransaction(newval);
+        this.getSession(newval);
         this.countDown = 100;
       }
     },
@@ -181,7 +181,7 @@ export default {
     clearInterval(this.countDownHandle);
     this.countDownHandle = 0;
     this.countDownHandle = setInterval(this.onCountDown, 300);
-    await this.getTransaction(this.sessionId);
+    await this.getSession(this.sessionId);
     const enabled = await this.ethEnabled();
     if (!enabled) {
       alert("Please install MetaMask to use this dApp!");
@@ -245,7 +245,7 @@ export default {
       if (!this.completed) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
-          this.getTransaction(this.transaction._id);
+          this.getSession(this.transaction._id);
           this.countDown = 100;
         }
       }
@@ -306,7 +306,7 @@ export default {
       }
     },
 
-    async getTransaction(id) {
+    async getSession(id) {
       if (!id) return;
 
       axios
@@ -346,7 +346,7 @@ export default {
       const data = {
         erc20TransactionHash: "", // (gotten as response from the transaction that burns wppc)
         signedMessage: "", //(use users address to sign transaction hash)
-        sessionID: this.transaction._id, //todo verify endpoint /peercoin/retrieve
+        sessionID: this.transaction._id,  
       };
       let response = await axios.post(this.endpoints().retrieve, data, config);
 

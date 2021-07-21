@@ -123,6 +123,7 @@ export default {
       const data = {
         amount: n,
         destinationAddress: this.destinationAddress,
+        erc20Address: ""//why Is This even Required in the interface definition Then?
       };
       let response = await axios.post(this.endpoints().wrap, data, config);
 
