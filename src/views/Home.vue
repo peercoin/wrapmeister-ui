@@ -1,12 +1,7 @@
 <template>
   <div class="home">
     <row :gutter="12">
-      <column> </column>
-      <column> </column>
-      <column> </column>
-    </row>
-    <row :gutter="12">
-      <column :md="8" :mdOffset="2" :lg="6" :lgOffset="3">
+      <column :xs="12" :lg="3" class="margin-auto">
         <img
           @click="gotoHome"
           alt="Peercoin"
@@ -14,7 +9,9 @@
           height="75"
           src="../assets/logo-white.svg"
         />
-        <span class="page-title">Ethereum ↔ Peercoin Bridge</span>
+      </column>
+      <column :xs="12" :lg="9">
+        <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
       </column>
     </row>
 
@@ -28,39 +25,23 @@
         <div class="body-column">
           <collapse-transition>
             <div class="body-mid center" v-if="showMenu">
-              <p>
-                <m-button block size="max" type="success" @mbclick="toggleWrap"
-                  >Bridge Peercoin to token</m-button
-                >
-              </p>
-              <p>
-                <m-button
-                  block
-                  size="max"
-                  type="success"
-                  @mbclick="toggleUnwrap"
-                  >Unbridge token back to Peercoin</m-button
-                >
-              </p>
-              <p>
-                <m-button
-                  block
-                  size="max"
-                  type="success"
-                  @mbclick="toggleEnterSession"
-                  >Continue session</m-button
-                >
-              </p>
+              <m-button block size="max" type="success" @mbclick="toggleWrap"
+                >Bridge Peercoin to token</m-button
+              >
+
+              <m-button block size="max" type="success" @mbclick="toggleUnwrap"
+                >Unbridge token back to Peercoin</m-button
+              >
+
+              <m-button block size="max" type="success" @mbclick="toggleEnterSession"
+                >Continue session</m-button
+              >
             </div>
           </collapse-transition>
 
           <collapse-transition>
             <div v-if="enteringSession" class="form-group">
-              <input
-                type="text"
-                placeholder="Enter sessionId"
-                v-model="sessionId"
-              />
+              <input type="text" placeholder="Enter sessionId" v-model="sessionId" />
               &nbsp;
               <m-button
                 type="success"
@@ -188,11 +169,15 @@ export default {
 .center {
   margin: auto;
   width: 50%;
-
   padding: 10px;
 }
 .body-mid {
-  width: 50%;
+  width: 70%;
+}
+@media screen and (max-width: 770px) {
+  .body-mid {
+    width: 100%;
+  }
 }
 .body-column {
   padding: 25px;
@@ -205,8 +190,7 @@ export default {
 }
 .page-title {
   color: rgb(251, 251, 251);
-  font-size: 34px;
-  margin-left: 25px;
+  font-size: 2rem;
 }
 .form-group {
   overflow: hidden;
@@ -215,6 +199,12 @@ export default {
 .logopeercoin {
   &:hover {
     cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .logopeercoin {
+    margin-top: 20px;
   }
 }
 </style>

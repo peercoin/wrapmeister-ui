@@ -39,8 +39,7 @@ body {
   font-size: 1.5rem;
   min-height: 800px;
 
-  background: url("./assets/efficient-and-sustainable.svg") bottom left
-    no-repeat;
+  background: url("./assets/efficient-and-sustainable.svg") bottom left no-repeat;
   background-position: 15% 75%;
   background-size: 40%;
 }
@@ -50,14 +49,11 @@ body {
   margin-right: 85px;
 }
 
-.form-row {
-  overflow: auto;
-}
-.form-row-right {
-  float: right;
-  min-width: 272px;
-  padding-top: 16px;
-  text-align: right;
+@media screen and (max-width: 770px) {
+  .maincontainer {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
 }
 
 .icon-case {
@@ -70,6 +66,9 @@ body {
   line-height: 40px;
 }
 
+.margin-auto {
+  margin: auto;
+}
 .row-input-field {
   width: 100%;
   box-sizing: border-box;
