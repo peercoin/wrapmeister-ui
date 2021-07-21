@@ -1,55 +1,49 @@
 <template>
   <div class="wrap-container">
     <div class="wrap-container-heading">{{ header }}</div>
-
-    <div class="form-row">
-      <div class="form-row-right">
-        <select
-          :class="{ 'row-input-field': true, invalid: !network }"
-          v-model="network"
-        >
+    <row>
+      <column :lg="12" :xl="6">
+        <p>Choose network to bridge</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
+        <select :class="{ 'row-input-field': true, invalid: !network }" v-model="network">
           <option v-for="item in networks" :value="item.key" :key="item.key">
             {{ item.description }}
           </option>
         </select>
-      </div>
-      <p>Choose network to bridge</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="6">
+        <p>ERC-20 Address</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAddress }"
           v-model="destinationAddress"
         />
-      </div>
-      <p>ERC-20 Address</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="6">
+        <p>Amount</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAmount }"
           v-model="amount"
         />
-      </div>
-      <p>Amount</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
-        <m-button
-          class="m-top-sm"
-          type="success"
-          @mbclick="submitWrap"
-          :disabled="!validForm"
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="12" class="margin-auto m-top-lg">
+        <m-button type="success" @mbclick="submitWrap" :disabled="!validForm"
           >Tokenise Peercoin</m-button
         >
-      </div>
-      <p>Start session</p>
-    </div>
+      </column>
+    </row>
   </div>
 </template>
 
@@ -82,9 +76,7 @@ export default {
     },
 
     validAddress() {
-      return (
-        !!this.destinationAddress && validate(this.destinationAddress, "ETH")
-      );
+      return !!this.destinationAddress && validate(this.destinationAddress, "ETH");
     },
 
     validAmount() {
@@ -103,9 +95,7 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-        c
-      ) {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0,
           v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
@@ -168,7 +158,7 @@ export default {
 .wrap-container {
   padding: 20px 12px 10px 20px;
   margin: auto;
-  width: 50%;
+  width: 60%;
 }
 .wrap-container-heading {
   font-weight: bold;

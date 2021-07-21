@@ -4,16 +4,24 @@
 
     <div class="form-row">
       <div class="form-row-right">
-        <select
-          :class="{ 'row-input-field': true, invalid: !network }"
-          v-model="network"
-        >
+        <select :class="{ 'row-input-field': true, invalid: !network }" v-model="network">
           <option v-for="item in networks" :value="item.key" :key="item.key">
             {{ item.description }}
           </option>
         </select>
       </div>
       <p>Choose network to bridge</p>
+    </div>
+
+    <div class="form-row">
+      <div class="form-row-right">
+        <input
+          type="text"
+          :class="{ 'row-input-field': true, invalid: !validERC20Address }"
+          v-model="erc20Address"
+        />
+      </div>
+      <p>ERC20 Address</p>
     </div>
 
     <div class="form-row">
@@ -63,8 +71,9 @@ export default {
   data() {
     return {
       requestId: null,
-      amount: "",
-      destinationAddress: "",
+      amount: "1",
+      erc20Address: "0x5e9560b6DC421E3Dd6021de4a4094be8517F7E34",
+      destinationAddress: "mjyx4qZLNpmuWEGdghHDuzpD5Ysy4zKitS",
       network: "",
       endpoints: wrapEndpoints,
       networks: [],
@@ -81,9 +90,13 @@ export default {
       return "Bridge Peercoin";
     },
 
+    validERC20Address() {
+      return !!this.erc20Address && validate(this.erc20Address, "ETH");
+    },
+
     validAddress() {
       return (
-        !!this.destinationAddress && validate(this.destinationAddress, "PPC")
+        !!this.destinationAddress && validate(this.destinationAddress, "PPC", "testnet")
       );
     },
 
@@ -103,9 +116,7 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-        c
-      ) {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0,
           v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
@@ -120,6 +131,12 @@ export default {
     },
 
     async submitUnWrap() {
+      let n = parseFloat(this.amount);
+      const data = {
+        amount: n,
+        destinationAddress: this.destinationAddress,
+        erc20Address: this.erc20Address,
+      };
       const config = {
         headers: {
           "Cache-Control": "no-cache",
@@ -128,14 +145,11 @@ export default {
           network: this.network,
           "Idempotency-Key": this.requestId,
         },
+        params: data,
       };
-      let n = parseFloat(this.amount);
-      const data = {
-        amount: n,
-        destinationAddress: this.destinationAddress,
-      };
-      let response = await axios.post(this.endpoints().unwrap, data, config);
 
+      let response = await axios.post(this.endpoints().unwrap, null, config);
+      console.log(response);
       if (
         (!!response && !!response.error) ||
         !(

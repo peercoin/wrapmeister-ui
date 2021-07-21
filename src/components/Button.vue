@@ -25,10 +25,10 @@
 // leading edge, instead of the trailing.
 function debounce(func, wait, immediate) {
   var timeout;
-  return function() {
+  return function () {
     var context = this,
       args = arguments;
-    var later = function() {
+    var later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -95,7 +95,7 @@ export default {
       }
 
       if (!this.dbclick)
-        this.dbclick = debounce(function() {
+        this.dbclick = debounce(function () {
           this.clicked = true;
           this.$emit("mbclick", e);
           setTimeout(() => {
@@ -179,7 +179,7 @@ a.m-button {
 }
 .m-button.m-button-max {
   padding: 15px 45px;
-  font-size: 18px;
+  font-size: 16px;
 }
 .m-button.m-button-large {
   padding: 10px 30px;

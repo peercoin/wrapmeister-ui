@@ -1,6 +1,6 @@
 export function wrapEndpoints(id) {
   //todo change
-  let _host = "http://localhost:3000";
+  let _host = "http://localhost:9000";
   return {
     wrap: `${_host}/api/v1/peercoin/wrap`,
     unwrap: `${_host}/api/v1/peercoin/unwrap`,
