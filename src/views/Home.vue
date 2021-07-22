@@ -41,11 +41,22 @@
 
           <collapse-transition>
             <div v-if="enteringSession" class="form-group">
-              <input type="text" placeholder="Enter sessionId" v-model="sessionId" />
-              &nbsp;
+              <row>
+                <column :lg="12" :xl="4">
+                  <p>Session Id</p>
+                </column>
+                <column :lg="12" :xl="8" class="margin-auto">
+                  <input
+                    type="text"
+                    :class="{ 'row-input-field': true }"
+                    v-model="sessionId"
+                  />
+                </column>
+              </row>
               <m-button
+                class="m-top-xl"
                 type="success"
-                size="mini"
+                size="max"
                 @mbclick="onSessionEntered"
                 :disabled="!sessionId"
                 >View session</m-button
@@ -195,6 +206,8 @@ export default {
 .form-group {
   overflow: hidden;
   clear: both;
+  width: 50%;
+  margin: auto;
 }
 .logopeercoin {
   &:hover {

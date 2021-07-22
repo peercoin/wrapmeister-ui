@@ -1,53 +1,56 @@
 <template>
   <div class="wrap-container">
     <div class="wrap-container-heading">{{ header }}</div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+    <row>
+      <column :lg="12" :xl="6">
+        <p>Choose network to bridge</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <select :class="{ 'row-input-field': true, invalid: !network }" v-model="network">
           <option v-for="item in networks" :value="item.key" :key="item.key">
             {{ item.description }}
           </option>
         </select>
-      </div>
-      <p>Choose network to bridge</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="6">
+        <p>ERC20 Address</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validERC20Address }"
           v-model="erc20Address"
         />
-      </div>
-      <p>ERC20 Address</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="6">
+        <p>Peercoin Address</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAddress }"
           v-model="destinationAddress"
         />
-      </div>
-      <p>Peercoin Address</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="6">
+        <p>Amount</p>
+      </column>
+      <column :lg="12" :xl="6" class="margin-auto">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAmount }"
           v-model="amount"
         />
-      </div>
-      <p>Amount</p>
-    </div>
-
-    <div class="form-row">
-      <div class="form-row-right">
+      </column>
+    </row>
+    <row>
+      <column :lg="12" :xl="12" class="margin-auto m-top-lg">
         <m-button
           class="m-top-sm"
           type="success"
@@ -55,9 +58,8 @@
           :disabled="!validForm"
           >Convert Peercoin Tokens</m-button
         >
-      </div>
-      <p>Start session</p>
-    </div>
+      </column>
+    </row>
   </div>
 </template>
 

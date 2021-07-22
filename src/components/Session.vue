@@ -2,55 +2,63 @@
   <div>
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
-
-      <countdown v-if="!completed" :status="0.01 * countDown"></countdown>
-
-      <div class="form-row">
-        <div class="form-row-right">
+      <!-- <countdown v-if="!completed" :status="0.01 * countDown"></countdown> -->
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Completed</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
           <span class="icon-case"> <font-awesome-icon :icon="completedIcon" /></span>
-        </div>
-        <p>Completed</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Network</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
           <input
             type="text"
             disabled="true"
             class="row-input-field"
             :value="mapNetworks(transaction.network)"
           />
-        </div>
-        <p>Network</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Amount</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
           <input
             type="text"
             disabled="true"
             class="row-input-field"
             :value="transaction.amount"
           />
-        </div>
-        <p>Amount</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
-          <vue-q-r-code-component
-            v-if="!!transaction.ppcAddress && !!transaction.wrapping"
-            :size="250"
-            :text="transaction.ppcAddress"
-          />
-
-          <small>{{ transaction.ppcAddress }}</small>
-        </div>
-        <p>{{ peercoinAddressLabel }}</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>{{ peercoinAddressLabel }}</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
+          <row>
+            <vue-q-r-code-component
+              v-if="!!transaction.ppcAddress && !!transaction.wrapping"
+              :size="250"
+              :text="transaction.ppcAddress"
+            />
+          </row>
+          <row>
+            <small class="margin-auto">{{ transaction.ppcAddress }}</small>
+          </row>
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Peercoin transaction</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
           <input
             type="text"
             :disabled="1 == 1"
@@ -58,68 +66,90 @@
             placeholder="waiting for deposit..."
             :value="transaction.ppcTransactionHash"
           />
-        </div>
-        <p>Peercoin transaction</p>
-      </div>
-
-      <div class="form-row" v-if="!!transaction.erc20Address">
-        <div class="form-row-right">
-          <vue-q-r-code-component :size="250" :text="transaction.erc20Address" />
-
-          <small>{{ transaction.erc20Address }}</small>
-        </div>
-        <p>ERC-20 address</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
-          <input
-            type="text"
-            :disabled="!!transaction.wrapping"
-            :placeholder="
-              !!transaction.wrapping
-                ? 'processing...'
-                : 'please input the transaction hash'
-            "
-            class="row-input-field"
-            :value="transaction.erc20TransactionHash"
-          />
-          <m-button
-            class="m-top-sm"
-            v-if="!transaction.wrapping"
-            type="success"
-            @mbclick="submitRetrievePeercoin"
-            :disabled="
-              !(
-                !!transaction._id &&
-                !!transaction.erc20TransactionHash &&
-                transaction.erc20TransactionHash.length > 64
-              )
-            "
-            >Retrieve Peercoin</m-button
-          >
-        </div>
-        <p>ERC-20 transaction</p>
-      </div>
-
-      <div class="form-row" v-if="!!transaction.signature">
-        <div class="form-row-right">
-          <vue-q-r-code-component :size="250" :text="transaction.signature" />
-          <textarea
-            disabled
-            class="row-input-field row-textarea-field m-top-sm"
-            v-model="transaction.signature"
-          ></textarea>
-        </div>
-        <p>Signature</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-row-right">
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>ERC-20 address</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
+          <row>
+            <vue-q-r-code-component
+              class="margin-auto"
+              :size="250"
+              :text="transaction.erc20Address"
+            />
+          </row>
+          <row>
+            <small class="margin-auto">{{ transaction.erc20Address }}</small>
+          </row>
+        </column>
+      </row>
+      <row class="transation-container">
+        <column :lg="12" :xl="6">
+          <p>ERC-20 transaction</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
+          <row>
+            <input
+              type="text"
+              :disabled="!!transaction.wrapping"
+              :placeholder="
+                !!transaction.wrapping
+                  ? 'processing...'
+                  : 'please input the transaction hash'
+              "
+              class="row-input-field"
+              :value="transaction.erc20TransactionHash"
+            />
+          </row>
+          <row>
+            <m-button
+              class="m-top-sm margin-auto"
+              v-if="!transaction.wrapping"
+              type="success"
+              @mbclick="submitRetrievePeercoin"
+              :disabled="
+                !(
+                  !!transaction._id &&
+                  !!transaction.erc20TransactionHash &&
+                  transaction.erc20TransactionHash.length > 64
+                )
+              "
+              >Retrieve Peercoin</m-button
+            >
+          </row>
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Signature</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
+          <row>
+            <vue-q-r-code-component
+              class="margin-auto"
+              :size="250"
+              :text="transaction.signature"
+            />
+          </row>
+          <row>
+            <textarea
+              disabled
+              class="row-input-field row-textarea-field m-top-sm"
+              v-model="transaction.signature"
+            ></textarea>
+          </row>
+        </column>
+      </row>
+      <row>
+        <column :lg="12" :xl="6">
+          <p>Signed</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
           <span class="icon-case"> <font-awesome-icon :icon="signedIcon" /></span>
-        </div>
-        <p>Signed</p>
-      </div>
+        </column>
+      </row>
     </div>
   </div>
 </template>
@@ -346,7 +376,7 @@ export default {
       const data = {
         erc20TransactionHash: "", // (gotten as response from the transaction that burns wppc)
         signedMessage: "", //(use users address to sign transaction hash)
-        sessionID: this.transaction._id,  
+        sessionID: this.transaction._id,
       };
       let response = await axios.post(this.endpoints().retrieve, data, config);
 
@@ -381,12 +411,6 @@ export default {
   },
 };
 </script>
-<style>
-.session-container .form-row-right img {
-  position: relative;
-  left: 100px;
-}
-</style>
 
 <style lang="scss" scoped>
 .session-container {
@@ -401,5 +425,9 @@ export default {
   margin-bottom: 20px;
   font-size: 15px;
   padding-bottom: 3px;
+}
+.transation-container {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
 }
 </style>

@@ -58,7 +58,7 @@ export default {
     return {
       requestId: null,
       amount: "",
-      destinationAddress: "",
+      destinationAddress: "0x5e9560b6DC421E3Dd6021de4a4094be8517F7E34",
       network: "",
       endpoints: wrapEndpoints,
       networks: [],
@@ -110,6 +110,13 @@ export default {
     },
 
     async submitWrap() {
+      let n = parseFloat(this.amount);
+      const data = {
+        amount: n,
+        destinationAddress: this.destinationAddress,
+        erc20Address: this.destinationAddress,
+      };
+
       const config = {
         headers: {
           "Cache-Control": "no-cache",
@@ -118,14 +125,10 @@ export default {
           network: this.network,
           "Idempotency-Key": this.requestId,
         },
+        params: data,
       };
-      let n = parseFloat(this.amount);
-      const data = {
-        amount: n,
-        destinationAddress: this.destinationAddress,
-        erc20Address: ""//why Is This even Required in the interface definition Then?
-      };
-      let response = await axios.post(this.endpoints().wrap, data, config);
+
+      let response = await axios.post(this.endpoints().wrap, null, config);
 
       if (
         (!!response && !!response.error) ||
