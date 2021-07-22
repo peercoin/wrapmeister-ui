@@ -57,8 +57,7 @@ body {
 }
 
 .icon-case {
-  width: 35px;
-  float: left;
+  width: 100%;
   border-radius: 5px 0px 0px 5px;
   height: 42px;
   position: relative;
