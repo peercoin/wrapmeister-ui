@@ -2,7 +2,7 @@
   <div>
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
-      <!-- <countdown v-if="!completed" :status="0.01 * countDown"></countdown> -->
+      <countdown v-if="!signed" :status="0.01 * countDown"></countdown>
       <row>
         <column :lg="12" :xl="6">
           <p>Completed</p>
@@ -44,6 +44,7 @@
         <column :lg="12" :xl="6" class="margin-auto">
           <row>
             <vue-q-r-code-component
+              class="margin-auto"
               v-if="!!transaction.ppcAddress && !!transaction.wrapping"
               :size="250"
               :text="transaction.ppcAddress"
@@ -93,14 +94,10 @@
           <row>
             <input
               type="text"
-              :disabled="!!transaction.wrapping"
-              :placeholder="
-                !!transaction.wrapping
-                  ? 'processing...'
-                  : 'please input the transaction hash'
-              "
+              disabled
+              :placeholder="'processing...'"
               class="row-input-field"
-              :value="transaction.erc20TransactionHash"
+              :value="transactionHash"
             />
           </row>
           <row>
@@ -109,13 +106,7 @@
               v-if="!transaction.wrapping"
               type="success"
               @mbclick="submitRetrievePeercoin"
-              :disabled="
-                !(
-                  !!transaction._id &&
-                  !!transaction.erc20TransactionHash &&
-                  transaction.erc20TransactionHash.length > 64
-                )
-              "
+              :disabled="!transactionHash"
               >Retrieve Peercoin</m-button
             >
           </row>
@@ -129,6 +120,7 @@
           <row>
             <vue-q-r-code-component
               class="margin-auto"
+              v-if="transaction.signature"
               :size="250"
               :text="transaction.signature"
             />
@@ -136,6 +128,7 @@
           <row>
             <textarea
               disabled
+              v-if="transaction.signature"
               class="row-input-field row-textarea-field m-top-sm"
               v-model="transaction.signature"
             ></textarea>
@@ -200,6 +193,7 @@ export default {
         erc20TransactionHash: null,
         ppcTransactionHash: null,
       },
+      transactionHash: "",
       accounts: [],
       web3: null,
       contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
@@ -211,12 +205,11 @@ export default {
     clearInterval(this.countDownHandle);
     this.countDownHandle = 0;
     this.countDownHandle = setInterval(this.onCountDown, 300);
-    await this.getSession(this.sessionId);
     const enabled = await this.ethEnabled();
     if (!enabled) {
       alert("Please install MetaMask to use this dApp!");
     }
-    await this.sendBurnTransaction();
+    await this.getSession(this.sessionId);
   },
 
   unmounted() {
@@ -225,8 +218,8 @@ export default {
   },
 
   computed: {
-    completed() {
-      return !!this.transaction && !!this.transaction._id && this.transaction.completed;
+    signed() {
+      return !!this.transaction && !!this.transaction._id && this.transaction.signed;
     },
 
     completedIcon() {
@@ -242,11 +235,13 @@ export default {
       }
       return "times";
     },
+
     peercoinAddressLabel() {
       return this.transaction.wrapping
         ? "Peercoin deposit address"
         : "Peercoin receive address";
     },
+
     sessionHeader() {
       if (!!this.transaction && !!this.transaction._id) {
         if (!!this.transaction.network) {
@@ -272,7 +267,7 @@ export default {
     },
 
     onCountDown() {
-      if (!this.completed) {
+      if (!this.signed) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
           this.getSession(this.transaction._id);
@@ -289,7 +284,9 @@ export default {
     async ethEnabled() {
       if (window.ethereum) {
         try {
-          await ethereum.request({ method: "eth_requestAccounts" });
+          await ethereum.request({
+            method: "eth_requestAccounts",
+          });
           this.web3 = new Web3(ethereum);
           this.accounts = await this.web3.eth.getAccounts();
           return true;
@@ -325,6 +322,45 @@ export default {
                 result.transactionHash,
                 this.transaction.erc20Address
               );
+              this.transactionHash = result.transactionHash;
+              console.log(signResult);
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            alert("Transaction sign rejected by user.");
+          }
+        } catch {}
+      }
+    },
+
+    async sendMinTransaction() {
+      if (this.accounts.length > 0) {
+        const contractInstance = new this.web3.eth.Contract(ABI, this.contractAddress, {
+          from: this.transaction.erc20Address,
+        });
+        let signature = JSON.parse(this.transaction.signature);
+        try {
+          const result = await contractInstance.methods
+            .claimTokens(
+              this.transaction.amount,
+              this.transaction.nonce,
+              this.transaction.erc20Address,
+              signature.v,
+              signature.r,
+              signature.s
+            )
+            .send();
+          const r = confirm(
+            `Please sign with your MetaMask \n ${result.transactionHash}`
+          );
+          if (r) {
+            try {
+              let signResult = await this.web3.eth.sign(
+                result.transactionHash,
+                this.transaction.erc20Address
+              );
+              this.transactionHash = result.transactionHash;
               console.log(signResult);
             } catch (e) {
               console.log(e);
@@ -338,12 +374,18 @@ export default {
 
     async getSession(id) {
       if (!id) return;
-
       axios
         .get(this.endpoints(id).session)
         .then((res) => {
           if (!!res && !!res.data && !!res.data.data) {
             this.transaction = res.data.data;
+            if (this.transaction.signed && !this.transaction.completed) {
+              if (this.transaction.wrapping) {
+                this.sendMinTransaction();
+              } else {
+                this.sendBurnTransaction();
+              }
+            }
           } else {
             this.eventBus.emit("add-toastr", {
               text:
@@ -418,6 +460,7 @@ export default {
   margin: auto;
   width: 50%;
 }
+
 .session-container-heading {
   font-weight: bold;
   font-style: italic;
@@ -426,6 +469,7 @@ export default {
   font-size: 15px;
   padding-bottom: 3px;
 }
+
 .transation-container {
   margin-top: 10px !important;
   margin-bottom: 10px !important;
