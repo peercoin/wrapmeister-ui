@@ -40,7 +40,7 @@ body {
   min-height: 800px;
 
   background: url("./assets/efficient-and-sustainable.svg") bottom left no-repeat;
-  background-position: 15% 75%;
+  background-position: 55% 75%;
   background-size: 40%;
 }
 

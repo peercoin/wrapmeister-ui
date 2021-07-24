@@ -11,18 +11,24 @@
         />
       </column>
       <column :xs="12" :lg="9">
-        <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
+        <p @click="gotoHome" class="page-title">Ethereum ↔ Peercoin Bridge</p>
       </column>
     </row>
 
     <row :gutter="50">
-      <column :xs="12" :lg="3">
+      <column :xs="12" :lg="3" v-if="metaMaskEnabled">
         <div class="body-column">
           <steps />
         </div>
       </column>
-      <column :xs="12" :lg="9">
+      <column :xs="12" :lg="!!metaMaskEnabled ? 9 : 12">
         <div class="body-column">
+          <collapse-transition>
+            <div class="body-mid center" v-if="!metaMaskEnabled">
+              <meta-mask-info />
+            </div>
+          </collapse-transition>
+
           <collapse-transition>
             <div class="body-mid center" v-if="showMenu">
               <m-button block size="max" type="success" @mbclick="toggleWrap"
@@ -33,7 +39,11 @@
                 >Unbridge token back to Peercoin</m-button
               >
 
-              <m-button block size="max" type="success" @mbclick="toggleEnterSession"
+              <m-button
+                block
+                size="max"
+                type="success"
+                @mbclick="toggleEnterSession"
                 >Continue session</m-button
               >
             </div>
@@ -94,6 +104,7 @@ import Session from "@/components/Session.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
+import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 
 export default {
   name: "Home",
@@ -145,8 +156,13 @@ export default {
   },
 
   computed: {
+    metaMaskEnabled() {
+      return !!window.ethereum && !!ethereum.request;
+    },
+
     showMenu() {
       return (
+        !!this.metaMaskEnabled &&
         !this.currentSessionId &&
         !this.iswrapping &&
         !this.isUnwrapping &&
@@ -173,9 +189,11 @@ export default {
     CollapseTransition,
     WrapPeercoin,
     UnwrapPeercoin,
+    MetaMaskInfo,
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .center {
   margin: auto;
@@ -202,6 +220,9 @@ export default {
 .page-title {
   color: rgb(251, 251, 251);
   font-size: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
 }
 .form-group {
   overflow: hidden;

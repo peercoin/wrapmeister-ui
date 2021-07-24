@@ -193,10 +193,10 @@ export default {
         erc20TransactionHash: null,
         ppcTransactionHash: null,
       },
-      transactionHash: "",
+      transactionHash: "",//from web3
       accounts: [],
       web3: null,
-      contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,
+      contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,//todo
     };
   },
 
