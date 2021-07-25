@@ -2,7 +2,7 @@
   <div>
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
-      <countdown v-if="!signed" :status="0.01 * countDown"></countdown>
+      <countdown v-if="!sessionCompleted" :status="0.01 * countDown"></countdown>
 
       <row>
         <column :lg="12" :xl="6">
@@ -198,8 +198,8 @@ export default {
   },
 
   computed: {
-    signed() {
-      return !!this.session && !!this.session._id && this.session.signed;
+    sessionCompleted() {
+      return !!this.session && !!this.session._id && this.session.completed;
     },
 
     completedIcon() {
@@ -272,7 +272,7 @@ export default {
     },
 
     async onCountDown() {
-      if (!this.signed) {
+      if (!this.sessionCompleted) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
           await this.getSession(this.session._id);
