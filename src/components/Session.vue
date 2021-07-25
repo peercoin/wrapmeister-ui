@@ -35,7 +35,7 @@
           <p>{{ peercoinAddressLabel }}</p>
         </column>
         <column :lg="12" :xl="6" class="margin-auto">
-          <row v-if="1 == 2">
+          <row>
             <vue-q-r-code-component
               class="margin-auto"
               v-if="!!session.ppcAddress && !!session.wrapping"

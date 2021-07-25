@@ -1,10 +1,10 @@
 <template>
   <h3 class="explain-title">01</h3>
-  <p>Convert Peercoins to token on ETH</p>
+  <p>Tokenize Peercoins on ETH</p>
   <h3 class="explain-title">02</h3>
-  <p>Send Peercoins to generated address</p>
+  <p>Send said amount of Peercoins to generated address</p>
   <h3 class="explain-title">03</h3>
-  <p>Claim Tokens on the ETH smart contract with given signature???</p>
+  <p>Withdraw tokens of said amount from ETH smart contract</p>
   <hr class="hr-text" data-content="OR" />
   <h3 class="explain-title">04</h3>
   <p>Convert Tokens back to Peercoin</p>
