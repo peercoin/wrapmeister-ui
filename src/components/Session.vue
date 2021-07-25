@@ -111,28 +111,31 @@
         </column>
       </row>
 
-      <row class="transation-container">
+      <row
+        v-if="!session.wrapping && !!unwrapBurnTokensTransactionHash"
+        class="transation-container"
+      >
         <column :lg="12" :xl="6">
-          <p>ERC-20 transaction</p>
+          <p>Burn tokens</p>
         </column>
         <column :lg="12" :xl="6" class="margin-auto">
           <row>
             <input
               type="text"
               disabled
-              :placeholder="'processing...'"
+              :placeholder="''"
               class="row-input-field"
-              :value="transactionHash"
+              :value="unwrapBurnTokensTransactionHash"
             />
           </row>
           <row>
             <m-button
               class="m-top-sm margin-auto"
-              v-if="!session.wrapping"
+              v-if="!!session.wrapping"
               type="success"
-              @mbclick="submitRetrievePeercoin"
-              :disabled="!transactionHash"
-              >Retrieve Peercoin</m-button
+              @mbclick="signUnwrapBurnTokensTransactionHash"
+              :disabled="!unwrapBurnTokensTransactionHash"
+              >Sign hash with MetaMask</m-button
             >
           </row>
         </column>
@@ -189,8 +192,10 @@ export default {
         erc20TransactionHash: null,
         ppcTransactionHash: null,
       },
-      transactionHash: "", //from web3
+
       wrapClaimtokensTransactionHash: "",
+      unwrapBurnTokensTransactionHash: "",
+      unwrapSignedMessage: "",
       accounts: [],
       web3: null,
       contractAddress: "",
@@ -210,13 +215,7 @@ export default {
     } else {
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
-    /*
-    this.accounts = await this.getAccounts();
 
-    if (!this.accounts || this.accounts.length < 1) {
-      alert("Please install MetaMask to use this website.");
-    }
-*/
     await this.getSession(this.sessionId);
   },
 
@@ -274,7 +273,8 @@ export default {
     resetSession() {
       this.accounts = [];
       this.wrapClaimtokensTransactionHash = "";
-      this.transactionHash = "";
+      this.unwrapBurnTokensTransactionHash = "";
+      this.unwrapSignedMessage = "";
       this.session = {
         _id: null,
         network: null,
@@ -339,43 +339,63 @@ export default {
 
     //unwrap:
     async sendBurnTransaction() {
-      if (this.accounts.length > 0) {
-        const contractInstance = new this.web3.eth.Contract(
-          ABI,
-          this.contractAddress,
-          {
-            from: this.session.erc20Address,
-          }
-        );
+      this.accounts = await this.getAccounts();
+      if (
+        !this.accounts ||
+        this.accounts.length < 1 ||
+        !this.session ||
+        !this.session.signature ||
+        !!this.session.wrapping ||
+        !this.session.erc20Address ||
+        !this.session.network ||
+        !this.hasValidSignature()
+      )
+        return;
+
+      const optionsContract = {
+        from: this.session.erc20Address,
+      };
+
+      //https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html
+      const contractInstance = new this.web3.eth.Contract(
+        ABI,
+        this.contractAddress,
+        optionsContract
+      );
+
+      try {
+        // burnTokens is from erc20.json ABI file
         let signature = JSON.parse(this.session.signature);
-        try {
-          const result = await contractInstance.methods
-            .burnTokens(
-              this.session.amount,
-              this.session.nonce,
-              signature.v,
-              signature.r,
-              signature.s
-            )
-            .send();
-          const r = confirm(
-            `Please sign with your MetaMask \n ${result.transactionHash}`
-          );
-          if (r) {
-            try {
-              let signResult = await this.web3.eth.sign(
-                result.transactionHash,
-                this.session.erc20Address
-              );
-              this.transactionHash = result.transactionHash;
-              console.log(signResult);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            alert("Transaction sign rejected by user.");
-          }
-        } catch {}
+        const result = await contractInstance.methods
+          .burnTokens(
+            this.session.amount,
+            this.session.nonce,
+            signature.v,
+            signature.r,
+            signature.s
+          )
+          .send();
+
+        this.unwrapBurnTokensTransactionHash = result.transactionHash;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async signUnwrapBurnTokensTransactionHash() {
+      if (!this.unwrapBurnTokensTransactionHash || !this.session.erc20Address)
+        return;
+      try {
+        let signResult = await this.web3.eth.sign(
+          this.unwrapBurnTokensTransactionHash,
+          this.session.erc20Address
+        );
+
+        console.log(signResult);
+        this.unwrapSignedMessage = signResult;
+        await this.submitRetrievePeercoin();
+      } catch (e) {
+        console.log(e);
       }
     },
 
@@ -406,7 +426,7 @@ export default {
 
       if (!this.contractAddress) {
         console.warn(
-          "No contract address fount for network: " + this.session.network
+          "No contract address found for network: " + this.session.network
         );
         return;
       }
@@ -453,7 +473,7 @@ export default {
           this.wrapClaimtokensTransactionHash,
           this.session.erc20Address
         );
-        //this.transactionHash = result.transactionHash;
+
         console.log(signResult);
 
         //wrapping done, as soon as Completed is retrieved this page wil automatically close.
@@ -468,8 +488,7 @@ export default {
 
       try {
         const res = await axios.get(this.endpoints(sessionid).session);
-       // console.log(res.data);
-        //     debugger;
+
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
 
@@ -484,7 +503,7 @@ export default {
 
             this.eventBus.emit("goto-home", {});
           } else if (this.session.signed) {
-            if (this.session.wrapping) {
+            if (!!this.session.wrapping) {
               this.sendMinTransaction();
             } else {
               this.sendBurnTransaction();
@@ -500,6 +519,15 @@ export default {
     },
 
     async submitRetrievePeercoin() {
+      if (
+        !!this.session.wrapping ||
+        !this.unwrapSignedMessage ||
+        !this.unwrapBurnTokensTransactionHash ||
+        !this.session._id ||
+        !this.session.network
+      )
+        return;
+
       const config = {
         headers: {
           "Cache-Control": "no-cache",
@@ -511,8 +539,8 @@ export default {
       };
 
       const data = {
-        erc20TransactionHash: "", // (gotten as response from the transaction that burns wppc)
-        signedMessage: "", //(use users address to sign transaction hash)
+        erc20TransactionHash: this.unwrapBurnTokensTransactionHash, // (gotten as response from the transaction that burns wppc)
+        signedMessage: this.unwrapSignedMessage, //(use users address to sign transaction hash)
         sessionID: this.session._id,
       };
       let response = await axios.post(this.endpoints().retrieve, data, config);

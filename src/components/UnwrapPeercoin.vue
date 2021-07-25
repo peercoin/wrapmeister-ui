@@ -73,9 +73,9 @@ export default {
   data() {
     return {
       requestId: null,
-      amount: "1",
-      erc20Address: "0x5e9560b6DC421E3Dd6021de4a4094be8517F7E34",
-      destinationAddress: "mjyx4qZLNpmuWEGdghHDuzpD5Ysy4zKitS",
+      amount: "",
+      erc20Address: "",//0x5e9560b6DC421E3Dd6021de4a4094be8517F7E34",
+      destinationAddress:"",// "mjyx4qZLNpmuWEGdghHDuzpD5Ysy4zKitS",
       network: "",
       endpoints: wrapEndpoints,
       networks: [],
