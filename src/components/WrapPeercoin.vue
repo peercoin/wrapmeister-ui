@@ -6,7 +6,10 @@
         <p>Choose network to bridge</p>
       </column>
       <column :lg="12" :xl="6" class="margin-auto">
-        <select :class="{ 'row-input-field': true, invalid: !network }" v-model="network">
+        <select
+          :class="{ 'row-input-field': true, invalid: !network }"
+          v-model="network"
+        >
           <option v-for="item in networks" :value="item.key" :key="item.key">
             {{ item.description }}
           </option>
@@ -76,13 +79,16 @@ export default {
     },
 
     validAddress() {
-      return !!this.destinationAddress && validate(this.destinationAddress, "ETH");
+      return (
+        !!this.destinationAddress && validate(this.destinationAddress, "ETH")
+      );
     },
 
     validAmount() {
       if (!this.amount) return false;
-      let pattern = /^\d*(\.\d+)?$/;
-      if (!pattern.test(this.amount)) return false;
+      const regex = /^\d{0,9}(\.\d{0,6})?$/gm;
+
+      if (!regex.test(this.amount)) return false;
 
       let n = parseFloat(this.amount);
 
@@ -96,7 +102,9 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+        c
+      ) {
         const r = (Math.random() * 16) | 0,
           v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
@@ -115,7 +123,7 @@ export default {
       const data = {
         amount: n,
         destinationAddress: this.destinationAddress,
-       // erc20Address: this.destinationAddress,
+        // erc20Address: this.destinationAddress,
       };
 
       const config = {

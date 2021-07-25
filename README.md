@@ -55,11 +55,6 @@ step n+1:
           .send(); 	
  OUTPUT: a wrapClaimtokensTransactionHash         
 
-click button for final step n+2:
-web3.eth.sign(
-          wrapClaimtokensTransactionHash,
-          session.erc20Address
-        )
 
 Done. Return to HOME (once the session.completed is retrieved)
 

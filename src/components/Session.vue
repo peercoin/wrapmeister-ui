@@ -82,36 +82,6 @@
       </row>
 
       <row
-        v-if="!!session.wrapping && !!wrapClaimtokensTransactionHash"
-        class="transation-container"
-      >
-        <column :lg="12" :xl="6">
-          <p>Claim TransactionHash</p>
-        </column>
-        <column :lg="12" :xl="6" class="margin-auto">
-          <row>
-            <input
-              type="text"
-              disabled
-              :placeholder="''"
-              class="row-input-field"
-              :value="wrapClaimtokensTransactionHash"
-            />
-          </row>
-          <row>
-            <m-button
-              class="m-top-sm margin-auto"
-              v-if="!!session.wrapping"
-              type="success"
-              @mbclick="signWrapClaimtokensTransactionHash"
-              :disabled="!wrapClaimtokensTransactionHash"
-              >Sign hash with MetaMask</m-button
-            >
-          </row>
-        </column>
-      </row>
-
-      <row
         v-if="!session.wrapping && !!unwrapBurnTokensTransactionHash"
         class="transation-container"
       >
@@ -464,24 +434,24 @@ export default {
       }
     },
 
-    async signWrapClaimtokensTransactionHash() {
-      if (!this.wrapClaimtokensTransactionHash || !this.session.erc20Address)
-        return;
+    // async signWrapClaimtokensTransactionHash() {
+    //   if (!this.wrapClaimtokensTransactionHash || !this.session.erc20Address)
+    //     return;
 
-      try {
-        const signResult = await this.web3.eth.sign(
-          this.wrapClaimtokensTransactionHash,
-          this.session.erc20Address
-        );
+    //   try {
+    //     const signResult = await this.web3.eth.sign(
+    //       this.wrapClaimtokensTransactionHash,
+    //       this.session.erc20Address
+    //     );
 
-        console.log(signResult);
+    //     console.log(signResult);
 
-        //wrapping done, as soon as Completed is retrieved this page wil automatically close.
-      } catch (e) {
-        console.log("signWrapClaimtokensTransactionHash");
-        console.log(e);
-      }
-    },
+    //     //wrapping done, as soon as Completed is retrieved this page wil automatically close.
+    //   } catch (e) {
+    //     console.log("signWrapClaimtokensTransactionHash");
+    //     console.log(e);
+    //   }
+    // },
 
     async getSession(sessionid) {
       if (!sessionid) return;
