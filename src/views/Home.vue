@@ -118,6 +118,14 @@ export default {
     };
   },
 
+  created() {
+    this.eventBus.on('goto-home', this.gotoHome) 
+  },
+
+  beforeUnmount() {
+      this.eventBus.off('goto-home', this.gotoHome)   
+  },
+
   methods: {
     gotoHome() {
       this.enteringSession = false;

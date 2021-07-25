@@ -33,22 +33,26 @@ export function getNetworks() {
     {
       key: "MATIC_TESTNET",
       description: "Polygon (Matic) - Testnet",
-      active: true,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      active: true
+      ,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     },
     {
       key: "MATIC_MAINNET",
       description: "Polygon (Matic)",
-      active: true,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      active: true,
+      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     },
     {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
-      active: true,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      active: true,
+      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     },
     {
       key: "ETH_MAINNET",
       description: "Ethereum (ETH)",
-      active: true,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      active: true,
+      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     },
   ];*/
 }

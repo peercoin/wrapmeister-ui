@@ -3,14 +3,7 @@
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
       <countdown v-if="!signed" :status="0.01 * countDown"></countdown>
-      <row>
-        <column :lg="12" :xl="6">
-          <p>Completed</p>
-        </column>
-        <column :lg="12" :xl="6" class="margin-auto">
-          <span class="icon-case"> <font-awesome-icon :icon="completedIcon" /></span>
-        </column>
-      </row>
+
       <row>
         <column :lg="12" :xl="6">
           <p>Network</p>
@@ -20,7 +13,7 @@
             type="text"
             disabled="true"
             class="row-input-field"
-            :value="mapNetworks(transaction.network)"
+            :value="mapNetworks(session.network)"
           />
         </column>
       </row>
@@ -33,7 +26,7 @@
             type="text"
             disabled="true"
             class="row-input-field"
-            :value="transaction.amount"
+            :value="session.amount"
           />
         </column>
       </row>
@@ -42,16 +35,16 @@
           <p>{{ peercoinAddressLabel }}</p>
         </column>
         <column :lg="12" :xl="6" class="margin-auto">
-          <row>
+          <row v-if="1 == 2">
             <vue-q-r-code-component
               class="margin-auto"
-              v-if="!!transaction.ppcAddress && !!transaction.wrapping"
+              v-if="!!session.ppcAddress && !!session.wrapping"
               :size="250"
-              :text="transaction.ppcAddress"
+              :text="session.ppcAddress"
             />
           </row>
           <row>
-            <small class="margin-auto">{{ transaction.ppcAddress }}</small>
+            <small class="margin-auto">{{ session.ppcAddress }}</small>
           </row>
         </column>
       </row>
@@ -65,7 +58,7 @@
             :disabled="1 == 1"
             class="row-input-field"
             placeholder="waiting for deposit..."
-            :value="transaction.ppcTransactionHash"
+            :value="session.ppcTransactionHash"
           />
         </column>
       </row>
@@ -74,18 +67,50 @@
           <p>ERC-20 address</p>
         </column>
         <column :lg="12" :xl="6" class="margin-auto">
-          <row>
+          <row v-if="2 == 1">
             <vue-q-r-code-component
               class="margin-auto"
               :size="250"
-              :text="transaction.erc20Address"
+              v-if="!!session.erc20Address"
+              :text="session.erc20Address"
             />
           </row>
           <row>
-            <small class="margin-auto">{{ transaction.erc20Address }}</small>
+            <small class="margin-auto">{{ session.erc20Address }}</small>
           </row>
         </column>
       </row>
+
+      <row
+        v-if="!!session.wrapping && !!wrapClaimtokensTransactionHash"
+        class="transation-container"
+      >
+        <column :lg="12" :xl="6">
+          <p>Claim TransactionHash</p>
+        </column>
+        <column :lg="12" :xl="6" class="margin-auto">
+          <row>
+            <input
+              type="text"
+              disabled
+              :placeholder="''"
+              class="row-input-field"
+              :value="wrapClaimtokensTransactionHash"
+            />
+          </row>
+          <row>
+            <m-button
+              class="m-top-sm margin-auto"
+              v-if="!!session.wrapping"
+              type="success"
+              @mbclick="signWrapClaimtokensTransactionHash"
+              :disabled="!wrapClaimtokensTransactionHash"
+              >Sign hash with MetaMask</m-button
+            >
+          </row>
+        </column>
+      </row>
+
       <row class="transation-container">
         <column :lg="12" :xl="6">
           <p>ERC-20 transaction</p>
@@ -103,7 +128,7 @@
           <row>
             <m-button
               class="m-top-sm margin-auto"
-              v-if="!transaction.wrapping"
+              v-if="!session.wrapping"
               type="success"
               @mbclick="submitRetrievePeercoin"
               :disabled="!transactionHash"
@@ -112,44 +137,15 @@
           </row>
         </column>
       </row>
-      <row>
-        <column :lg="12" :xl="6">
-          <p>Signature</p>
-        </column>
-        <column :lg="12" :xl="6" class="margin-auto">
-          <row>
-            <vue-q-r-code-component
-              class="margin-auto"
-              v-if="transaction.signature"
-              :size="250"
-              :text="transaction.signature"
-            />
-          </row>
-          <row>
-            <textarea
-              disabled
-              v-if="transaction.signature"
-              class="row-input-field row-textarea-field m-top-sm"
-              v-model="transaction.signature"
-            ></textarea>
-          </row>
-        </column>
-      </row>
-      <row>
-        <column :lg="12" :xl="6">
-          <p>Signed</p>
-        </column>
-        <column :lg="12" :xl="6" class="margin-auto">
-          <span class="icon-case"> <font-awesome-icon :icon="signedIcon" /></span>
-        </column>
-      </row>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { wrapEndpoints, getNetworks } from "@/Endpoints.js";
+import { setIntervalAsync } from "set-interval-async/fixed";
+import { clearIntervalAsync } from "set-interval-async";
+import { wrapEndpoints, getNetworks, getContractAddress } from "@/Endpoints.js";
 import VueQRCodeComponent from "vue-qrcode-component";
 import MButton from "@/components/Button.vue";
 import Countdown from "@/components/Countdown.vue";
@@ -165,9 +161,9 @@ export default {
   },
 
   watch: {
-    sessionId(newval, oldVal) {
+    async sessionId(newval, oldVal) {
       if (newval !== oldVal) {
-        this.getSession(newval);
+        await this.getSession(newval);
         this.countDown = 100;
       }
     },
@@ -177,9 +173,9 @@ export default {
     return {
       requestId: null,
       countDown: 100,
-      countDownHandle: 0,
+      countDownHandle: null,
       endpoints: wrapEndpoints,
-      transaction: {
+      session: {
         _id: null,
         network: null,
         wrapping: true,
@@ -193,62 +189,79 @@ export default {
         erc20TransactionHash: null,
         ppcTransactionHash: null,
       },
-      transactionHash: "",//from web3
+      transactionHash: "", //from web3
+      wrapClaimtokensTransactionHash: "",
       accounts: [],
       web3: null,
-      contractAddress: process.env.VUE_APP_CONTRACT_ADDRESS,//todo
+      contractAddress: "",
     };
   },
 
   async mounted() {
+    this.resetSession();
     this.requestId = this.newId();
     clearInterval(this.countDownHandle);
-    this.countDownHandle = 0;
-    this.countDownHandle = setInterval(this.onCountDown, 300);
-    const enabled = await this.ethEnabled();
-    if (!enabled) {
-      alert("Please install MetaMask to use this dApp!");
+
+    if (!!this.countDownHandle) {
+      (async () => {
+        await clearIntervalAsync(this.countDownHandle);
+        this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
+      })();
+    } else {
+      this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
+    /*
+    this.accounts = await this.getAccounts();
+
+    if (!this.accounts || this.accounts.length < 1) {
+      alert("Please install MetaMask to use this website.");
+    }
+*/
     await this.getSession(this.sessionId);
   },
 
-  unmounted() {
-    clearInterval(this.countDownHandle);
-    this.countDownHandle = 0;
+  async unmounted() {
+    if (!!this.countDownHandle) {
+      (async () => {
+        await clearIntervalAsync(this.countDownHandle);
+      })();
+    }
   },
 
   computed: {
     signed() {
-      return !!this.transaction && !!this.transaction._id && this.transaction.signed;
+      return !!this.session && !!this.session._id && this.session.signed;
     },
 
     completedIcon() {
-      if (!!this.transaction && !!this.transaction._id && this.transaction.completed) {
+      if (!!this.session && !!this.session._id && this.session.completed) {
         return "check-square";
       }
       return "times";
     },
 
     signedIcon() {
-      if (!!this.transaction && !!this.transaction._id && this.transaction.signed) {
+      if (!!this.session && !!this.session._id && this.session.signed) {
         return "check-square";
       }
       return "times";
     },
 
     peercoinAddressLabel() {
-      return this.transaction.wrapping
+      return this.session.wrapping
         ? "Peercoin deposit address"
         : "Peercoin receive address";
     },
 
     sessionHeader() {
-      if (!!this.transaction && !!this.transaction._id) {
-        if (!!this.transaction.network) {
-          if (this.transaction.wrapping) {
-            return "Send Peercoin to " + this.mapNetworks(this.transaction.network);
+      if (!!this.session && !!this.session._id) {
+        if (!!this.session.network) {
+          if (this.session.wrapping) {
+            return "Send Peercoin to " + this.mapNetworks(this.session.network);
           } else {
-            return "Get Peercoin from " + this.mapNetworks(this.transaction.network);
+            return (
+              "Get Peercoin from " + this.mapNetworks(this.session.network)
+            );
           }
         }
       }
@@ -258,19 +271,41 @@ export default {
   },
 
   methods: {
+    resetSession() {
+      this.accounts = [];
+      this.wrapClaimtokensTransactionHash = "";
+      this.transactionHash = "";
+      this.session = {
+        _id: null,
+        network: null,
+        wrapping: true,
+        amount: null,
+        signed: false,
+        signature: null,
+        nonce: null,
+        erc20Address: null,
+        ppcAddress: null,
+        completed: false,
+        erc20TransactionHash: null,
+        ppcTransactionHash: null,
+      };
+    },
+
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+        c
+      ) {
         const r = (Math.random() * 16) | 0,
           v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
       });
     },
 
-    onCountDown() {
+    async onCountDown() {
       if (!this.signed) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
-          this.getSession(this.transaction._id);
+          await this.getSession(this.session._id);
           this.countDown = 100;
         }
       }
@@ -281,127 +316,187 @@ export default {
       return !!network ? network.description : key;
     },
 
-    async ethEnabled() {
+    async getAccounts() {
       if (window.ethereum) {
         try {
+          if (!!this.accounts && this.accounts.length > 0) {
+            return this.accounts;
+          }
           await ethereum.request({
             method: "eth_requestAccounts",
           });
+
           this.web3 = new Web3(ethereum);
-          this.accounts = await this.web3.eth.getAccounts();
-          return true;
+          const accounts = await this.web3.eth.getAccounts();
+          return accounts;
         } catch (error) {
+          console.log("getAccounts");
           console.log(error);
         }
+      }
+      return [];
+    },
+
+    //unwrap:
+    async sendBurnTransaction() {
+      if (this.accounts.length > 0) {
+        const contractInstance = new this.web3.eth.Contract(
+          ABI,
+          this.contractAddress,
+          {
+            from: this.session.erc20Address,
+          }
+        );
+        let signature = JSON.parse(this.session.signature);
+        try {
+          const result = await contractInstance.methods
+            .burnTokens(
+              this.session.amount,
+              this.session.nonce,
+              signature.v,
+              signature.r,
+              signature.s
+            )
+            .send();
+          const r = confirm(
+            `Please sign with your MetaMask \n ${result.transactionHash}`
+          );
+          if (r) {
+            try {
+              let signResult = await this.web3.eth.sign(
+                result.transactionHash,
+                this.session.erc20Address
+              );
+              this.transactionHash = result.transactionHash;
+              console.log(signResult);
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            alert("Transaction sign rejected by user.");
+          }
+        } catch {}
+      }
+    },
+
+    hasValidSignature() {
+      if (!!this.session && !!this.session.signed && !!this.session.signature) {
+        try {
+          let signature = JSON.parse(this.session.signature);
+          return "v" in signature && "r" in signature && "s" in signature;
+        } catch (error) {}
       }
       return false;
     },
 
-    async sendBurnTransaction() {
-      if (this.accounts.length > 0) {
-        const contractInstance = new this.web3.eth.Contract(ABI, this.contractAddress, {
-          from: this.transaction.erc20Address,
-        });
-        let signature = JSON.parse(this.transaction.signature);
-        try {
-          const result = await contractInstance.methods
-            .burnTokens(
-              this.transaction.amount,
-              this.transaction.nonce,
-              signature.v,
-              signature.r,
-              signature.s
-            )
-            .send();
-          const r = confirm(
-            `Please sign with your MetaMask \n ${result.transactionHash}`
-          );
-          if (r) {
-            try {
-              let signResult = await this.web3.eth.sign(
-                result.transactionHash,
-                this.transaction.erc20Address
-              );
-              this.transactionHash = result.transactionHash;
-              console.log(signResult);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            alert("Transaction sign rejected by user.");
-          }
-        } catch {}
-      }
-    },
-
+    //wrap:
     async sendMinTransaction() {
-      if (this.accounts.length > 0) {
-        const contractInstance = new this.web3.eth.Contract(ABI, this.contractAddress, {
-          from: this.transaction.erc20Address,
-        });
-        let signature = JSON.parse(this.transaction.signature);
-        try {
-          const result = await contractInstance.methods
-            .claimTokens(
-              this.transaction.amount,
-              this.transaction.nonce,
-              this.transaction.erc20Address,
-              signature.v,
-              signature.r,
-              signature.s
-            )
-            .send();
-          const r = confirm(
-            `Please sign with your MetaMask \n ${result.transactionHash}`
-          );
-          if (r) {
-            try {
-              let signResult = await this.web3.eth.sign(
-                result.transactionHash,
-                this.transaction.erc20Address
-              );
-              this.transactionHash = result.transactionHash;
-              console.log(signResult);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            alert("Transaction sign rejected by user.");
-          }
-        } catch {}
+      this.accounts = await this.getAccounts();
+      if (
+        !this.accounts ||
+        this.accounts.length < 1 ||
+        !this.session ||
+        !this.session.signature ||
+        !this.session.wrapping ||
+        !this.session.erc20Address ||
+        !this.session.network ||
+        !this.hasValidSignature()
+      )
+        return;
+
+      if (!this.contractAddress) {
+        console.warn(
+          "No contract address fount for network: " + this.session.network
+        );
+        return;
+      }
+
+      const optionsContract = {
+        from: this.session.erc20Address,
+      };
+
+      //https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html
+      const contractInstance = new this.web3.eth.Contract(
+        ABI,
+        this.contractAddress,
+        optionsContract
+      );
+
+      try {
+        let signature = JSON.parse(this.session.signature);
+
+        //claimTokens is defined in @/abi/erc20.json
+        const result = await contractInstance.methods
+          .claimTokens(
+            this.session.amount,
+            this.session.nonce,
+            this.session.erc20Address,
+            signature.v,
+            signature.r,
+            signature.s
+          )
+          .send();
+
+        this.wrapClaimtokensTransactionHash = result.transactionHash;
+      } catch (e) {
+        console.log("sendMinTransaction exception");
+        console.log(e);
       }
     },
 
-    async getSession(id) {
-      if (!id) return;
-      axios
-        .get(this.endpoints(id).session)
-        .then((res) => {
-          if (!!res && !!res.data && !!res.data.data) {
-            this.transaction = res.data.data;
-            if (this.transaction.signed && !this.transaction.completed) {
-              if (this.transaction.wrapping) {
-                this.sendMinTransaction();
-              } else {
-                this.sendBurnTransaction();
-              }
-            }
-          } else {
+    async signWrapClaimtokensTransactionHash() {
+      if (!this.wrapClaimtokensTransactionHash || !this.session.erc20Address)
+        return;
+
+      try {
+        const signResult = await this.web3.eth.sign(
+          this.wrapClaimtokensTransactionHash,
+          this.session.erc20Address
+        );
+        //this.transactionHash = result.transactionHash;
+        console.log(signResult);
+
+        //wrapping done, as soon as Completed is retrieved this page wil automatically close.
+      } catch (e) {
+        console.log("signWrapClaimtokensTransactionHash");
+        console.log(e);
+      }
+    },
+
+    async getSession(sessionid) {
+      if (!sessionid) return;
+
+      try {
+        const res = await axios.get(this.endpoints(sessionid).session);
+       // console.log(res.data);
+        //     debugger;
+        if (!!res && !!res.data && !!res.data.data) {
+          this.session = res.data.data;
+
+          this.contractAddress = getContractAddress(this.session.network);
+
+          if (this.session.completed) {
+            this.resetSession();
             this.eventBus.emit("add-toastr", {
-              text:
-                !!res && !!res.data && !!res.data.message
-                  ? res.data.message
-                  : `Unable to retrieve session ${id}`,
-              type: "error",
+              text: `Session ${sessionid} completed`,
+              type: "success",
             });
+
+            this.eventBus.emit("goto-home", {});
+          } else if (this.session.signed) {
+            if (this.session.wrapping) {
+              this.sendMinTransaction();
+            } else {
+              this.sendBurnTransaction();
+            }
           }
-        })
-        .catch((err) => {
-          this.eventBus.emit("add-toastr", {
-            text: `Unable to retrieve session ${id}`,
-            type: "error",
-          });
+        }
+      } catch (error) {
+        this.eventBus.emit("add-toastr", {
+          text: `Unable to retrieve session ${sessionid}`,
+          type: "error",
         });
+      }
     },
 
     async submitRetrievePeercoin() {
@@ -410,7 +505,7 @@ export default {
           "Cache-Control": "no-cache",
           Pragma: "no-cache",
           Expires: "0",
-          network: this.transaction.network,
+          network: this.session.network,
           "Idempotency-Key": this.requestId,
         },
       };
@@ -418,7 +513,7 @@ export default {
       const data = {
         erc20TransactionHash: "", // (gotten as response from the transaction that burns wppc)
         signedMessage: "", //(use users address to sign transaction hash)
-        sessionID: this.transaction._id,
+        sessionID: this.session._id,
       };
       let response = await axios.post(this.endpoints().retrieve, data, config);
 

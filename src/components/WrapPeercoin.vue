@@ -58,7 +58,7 @@ export default {
     return {
       requestId: null,
       amount: "",
-      destinationAddress: "0x5e9560b6DC421E3Dd6021de4a4094be8517F7E34",
+      destinationAddress: "",
       network: "",
       endpoints: wrapEndpoints,
       networks: [],
@@ -88,6 +88,7 @@ export default {
 
       return typeof n == "number" && !isNaN(n) && isFinite(n) && n > 0;
     },
+
     validForm() {
       return this.validAmount && this.validAddress && !!this.network;
     },
