@@ -27,7 +27,7 @@ POST /api/v1/peercoin/wrap
 parameters:
         amount: 1984,
         destinationAddress: an_ETHdestinationAddress,
-        erc20Address: an_ETHdestinationAddress (isn't used in wrap, but required in interface)
+       
 
 OUTPUT: a session with sessionID
 

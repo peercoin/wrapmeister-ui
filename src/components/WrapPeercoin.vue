@@ -115,7 +115,7 @@ export default {
       const data = {
         amount: n,
         destinationAddress: this.destinationAddress,
-        erc20Address: this.destinationAddress,
+       // erc20Address: this.destinationAddress,
       };
 
       const config = {
