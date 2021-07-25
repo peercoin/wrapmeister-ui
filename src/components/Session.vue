@@ -2,7 +2,7 @@
   <div>
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
-      <countdown v-if="!sessionCompleted" :status="0.01 * countDown"></countdown>
+      <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
 
       <row>
         <column :lg="12" :xl="6">
@@ -198,8 +198,8 @@ export default {
   },
 
   computed: {
-    sessionCompleted() {
-      return !!this.session && !!this.session._id && this.session.completed;
+    showProgressbar() {
+      return !!this.session && !!this.session._id && !this.session.signed && this.session.wrapping;
     },
 
     completedIcon() {
@@ -272,7 +272,7 @@ export default {
     },
 
     async onCountDown() {
-      if (!this.sessionCompleted) {
+      if (this.showProgressbar) {
         this.countDown = this.countDown - 1;
         if (this.countDown < 0.001) {
           await this.getSession(this.session._id);
@@ -309,6 +309,8 @@ export default {
 
     //unwrap:
     async sendBurnTransaction() {
+      if (!!this.unwrapBurnTokensTransactionHash) return;
+
       this.accounts = await this.getAccounts();
       if (
         !this.accounts ||
@@ -381,6 +383,8 @@ export default {
 
     //wrap:
     async sendMinTransaction() {
+      if (!!this.wrapClaimtokensTransactionHash) return;
+
       this.accounts = await this.getAccounts();
       if (
         !this.accounts ||
@@ -428,6 +432,13 @@ export default {
           .send();
 
         this.wrapClaimtokensTransactionHash = result.transactionHash;
+
+        this.resetSession();
+        this.eventBus.emit("add-toastr", {
+          text: `Tokenise Peercoin to ETH completed`,
+          type: "success",
+        });
+        this.eventBus.emit("goto-home", {});
       } catch (e) {
         console.log("sendMinTransaction exception");
         console.log(e);
@@ -541,7 +552,8 @@ export default {
             : `getting peercoins...`,
         type: "success",
       });
-      //todo reset to homepage
+
+      this.eventBus.emit("goto-home", {});
     },
   },
 };
