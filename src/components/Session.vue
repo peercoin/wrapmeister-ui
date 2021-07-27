@@ -1,5 +1,11 @@
 <template>
   <div>
+    <modal
+      v-if="popupModal"
+      @modalconfirm="onModalConfirm"
+      @modalclose="onModalClose"
+      body="Proceed with MetaMask?"
+    ></modal>
     <div class="session-container">
       <div class="session-container-heading">{{ sessionHeader }}</div>
       <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
@@ -122,6 +128,7 @@ import { wrapEndpoints, getNetworks, getContractAddress } from "@/Endpoints.js";
 import VueQRCodeComponent from "vue-qrcode-component";
 import MButton from "@/components/Button.vue";
 import Countdown from "@/components/Countdown.vue";
+import Modal from "@/components/Modal.vue";
 import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
 
@@ -131,6 +138,7 @@ export default {
     VueQRCodeComponent,
     MButton,
     Countdown,
+    Modal,
   },
 
   watch: {
@@ -169,6 +177,7 @@ export default {
       accounts: [],
       web3: null,
       contractAddress: "",
+      popupModal: false,
     };
   },
 
@@ -199,7 +208,12 @@ export default {
 
   computed: {
     showProgressbar() {
-      return !!this.session && !!this.session._id && !this.session.signed && this.session.wrapping;
+      return (
+        !!this.session &&
+        !!this.session._id &&
+        !this.session.signed &&
+        this.session.wrapping
+      );
     },
 
     completedIcon() {
@@ -245,6 +259,7 @@ export default {
       this.wrapClaimtokensTransactionHash = "";
       this.unwrapBurnTokensTransactionHash = "";
       this.unwrapSignedMessage = "";
+      this.popupModal = false;
       this.session = {
         _id: null,
         network: null,
@@ -259,6 +274,21 @@ export default {
         erc20TransactionHash: null,
         ppcTransactionHash: null,
       };
+    },
+
+    onModalConfirm() {
+      if (this.session.signed) {
+        this.popupModal = false;
+        if (!!this.session.wrapping) {
+          this.sendMinTransaction();
+        } else {
+          this.sendBurnTransaction();
+        }
+      }
+    },
+
+    onModalClose() {
+      this.popupModal = false;
     },
 
     newId() {
@@ -474,7 +504,7 @@ export default {
           this.session = res.data.data;
 
           this.contractAddress = getContractAddress(this.session.network);
-
+ 
           if (this.session.completed) {
             this.resetSession();
             this.eventBus.emit("add-toastr", {
@@ -484,11 +514,7 @@ export default {
 
             this.eventBus.emit("goto-home", {});
           } else if (this.session.signed) {
-            if (!!this.session.wrapping) {
-              this.sendMinTransaction();
-            } else {
-              this.sendBurnTransaction();
-            }
+            this.popupModal = true;
           }
         }
       } catch (error) {
