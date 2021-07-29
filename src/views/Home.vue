@@ -94,7 +94,6 @@
 <script>
 // @ is an alias to /src
 import MButton from "@/components/Button.vue";
-import Steps from "@/components/Steps.vue";
 import Session from "@/components/Session.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
@@ -187,7 +186,6 @@ export default {
 
   components: {
     MButton,
-    Steps,
     Session,
     CollapseTransition,
     WrapPeercoin,
