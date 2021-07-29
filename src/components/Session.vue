@@ -88,7 +88,7 @@
       </row>
 
       <row
-        v-if="!session.wrapping && !!unwrapBurnTokensTransactionHash"
+        v-if="(1 == 2) && !session.wrapping && !!unwrapBurnTokensTransactionHash"
         class="transation-container"
       >
         <column :lg="12" :xl="6">
@@ -104,7 +104,7 @@
               :value="unwrapBurnTokensTransactionHash"
             />
           </row>
-          <row v-if="1==2">
+          <row>
             <m-button
               class="m-top-sm margin-auto"
               v-if="!!session.wrapping"
@@ -379,12 +379,24 @@ export default {
           .send();
 
         this.unwrapBurnTokensTransactionHash = result.transactionHash;
+        console.log(
+          "unwrapBurnTokensTransactionHash: " +
+            this.unwrapBurnTokensTransactionHash
+        );
+
+        //the end of unwrap:
+
+        this.eventBus.emit("add-toastr", {
+          text: `Unwrap Peercoin from ETH completed`,
+          type: "success",
+        });
+        this.eventBus.emit("goto-home", {});
       } catch (e) {
         console.log(e);
       }
     },
 
-     async signUnwrapBurnTokensTransactionHash() {},
+    async signUnwrapBurnTokensTransactionHash() {},
     //   if (!this.unwrapBurnTokensTransactionHash || !this.session.erc20Address)
     //     return;
 
@@ -396,15 +408,9 @@ export default {
 
     //     console.log(signResult);
     //     this.unwrapSignedMessage = signResult;
-        
+
     //     //not needed anymore
     //     //await this.submitRetrievePeercoin();
-    //     //the end:
-    //     this.eventBus.emit("add-toastr", {
-    //       text: `Unwrap Peercoin from ETH completed`,
-    //       type: "success",
-    //     });
-    //     this.eventBus.emit("goto-home", {});
 
     //   } catch (e) {
     //     console.log(e);
@@ -514,7 +520,7 @@ export default {
           this.session = res.data.data;
 
           this.contractAddress = getContractAddress(this.session.network);
- 
+
           if (this.session.completed) {
             this.resetSession();
             this.eventBus.emit("add-toastr", {
