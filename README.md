@@ -32,7 +32,7 @@ parameters:
 OUTPUT: a session with sessionID
 
 step 2....n:
-POST /api/v1/peercoin/retrieve/{sessionID} 
+GET /api/v1/session/{sessionID}
 Until session.signed is true and session.signature is a json-string having:
             signature.v,
             signature.r,
@@ -73,7 +73,7 @@ parameters:
 OUTPUT: a session with sessionID
 
 step 2: 
-POST /api/v1/peercoin/retrieve/{sessionID} 
+GET /api/v1/session/{sessionID}
 Until (most likely just once) the session.signed is true and session.signature is a json-string having:
             signature.v,
             signature.r,
