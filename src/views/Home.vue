@@ -16,11 +16,6 @@
     </row>
 
     <row :gutter="50">
-      <column :xs="12" :lg="3" v-if="metaMaskEnabled">
-        <div class="body-column">
-          <steps />
-        </div>
-      </column>
       <column :xs="12" :lg="!!metaMaskEnabled ? 9 : 12">
         <div class="body-column">
           <collapse-transition>
