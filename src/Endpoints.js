@@ -4,7 +4,7 @@ export function wrapEndpoints(id) {
   return {
     wrap: `${_host}/api/v1/peercoin/wrap`,
     unwrap: `${_host}/api/v1/peercoin/unwrap`,
-    retrieve: `${_host}/api/v1/peercoin/retrieve`,
+    //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
   };
 }

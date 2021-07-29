@@ -104,7 +104,7 @@
               :value="unwrapBurnTokensTransactionHash"
             />
           </row>
-          <row>
+          <row v-if="1==2">
             <m-button
               class="m-top-sm margin-auto"
               v-if="!!session.wrapping"
@@ -384,22 +384,32 @@ export default {
       }
     },
 
-    async signUnwrapBurnTokensTransactionHash() {
-      if (!this.unwrapBurnTokensTransactionHash || !this.session.erc20Address)
-        return;
-      try {
-        let signResult = await this.web3.eth.sign(
-          this.unwrapBurnTokensTransactionHash,
-          this.session.erc20Address
-        );
+     async signUnwrapBurnTokensTransactionHash() {},
+    //   if (!this.unwrapBurnTokensTransactionHash || !this.session.erc20Address)
+    //     return;
 
-        console.log(signResult);
-        this.unwrapSignedMessage = signResult;
-        await this.submitRetrievePeercoin();
-      } catch (e) {
-        console.log(e);
-      }
-    },
+    //   try {
+    //     let signResult = await this.web3.eth.sign(
+    //       this.unwrapBurnTokensTransactionHash,
+    //       this.session.erc20Address
+    //     );
+
+    //     console.log(signResult);
+    //     this.unwrapSignedMessage = signResult;
+        
+    //     //not needed anymore
+    //     //await this.submitRetrievePeercoin();
+    //     //the end:
+    //     this.eventBus.emit("add-toastr", {
+    //       text: `Unwrap Peercoin from ETH completed`,
+    //       type: "success",
+    //     });
+    //     this.eventBus.emit("goto-home", {});
+
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
 
     hasValidSignature() {
       if (!!this.session && !!this.session.signed && !!this.session.signature) {
@@ -525,62 +535,62 @@ export default {
       }
     },
 
-    async submitRetrievePeercoin() {
-      if (
-        !!this.session.wrapping ||
-        !this.unwrapSignedMessage ||
-        !this.unwrapBurnTokensTransactionHash ||
-        !this.session._id ||
-        !this.session.network
-      )
-        return;
+    // async submitRetrievePeercoin() {
+    //   if (
+    //     !!this.session.wrapping ||
+    //     !this.unwrapSignedMessage ||
+    //     !this.unwrapBurnTokensTransactionHash ||
+    //     !this.session._id ||
+    //     !this.session.network
+    //   )
+    //     return;
 
-      const config = {
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-          network: this.session.network,
-          "Idempotency-Key": this.requestId,
-        },
-      };
+    //   const config = {
+    //     headers: {
+    //       "Cache-Control": "no-cache",
+    //       Pragma: "no-cache",
+    //       Expires: "0",
+    //       network: this.session.network,
+    //       "Idempotency-Key": this.requestId,
+    //     },
+    //   };
 
-      const data = {
-        erc20TransactionHash: this.unwrapBurnTokensTransactionHash, // (gotten as response from the transaction that burns wppc)
-        signedMessage: this.unwrapSignedMessage, //(use users address to sign transaction hash)
-        sessionID: this.session._id,
-      };
-      let response = await axios.post(this.endpoints().retrieve, data, config);
+    //   const data = {
+    //     erc20TransactionHash: this.unwrapBurnTokensTransactionHash, // (gotten as response from the transaction that burns wppc)
+    //     signedMessage: this.unwrapSignedMessage, //(use users address to sign transaction hash)
+    //     sessionID: this.session._id,
+    //   };
+    //   let response = await axios.post(this.endpoints().retrieve, data, config);
 
-      if (
-        (!!response && !!response.error) ||
-        (!!response && !!response.data.error) ||
-        !(
-          !!response &&
-          !!response.data &&
-          !!response.data.data &&
-          !!response.data.data._id
-        )
-      ) {
-        this.eventBus.emit("add-toastr", {
-          text:
-            !!response && !!response.data && !!response.data.message
-              ? response.data.message
-              : `Unable to request peercoins`,
-          type: "error",
-        });
-        return;
-      }
-      this.eventBus.emit("add-toastr", {
-        text:
-          !!response && !!response.data && !!response.data.message
-            ? response.data.message
-            : `getting peercoins...`,
-        type: "success",
-      });
+    //   if (
+    //     (!!response && !!response.error) ||
+    //     (!!response && !!response.data.error) ||
+    //     !(
+    //       !!response &&
+    //       !!response.data &&
+    //       !!response.data.data &&
+    //       !!response.data.data._id
+    //     )
+    //   ) {
+    //     this.eventBus.emit("add-toastr", {
+    //       text:
+    //         !!response && !!response.data && !!response.data.message
+    //           ? response.data.message
+    //           : `Unable to request peercoins`,
+    //       type: "error",
+    //     });
+    //     return;
+    //   }
+    //   this.eventBus.emit("add-toastr", {
+    //     text:
+    //       !!response && !!response.data && !!response.data.message
+    //         ? response.data.message
+    //         : `getting peercoins...`,
+    //     type: "success",
+    //   });
 
-      this.eventBus.emit("goto-home", {});
-    },
+    //   this.eventBus.emit("goto-home", {});
+    // },
   },
 };
 </script>

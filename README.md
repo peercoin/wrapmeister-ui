@@ -56,7 +56,7 @@ step n+1:
  OUTPUT: a wrapClaimtokensTransactionHash         
 
 
-Done. Return to HOME (once the session.completed is retrieved)
+Done. Return to HOME  
 
 
 ### unwrap
@@ -95,24 +95,6 @@ step 3:
           .send() 	
  OUTPUT: a unwrapBurnTokensTransactionHash         
 
-
-
-
-click button for step 4:
-web3.eth.sign(
-          unwrapBurnTokensTransactionHash,
-          session.erc20Address
-        )
- OUTPUT: a unwrapBurnsignature  
-
-step 5:
-- POST /api/v1/peercoin/retrieve
-  parameters:
-        erc20TransactionHash (gotten as response from the transaction that burns wppc)
-        signedMessage: unwrapBurnsignature, //(use users address to sign transaction hash)
-        sessionID: session._id,
-
-
-Done. Return to HOME (when session completed is true)      
+Done. Return to HOME  
 
  
