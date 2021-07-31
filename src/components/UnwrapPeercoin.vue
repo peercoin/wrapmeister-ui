@@ -110,7 +110,10 @@ export default {
     },
 
     validERC20Address() {
-      return !!this.erc20Address && validate(this.erc20Address, "ETH");
+      if (!!this.network && this.network.indexOf("TEST") != 0) {
+        return validate(this.erc20Address, "ETH", "both");
+      }
+      return validate(this.erc20Address, "ETH");
     },
 
     validAddress() {
