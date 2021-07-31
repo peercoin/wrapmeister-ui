@@ -1,4 +1,4 @@
-<template>
+<template><!-- shows a explainer on the left page side, NOT USED FOR NOW -->
   <h3 class="explain-title">01</h3>
   <p>Tokenize Peercoins on ETH</p>
   <h3 class="explain-title">02</h3>

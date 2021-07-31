@@ -7,11 +7,6 @@ const routes = [
     name: "Home",
     component: Home,
   },
-  {
-    path: "/session/:id",
-    name: "Session",
-    component: Home,
-  },
 ];
 
 const router = createRouter({

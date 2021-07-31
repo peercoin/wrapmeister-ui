@@ -16,12 +16,12 @@
     </row>
 
     <row :gutter="50">
-      <column :xs="12" :lg="3" v-if="metaMaskEnabled">
+      <!--      <column :xs="12" :lg="3" v-if="metaMaskEnabled">
         <div class="body-column">
           <steps />
         </div>
-      </column>
-      <column :xs="12" :lg="!!metaMaskEnabled ? 9 : 12">
+      </column> -->
+      <column :xs="12" :lg="1 == 2 && !!metaMaskEnabled ? 9 : 12">
         <div class="body-column">
           <collapse-transition>
             <div class="body-mid center" v-if="!metaMaskEnabled">
@@ -38,45 +38,6 @@
               <m-button block size="max" type="success" @mbclick="toggleUnwrap"
                 >Unbridge token back to Peercoin</m-button
               >
-
-              <m-button v-if="1==2"
-                block
-                size="max"
-                type="success"
-                @mbclick="toggleEnterSession"
-                >Continue session</m-button
-              >
-            </div>
-          </collapse-transition>
-
-          <collapse-transition>
-            <div v-if="enteringSession" class="form-group">
-              <row>
-                <column :lg="12" :xl="4">
-                  <p>Session Id</p>
-                </column>
-                <column :lg="12" :xl="8" class="margin-auto">
-                  <input
-                    type="text"
-                    :class="{ 'row-input-field': true }"
-                    v-model="sessionId"
-                  />
-                </column>
-              </row>
-              <m-button
-                class="m-top-xl"
-                type="success"
-                size="max"
-                @mbclick="onSessionEntered"
-                :disabled="!sessionId"
-                >View session</m-button
-              >
-            </div>
-          </collapse-transition>
-
-          <collapse-transition>
-            <div v-if="showSession">
-              <session :sessionId="currentSessionId" />
             </div>
           </collapse-transition>
 
@@ -99,8 +60,6 @@
 <script>
 // @ is an alias to /src
 import MButton from "@/components/Button.vue";
-import Steps from "@/components/Steps.vue";
-import Session from "@/components/Session.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
@@ -119,11 +78,11 @@ export default {
   },
 
   created() {
-    this.eventBus.on('goto-home', this.gotoHome) 
+    this.eventBus.on("goto-home", this.gotoHome);
   },
 
   beforeUnmount() {
-      this.eventBus.off('goto-home', this.gotoHome)   
+    this.eventBus.off("goto-home", this.gotoHome);
   },
 
   methods: {
@@ -192,8 +151,6 @@ export default {
 
   components: {
     MButton,
-    Steps,
-    Session,
     CollapseTransition,
     WrapPeercoin,
     UnwrapPeercoin,
@@ -219,8 +176,8 @@ export default {
 .body-column {
   padding: 25px;
   background-color: rgba(255, 255, 255, 0.85);
-  min-height: 300px;
-  border-radius: 25px;
+  min-height: 100px;
+  border-radius: 5px;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.7;
