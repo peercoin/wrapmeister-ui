@@ -96,6 +96,21 @@ export default {
       endpoints: wrapEndpoints,
       networks: [],
       unwrapSignedMessage: "",
+      session: {
+        _id: null,
+        network: null,
+        amount: null,
+        wrapSignature: null,
+        wrapTxid: null,
+        wrapNonce: null,
+        wrapPPCAddress: null,
+        unwrapSignature: null,
+        unwrapTxid: null,
+        unwrapNonce: false,
+        unwrapPPCAddress: null,
+        ERC20Address: null,
+        inStorage: false
+      },
     };
   },
 
@@ -166,7 +181,7 @@ export default {
       if (!this.comfirmedProceedMetaMask) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
-        this.doMetaMaskStuff();
+        this.submitUnWrap();
       }
     },
 
@@ -216,24 +231,34 @@ export default {
       )
         return;
 
+      const contractAddress = getContractAddress(this.session.network);
+      if (!contractAddress) {
+        console.warn(
+          "No contract address found for network: " + this.session.network
+        );
+        return;
+      }
+
       const optionsContract = {
-        from: "this.session.erc20Address",
+        from: this.session.ERC20Address,
       };
 
       //https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html
       const contractInstance = new this.web3.eth.Contract(
         ABI,
-        this.contractAddress,
+        contractAddress,
         optionsContract
       );
-      let signatureJson = ""; //from metamask?
-      let amount = 12.34;
-      let nonce = 42;
+      //let signatureJson = ""; //from metamask?
+      //let amount = 12.34;
+      //let nonce = 42;
       try {
         // burnTokens is from erc20.json ABI file
-        let signature = JSON.parse(signatureJson);
+        let signature = JSON.parse(this.session.unwrapSignature);
+        console.log(this.session);
+        console.log(signature);
         const result = await contractInstance.methods
-          .burnTokens(amount, nonce, signature.v, signature.r, signature.s)
+          .burnTokens(this.session.amount, this.session.unwrapNonce, signature.v, signature.r, signature.s)
           .send();
 
         this.unwrapBurnTokensTransactionHash = result.transactionHash;
@@ -271,13 +296,7 @@ export default {
     },
 
     async submitUnWrap() {
-      let nb = parseFloat(this.amount);
-      const data = {
-        amount: nb,
-        destinationAddress: "this.destinationAddress", //valid Peercoinaddress!
-        erc20Address: " this.erc20Address",
-        //unwrapBurnTokensTransactionHash
-      };
+      //let nb = parseFloat(this.amount);
       const config = {
         headers: {
           "Cache-Control": "no-cache",
@@ -286,20 +305,24 @@ export default {
           network: this.network,
           "Idempotency-Key": this.requestId,
         },
-        params: data,
+        params: {
+          amount: this.amount,
+          PPCAddress: this.destinationAddress, //valid Peercoinaddress!
+          ERC20Address: this.erc20Address,
+        },
       };
 
       let response = await axios.post(this.endpoints().unwrap, null, config);
       console.log(response);
       if (
-        (!!response && !!response.error) ||
-        !(
+        (!!response &&
           !!response &&
           !!response.data &&
           !!response.data.data &&
           !!response.data.data._id
         )
       ) {
+        console.log('?!?!?');
         this.eventBus.emit("add-toastr", {
           text:
             !!response && !!response.data && !!response.data.message
@@ -307,9 +330,12 @@ export default {
               : `Unable to unwrap`,
           type: "error",
         });
+
+        this.session = response.data.data;
+        this.sendBurnTransaction();
         return;
       } else {
-        //gotoHome
+        console.log('OI!');
       }
     },
   },
