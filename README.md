@@ -21,7 +21,7 @@ everything in dist folder
 ## wrap peercoins to wppc ##
 
 **step 1:**
-POST /api/v1/peercoin/wrap 
+POST /api/v1/wrap 
 query-parameters:
         amount: 1984,
         destinationAddress: an_ETHdestinationAddress,
@@ -78,7 +78,7 @@ do MetaMask stuff and then call burnTokens:
  - sign with metamask...
 
 **step 2:**
-POST /api/v1/peercoin/unwrap 
+POST /api/v1/unwrap 
 query-parameters:
         amount: 1984,
         destinationAddress: an_PeercoinAddress,

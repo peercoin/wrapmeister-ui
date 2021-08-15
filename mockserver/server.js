@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("mockserver");
 });
 
-app.post("/api/v1/peercoin/wrap", function(req, res, next) {
+app.post("/api/v1/wrap", function(req, res, next) {
   console.log(req.body); // {'amount':"1984.42", 'erc20Address': "", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     //error: false,
@@ -43,7 +43,7 @@ app.post("/api/v1/peercoin/wrap", function(req, res, next) {
   });
 });
 
-app.post("/api/v1/peercoin/unwrap", function(req, res, next) {
+app.post("/api/v1/unwrap", function(req, res, next) {
   console.log(req.body); // // {'amount':"1984.42",  'erc20Address': "0xeee84A4E17eaA817e72FED60EEd579eE8cb5BBcC", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     success: true,
@@ -62,31 +62,6 @@ app.post("/api/v1/peercoin/unwrap", function(req, res, next) {
       ppcTransactionHash: "ppc receiving transaction hash",
     },
   });
-});
-
-app.post("/api/v1/peercoin/retrieve", function(req, res, next) {
-  var tx = req.body.erc20TransactionHash;
-  var sessionID = req.body.sessionID;
-  var signedMessage = req.body.signedMessage;
-  var ret = {
-    success: true,
-    message: "peercoins have been sent to your address",
-    data: {
-      _id: sessionID,
-      network: "BSC_TESTNET",
-      wrapping: false,
-      signed: true,
-      signature: signedMessage,
-      erc20Address: "someotheraddressfromsender",
-      amount: 123,
-      ppcAddress: "someppcAddress",
-      completed: false,
-      erc20TransactionHash: tx,
-      ppcTransactionHash: "thisshouldbeatxidonppcblockchainforUNwrapping",
-    },
-  };
-
-  res.json(ret);
 });
 
 app.get("/api/v1/session/:sessionId", function(req, res, next) {

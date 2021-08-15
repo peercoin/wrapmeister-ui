@@ -54,7 +54,7 @@
       </column>
     </row>
 
-    <row v-if="!!session.ppcAddress">
+    <row v-if="!!session.wrapPPCAddress">
       <column :lg="12" :xl="6">
         <p>Peercoin deposit address</p>
       </column>
@@ -62,13 +62,13 @@
         <row>
           <vue-q-r-code-component
             class="margin-auto"
-            v-if="!!session.ppcAddress && !!session.wrapping"
+            v-if="!!session.wrapPPCAddress"
             :size="250"
-            :text="session.ppcAddress"
+            :text="session.wrapPPCAddress"
           />
         </row>
         <row>
-          <small class="margin-auto">{{ session.ppcAddress }}</small>
+          <small class="margin-auto">{{ session.wrapPPCAddress }}</small>
         </row>
       </column>
     </row>
@@ -106,16 +106,17 @@ export default {
       session: {
         _id: null,
         network: null,
-        wrapping: true,
         amount: null,
-        signed: false,
-        signature: null,
-        nonce: null,
-        erc20Address: null,
-        ppcAddress: null,
-        completed: false,
-        erc20TransactionHash: null,
-        ppcTransactionHash: null,
+        wrapSignature: null,
+        wrapTxid: null,
+        wrapNonce: null,
+        wrapPPCAddress: null,
+        unwrapSignature: null,
+        unwrapTxid: null,
+        unwrapNonce: false,
+        unwrapPPCAddress: null,
+        ERC20Address: null,
+        inStorage: false
       },
       comfirmedProceedMetaMask: false,
       amount: "",
@@ -160,8 +161,8 @@ export default {
       return (
         !!this.session &&
         !!this.session._id &&
-        this.session.wrapping &&
-        !this.session.signed &&
+        this.session.wrapPPCAddress &&
+        !this.session.wrapSignature &&
         // !this.session.signature &&
         !this.comfirmedProceedMetaMask
       );
@@ -227,26 +228,23 @@ export default {
       }
     },
 
-    async getSession(sessionid) {
-      if (!sessionid) return;
+    async getSession(id) {
+      if (!id) return;
 
       try {
-        const res = await axios.get(this.endpoints(sessionid).session);
+        const res = await axios.get(this.endpoints(id).session);
 
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
 
-          if (this.session.completed) {
-            this.resetSession();
-            this.gotoHome(`Session ${sessionid} completed`);
-          } else if (this.session.signed) {
+          if (this.session.inStorage) {
             this.popupModal = true;
           }
         }
       } catch (error) {
         console.warn(error);
         this.eventBus.emit("add-toastr", {
-          text: `Unable to retrieve session ${sessionid}`,
+          text: `Unable to retrieve session ${id}`,
           type: "error",
         });
       }
@@ -261,16 +259,17 @@ export default {
       this.session = {
         _id: null,
         network: null,
-        wrapping: true,
         amount: null,
-        signed: false,
-        signature: null,
-        nonce: null,
-        erc20Address: null,
-        ppcAddress: null,
-        completed: false,
-        erc20TransactionHash: null,
-        ppcTransactionHash: null,
+        wrapSignature: null,
+        wrapTxid: null,
+        wrapNonce: null,
+        wrapPPCAddress: null,
+        unwrapSignature: null,
+        unwrapTxid: null,
+        unwrapNonce: false,
+        unwrapPPCAddress: null,
+        ERC20Address: null,
+        inStorage: false
       };
     },
 
@@ -293,35 +292,30 @@ export default {
       };
       console.log("POST Wrap to wrapmeister");
       let response = await axios.post(this.endpoints().wrap, null, config);
+      this.session = response.data.data;
+      console.log(this.session);
 
-      if (
-        (!!response && !!response.error) ||
-        !(
-          !!response &&
-          !!response.data &&
-          !!response.data.data &&
-          !!response.data.data._id
-        )
-      ) {
-        this.eventBus.emit("add-toastr", {
-          text:
-            !!response && !!response.data && !!response.data.message
-              ? response.data.message
-              : `Unable to start session`,
-          type: "error",
+      if (response && !response.error) {
+        return this.eventBus.emit("add-toastr", {
+          text: response.data.message,
+          type: "success",
         });
         return;
+      } else {
+        this.eventBus.emit("add-toastr", {
+          text: response.data.message,
+          type: "error",
+        });
+
+        return;
       }
-      this.session = response.data.data;
     },
 
     onModalConfirm() {
       if (
         !this.comfirmedProceedMetaMask &&
-        !this.session.completed &&
-        !!this.session.wrapping &&
-        !!this.session.signed &&
-        !!this.session.signature
+        !!this.session.wrapPPCAddress &&
+        !!this.session.wrapSignature
       ) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
@@ -363,11 +357,10 @@ export default {
         !this.accounts ||
         this.accounts.length < 1 ||
         !this.session ||
-        !this.session.signature ||
-        !this.session.wrapping ||
-        !this.session.erc20Address ||
-        !this.session.network ||
-        !this.hasValidSignature()
+        !this.session.wrapSignature ||
+        !this.session.ERC20Address ||
+        !this.session.network 
+        //|| !this.hasValidSignature()
       )
         return;
 
@@ -381,7 +374,7 @@ export default {
       }
 
       const optionsContract = {
-        from: this.session.erc20Address, //should be equal to destinationAddress
+        from: this.session.ERC20Address, //should be equal to destinationAddress
       };
 
       //https://web3js.readthedocs.io/en/v1.2.11/web3-eth-contract.html
@@ -391,15 +384,15 @@ export default {
         optionsContract
       );
 
-      try {
-        let signature = JSON.parse(this.session.signature);
+      /*try {
+        let signature = JSON.parse(this.session.wrapSignature);
 
         //claimTokens is defined in @/abi/erc20.json
         const result = await contractInstance.methods
           .claimTokens(
             this.session.amount,
-            this.session.nonce,
-            this.session.erc20Address,
+            this.session.wrapNonce,
+            this.session.ERC20Address,
             signature.v,
             signature.r,
             signature.s
@@ -416,7 +409,28 @@ export default {
       } catch (e) {
         console.log("doClaimTokens exception");
         console.log(e);
-      }
+      }*/
+      let signature = JSON.parse(this.session.wrapSignature);
+
+      //claimTokens is defined in @/abi/erc20.json
+      const result = await contractInstance.methods
+        .claimTokens(
+          this.session.amount,
+          this.session.wrapNonce,
+          this.session.ERC20Address,
+          signature.v,
+          signature.r,
+          signature.s
+        )
+        .send();
+
+      this.wrapClaimtokensTransactionHash = result.transactionHash;
+      console.log(
+        "wrapClaimtokensTransactionHash: " + result.transactionHash
+      );
+      this.resetSession();
+
+      this.gotoHome(`Tokenise Peercoin to ETH completed`);
     },
   },
 
