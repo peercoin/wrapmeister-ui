@@ -2,8 +2,8 @@ export function wrapEndpoints(id) {
   //todo change
   let _host = process.env.VUE_APP_WRAPPERHOST; //"http://localhost:9000";
   return {
-    wrap: `${_host}/api/v1/peercoin/wrap`,
-    unwrap: `${_host}/api/v1/peercoin/unwrap`,
+    wrap: `${_host}/api/v1/wrap`,
+    unwrap: `${_host}/api/v1/unwrap`,
     //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
   };
