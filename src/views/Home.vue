@@ -3,7 +3,6 @@
     <row :gutter="12">
       <column :xs="12" :lg="3" class="margin-auto">
         <img
-          @click="gotoHome"
           alt="Peercoin"
           class="logopeercoin"
           height="75"
@@ -11,7 +10,7 @@
         />
       </column>
       <column :xs="12" :lg="9">
-        <p @click="gotoHome" class="page-title">Ethereum ↔ Peercoin Bridge</p>
+        <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
       </column>
     </row>
 
@@ -22,6 +21,9 @@
         </div>
       </column> -->
       <column :xs="12" :lg="1 == 2 && !!metaMaskEnabled ? 9 : 12">
+        <div v-if="iswrapping || isUnwrapping" class="gobackdiv" @click="onBackClick">
+          Back
+        </div>
         <div class="body-column">
           <collapse-transition>
             <div class="body-mid center" v-if="!metaMaskEnabled">
@@ -94,6 +96,11 @@ export default {
       this.$router.push({
         name: "Home",
       });
+    },
+
+    onBackClick() {
+      //for now:
+      this.gotoHome();
     },
 
     gotoSession(id) {
@@ -173,6 +180,15 @@ export default {
     width: 100%;
   }
 }
+
+.gobackdiv {
+  text-align: left;
+  font-size: 70%;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .body-column {
   padding: 25px;
   background-color: rgba(255, 255, 255, 0.85);
@@ -185,9 +201,9 @@ export default {
 .page-title {
   color: rgb(251, 251, 251);
   font-size: 2rem;
-  &:hover {
-    cursor: pointer;
-  }
+  // &:hover {
+  //   cursor: pointer;
+  // }
 }
 .form-group {
   overflow: hidden;
@@ -195,11 +211,11 @@ export default {
   width: 50%;
   margin: auto;
 }
-.logopeercoin {
-  &:hover {
-    cursor: pointer;
-  }
-}
+// .logopeercoin {
+// &:hover {
+//   cursor: pointer;
+// }
+// }
 
 @media screen and (max-width: 992px) {
   .logopeercoin {

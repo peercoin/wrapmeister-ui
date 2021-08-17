@@ -30,15 +30,17 @@ app.post("/api/v1/wrap", function(req, res, next) {
     data: {
       _id: "70F4E46ABF55E1FF",
       network: "BSC_TESTNET",
-      wrapping: true,
-      signed: false,
-      signature: '{"message":"0x2225b71678bdce5f7f13efd911e41c980ad4af2b92e4468eba591ab4d2b2f6f8","messageHash":"0x1f9c424590f61d8d73c5b3b8701352d6a388b67ce18198233e231058d4b12922","v":"0x1c","r":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab","s":"0x0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b98553","signature":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b985531c"}',
-      erc20Address: req.body.destinationAddress,
-      amount: req.body.amount,
-      ppcAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
-      completed: false,
-      erc20TransactionHash: "sometxidontheotherblockchainforwrapping",
-      ppcTransactionHash: "thisshouldbeatxidonppcblockchainforwrapping",
+      amount: 47.56,
+      wrapSignature: null,
+      wrapTxid: null,
+      wrapNonce: null,
+      wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
+      unwrapSignature: null,
+      unwrapTxid: null,
+      unwrapNonce: false,
+      unwrapPPCAddress: null,
+      ERC20Address: null,
+      inStorage: false 
     },
   });
 });
@@ -109,4 +111,4 @@ app.get("/api/v1/session/:sessionId", function(req, res, next) {
   res.json(ret);
 });
 
-app.listen(9000);
+app.listen(3000);
