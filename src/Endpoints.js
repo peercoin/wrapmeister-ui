@@ -6,6 +6,7 @@ export function wrapEndpoints(id) {
     unwrap: `${_host}/api/v1/unwrap`,
     //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
+    confirmBurn: `${_host}/api/v1/confirm-burn`
   };
 }
 
