@@ -85,13 +85,16 @@ export default {
   extends: BaseWrapper,
   data() {
     return {
-      erc20Address: ""
+      erc20Address: "",
     };
   },
 
   mounted() {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
+    if (!!this.networks && this.networks.length == 1) {
+      this.network = this.networks[0].key;
+    }
   },
 
   computed: {
@@ -122,24 +125,28 @@ export default {
 
       const contractAddress = getContractAddress(this.session.network);
       if (!contractAddress) {
-        return console.error("No contract address found for network: " + this.session.network);
+        return console.error(
+          "No contract address found for network: " + this.session.network
+        );
       }
-      
+
       try {
         const contract = new this.web3.eth.Contract(ABI, contractAddress, {
           from: this.session.ERC20Address,
         });
-        
+
         let signature = JSON.parse(this.session.unwrapSignature);
         const decimals = await contract.methods.decimals().call();
 
-        const result = await contract.methods.burnTokens(
-          this.session.amount * (10 ** decimals), 
-          this.session.unwrapNonce, 
-          signature.v, 
-          signature.r, 
-          signature.s
-        ).send();
+        const result = await contract.methods
+          .burnTokens(
+            this.session.amount * 10 ** decimals,
+            this.session.unwrapNonce,
+            signature.v,
+            signature.r,
+            signature.s
+          )
+          .send();
 
         axios.post(this.endpoints().confirmBurn, null, {
           headers: {
@@ -156,7 +163,6 @@ export default {
 
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
-
       } catch (e) {
         console.log(e);
       }
@@ -178,8 +184,15 @@ export default {
         },
       });
 
-      if (!!response && !!response && !!response.data && !!response.data.data && !!response.data.data._id) {
-        const success = !!response && !!response.data && !!response.data.message;
+      if (
+        !!response &&
+        !!response &&
+        !!response.data &&
+        !!response.data.data &&
+        !!response.data.data._id
+      ) {
+        const success =
+          !!response && !!response.data && !!response.data.message;
 
         this.eventBus.emit("add-toastr", {
           text: success ? response.data.message : `Unable to unwrap`,
@@ -189,7 +202,7 @@ export default {
         this.session = response.data.data;
         this.burnTokens();
       }
-    }
+    },
   },
 
   components: {

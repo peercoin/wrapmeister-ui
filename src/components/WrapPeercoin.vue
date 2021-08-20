@@ -113,6 +113,9 @@ export default {
   async mounted() {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
+    if (!!this.networks && this.networks.length == 1) {
+      this.network = this.networks[0].key;
+    }
 
     this.resetSession();
 
