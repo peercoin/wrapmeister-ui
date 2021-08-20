@@ -1,5 +1,11 @@
 <template>
   <div class="home">
+    <modal
+      v-if="popupModal"
+      @modalconfirm="onModalConfirm"
+      @modalclose="onModalClose"
+      body="Back to Home?"
+    ></modal>
     <row :gutter="12">
       <column :xs="12" :lg="3" class="margin-auto">
         <img
@@ -21,7 +27,11 @@
         </div>
       </column> -->
       <column :xs="12" :lg="1 == 2 && !!metaMaskEnabled ? 9 : 12">
-        <div v-if="iswrapping || isUnwrapping" class="gobackdiv" @click="onBackClick">
+        <div
+          v-if="iswrapping || isUnwrapping"
+          class="gobackdiv"
+          @click="onBackClick"
+        >
           Back
         </div>
         <div class="body-column">
@@ -66,6 +76,7 @@ import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
+import Modal from "@/components/Modal.vue";
 
 export default {
   name: "Home",
@@ -76,6 +87,7 @@ export default {
       sessionId: "",
       iswrapping: false,
       isUnwrapping: false,
+      popupModal: false,
     };
   },
 
@@ -93,14 +105,14 @@ export default {
       this.sessionId = "";
       this.iswrapping = false;
       this.isUnwrapping = false;
+      this.popupModal = false;
       this.$router.push({
         name: "Home",
       });
     },
 
     onBackClick() {
-      //for now:
-      this.gotoHome();
+      this.popupModal = true;
     },
 
     gotoSession(id) {
@@ -126,6 +138,15 @@ export default {
       if (!this.sessionId) return;
       this.gotoSession(this.sessionId);
       this.enteringSession = false;
+    },
+
+    onModalConfirm() {
+      this.popupModal = false;
+      this.gotoHome();
+    },
+
+    onModalClose() {
+      this.popupModal = false;
     },
   },
 
@@ -158,6 +179,7 @@ export default {
 
   components: {
     MButton,
+    Modal,
     CollapseTransition,
     WrapPeercoin,
     UnwrapPeercoin,

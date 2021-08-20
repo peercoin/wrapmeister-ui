@@ -99,6 +99,11 @@ import ABI from "@/abi/erc20.json";
 export default {
   data() {
     return {
+      websocket: null,
+      connectTimer: null,
+      reconnectTimer: null,
+      retryTimer: null,
+
       requestId: null,
       countDown: 100,
       countDownHandle: null,
@@ -116,7 +121,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
-        inStorage: false
+        inStorage: false,
       },
       comfirmedProceedMetaMask: false,
       amount: "",
@@ -137,6 +142,8 @@ export default {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
     this.resetSession();
+
+    //todo: replace polling mechanism with websocket:
     clearInterval(this.countDownHandle);
     if (!!this.countDownHandle) {
       (async () => {
@@ -146,6 +153,8 @@ export default {
     } else {
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
+
+    //this.connect();
   },
 
   async unmounted() {
@@ -154,6 +163,8 @@ export default {
         await clearIntervalAsync(this.countDownHandle);
       })();
     }
+
+    this.disconnect();
   },
 
   computed: {
@@ -200,13 +211,14 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-        c
-      ) {
-        const r = (Math.random() * 16) | 0,
-          v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          const r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      );
     },
 
     gotoHome(message) {
@@ -269,7 +281,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
-        inStorage: false
+        inStorage: false,
       };
     },
 
@@ -348,6 +360,88 @@ export default {
       return [];
     },
 
+    //todo:
+    connect() {
+      if (this.websocket !== null) return;
+
+      if ("WebSocket" in window && !!this.endpoints().websocket) {
+        if (this.connectTimer !== null) {
+          clearTimeout(this.connectTimer);
+        }
+
+        this.connectTimer = setTimeout(() => {
+          console.warn("websocket failed");
+          this.connectTimer = null;
+        }, 5000);
+
+        //let protocol = location.protocol === "https:" ? "wss://" : "ws://";
+        let websocket = new WebSocket(this.endpoints().websocket);
+
+        websocket.onopen = () => {
+          console.log("websocket connected");
+
+          if (this.connectTimer !== null) {
+            clearTimeout(this.connectTimer);
+            this.connectTimer = null;
+          }
+        };
+
+        websocket.onmessage = (event) => {
+          if (!!event && !!event.data) {
+            console.log("WebSocket message received:", event.data);
+          }
+        };
+
+        websocket.onclose = (event) => {
+          console.log(
+            "  websocket closed unexpectedly, reconnecting in 1 second"
+          );
+
+          this.reset();
+          this.reconnect();
+        };
+
+        websocket.onerror = (event) => {
+          console.error("Dashboard websocket error: " + event);
+        };
+
+        this.websocket = websocket;
+      }
+    },
+
+    reset() {
+      if (this.connectTimer !== null) clearTimeout(this.connectTimer);
+
+      if (this.reconnectTimer !== null) clearTimeout(this.reconnectTimer);
+
+      if (this.websocket !== null) {
+        this.websocket.onopen = null;
+        this.websocket.onmessage = null;
+        this.websocket.onclose = null;
+        this.websocket.onerror = null;
+
+        this.websocket.close();
+        this.websocket = null;
+      }
+    },
+
+    reconnect() {
+      if (this.reconnectTimer !== null) clearTimeout(this.reconnectTimer);
+
+      this.reconnectTimer = setTimeout(() => {
+        this.reconnectTimer = null;
+        this.connect();
+      }, 1000);
+    },
+
+    disconnect() {
+      console.debug("WebSocket disconnect");
+
+      this.reset();
+
+      if (this.retryTimer !== null) clearTimeout(this.retryTimer);
+    },
+
     //wrap:
     async doClaimTokens() {
       if (!!this.wrapClaimtokensTransactionHash) return;
@@ -359,7 +453,7 @@ export default {
         !this.session ||
         !this.session.wrapSignature ||
         !this.session.ERC20Address ||
-        !this.session.network 
+        !this.session.network
         //|| !this.hasValidSignature()
       )
         return;
@@ -425,9 +519,7 @@ export default {
         .send();
 
       this.wrapClaimtokensTransactionHash = result.transactionHash;
-      console.log(
-        "wrapClaimtokensTransactionHash: " + result.transactionHash
-      );
+      console.log("wrapClaimtokensTransactionHash: " + result.transactionHash);
       this.resetSession();
 
       this.gotoHome(`Tokenise Peercoin to ETH completed`);
