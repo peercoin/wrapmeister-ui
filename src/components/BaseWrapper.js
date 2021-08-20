@@ -16,6 +16,10 @@ export default {
       destinationPPCAddress: "",
       network: "",
       networks: [],
+      websocket: null,
+      connectTimer: null,
+      reconnectTimer: null,
+      retryTimer: null,
       session: {
         _id: null,
         network: null,
@@ -28,8 +32,8 @@ export default {
         unwrapTxid: null,
         unwrapNonce: false,
         unwrapPPCAddress: null,
-        ERC20Address: null
-      }
+        ERC20Address: null,
+      },
     };
   },
 
@@ -73,13 +77,14 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-        c
-      ) {
-        const r = (Math.random() * 16) | 0,
-          v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          const r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      );
     },
 
     resetSession() {
@@ -99,7 +104,7 @@ export default {
         unwrapTxid: null,
         unwrapNonce: false,
         unwrapPPCAddress: null,
-        ERC20Address: null
+        ERC20Address: null,
       };
     },
 
@@ -110,6 +115,93 @@ export default {
       });
 
       this.eventBus.emit("goto-home", {});
+    },
+
+    // call u want a websocket connection()
+    connect() {
+      if (this.websocket !== null) return;
+
+      if ("WebSocket" in window && !!this.endpoints().websocket) {
+        if (this.connectTimer !== null) {
+          clearTimeout(this.connectTimer);
+        }
+
+        this.connectTimer = setTimeout(() => {
+          console.warn("websocket failed");
+          this.connectTimer = null;
+        }, 5000);
+
+        let websocket = new WebSocket(this.endpoints().websocket);
+
+        websocket.onopen = () => {
+          console.log("websocket connected");
+
+          if (this.connectTimer !== null) {
+            clearTimeout(this.connectTimer);
+            this.connectTimer = null;
+          }
+        };
+
+        websocket.onmessage = (event) => {
+          if (!!event && !!event.data) {
+            console.log("WebSocket message received:", event.data);
+            this.someActionToOveride(event.data);
+          }
+        };
+
+        websocket.onclose = (event) => {
+          console.log(
+            "  websocket closed unexpectedly, reconnecting in 1 second"
+          );
+
+          this.resetSocket();
+          this.reconnect();
+        };
+
+        websocket.onerror = (event) => {
+          console.error("Dashboard websocket error: " + event);
+        };
+
+        this.websocket = websocket;
+      }
+    },
+
+    someActionToOveride(jsonStr) {
+      //console.log(JSON.parse());
+    },
+
+    resetSocket() {
+      if (this.connectTimer !== null) clearTimeout(this.connectTimer);
+
+      if (this.reconnectTimer !== null) clearTimeout(this.reconnectTimer);
+
+      if (this.websocket !== null) {
+        this.websocket.onopen = null;
+        this.websocket.onmessage = null;
+        this.websocket.onclose = null;
+        this.websocket.onerror = null;
+
+        this.websocket.close();
+        this.websocket = null;
+      }
+    },
+
+    reconnect() {
+      if (this.reconnectTimer !== null) clearTimeout(this.reconnectTimer);
+
+      this.reconnectTimer = setTimeout(() => {
+        this.reconnectTimer = null;
+        this.connect();
+      }, 1000);
+    },
+
+    // call in a unmounted()
+    disconnect() {
+      console.log("WebSocket disconnect");
+
+      this.resetSocket();
+
+      if (this.retryTimer !== null) clearTimeout(this.retryTimer);
     },
 
     onModalClose() {
@@ -133,8 +225,8 @@ export default {
           console.log(error);
         }
       }
-      
+
       return [];
-    }
-  }
+    },
+  },
 };

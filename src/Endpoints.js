@@ -1,12 +1,15 @@
 export function wrapEndpoints(id) {
   //todo change
-  let _host = process.env.VUE_APP_WRAPPERHOST; //"http://localhost:9000";
+  let _host = process.env.VUE_APP_WRAPPERHOST; //"http://localhost:3000";
+  let wsshost=process.env.VUE_APP_WRAPPERHOSTWSS; //"ws://localhost:3000";
+  
   return {
     wrap: `${_host}/api/v1/wrap`,
     unwrap: `${_host}/api/v1/unwrap`,
     //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
-    confirmBurn: `${_host}/api/v1/confirm-burn`
+    confirmBurn: `${_host}/api/v1/confirm-burn`,
+    websocket: wsshost
   };
 }
 

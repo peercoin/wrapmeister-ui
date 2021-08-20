@@ -1,5 +1,5 @@
 var cors = require("cors");
-
+const ws = require("ws");
 const express = require("express");
 const nocache = require("nocache");
 const app = express();
@@ -110,4 +110,55 @@ app.get("/api/v1/session/:sessionId", function(req, res, next) {
   res.json(ret);
 });
 
-app.listen(3000);
+
+
+
+
+
+
+const server = app.listen(3000);
+
+const wss = new ws.Server({ server /*path: "/someendpoint"  */ });
+
+wss.on("connection", (mywebsocket) => {
+  
+  console.log("connection");
+  mywebsocket.isAlive = true;
+
+  mywebsocket.send(
+    JSON.stringify({
+      Id: 42,
+      content: "hello world!",
+      isBroadcast: false,
+      sender: "NS",
+    })
+  );
+
+  mywebsocket.on("pong", () => {
+    mywebsocket.isAlive = true;
+  });
+
+  mywebsocket.on("error", (err) => {
+    console.warn(`Client disconnected - reason: ${err}`);
+  });
+
+ 
+  mywebsocket.on("message", (message) => {
+    
+    console.log("received: %s", message);
+    
+  });
+ 
+});
+
+//cleanup
+setInterval(() => {
+  wss.clients.forEach((myWebSocket) => {
+    if (!myWebSocket.isAlive) {
+      console.warn("I am the terminator", myWebSocket);
+      return myWebSocket.terminate();
+    }
+  });
+}, 10000);
+
+console.log("mock started on port 3000!");
