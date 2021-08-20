@@ -1,15 +1,15 @@
 export function wrapEndpoints(id) {
   //todo change
   let _host = process.env.VUE_APP_WRAPPERHOST; //"http://localhost:3000";
-  let wsshost=process.env.VUE_APP_WRAPPERHOSTWSS; //"ws://localhost:3000";
-  
+  let wsshost = process.env.VUE_APP_WRAPPERHOSTWSS; //"ws://localhost:3000";
+
   return {
     wrap: `${_host}/api/v1/wrap`,
     unwrap: `${_host}/api/v1/unwrap`,
     //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
     confirmBurn: `${_host}/api/v1/confirm-burn`,
-    websocket: wsshost
+    websocket: wsshost,
   };
 }
 
@@ -19,7 +19,20 @@ export function getContractAddress(network) {
 }
 
 export function getNetworks() {
-  return JSON.parse(process.env.VUE_APP_NETWORKS);
+  try {
+    console.log("config networks: ", process.env.VUE_APP_NETWORKS);
+    return JSON.parse(process.env.VUE_APP_NETWORKS);
+  } catch {
+    return JSON.parse([
+      {
+        key: "BSC_TESTNET",
+        description: "Binance Smart Chain (BSC) - Testnet",
+        active: true,
+        contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
+      },
+    ]);
+  }
+
   /*
   return [
     {
