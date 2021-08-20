@@ -109,10 +109,12 @@ export default {
     },
 
     gotoHome(message) {
-      this.eventBus.emit("add-toastr", {
-        text: message,
-        type: "success",
-      });
+      if (!!message) {
+        this.eventBus.emit("add-toastr", {
+          text: message,
+          type: "success",
+        });
+      }
 
       this.eventBus.emit("goto-home", {});
     },
