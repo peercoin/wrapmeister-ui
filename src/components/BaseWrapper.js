@@ -12,7 +12,7 @@ export default {
       comfirmedProceedMetaMask: false,
       accounts: [],
       amount: "",
-      destinationETHAdress: "",
+      destinationETHAddress: "",
       destinationPPCAddress: "",
       network: "",
       networks: [],
@@ -28,8 +28,7 @@ export default {
         unwrapTxid: null,
         unwrapNonce: false,
         unwrapPPCAddress: null,
-        ERC20Address: null,
-        inStorage: false
+        ERC20Address: null
       }
     };
   },
@@ -41,10 +40,10 @@ export default {
 
     validETHAddress() {
       if (!!this.network && this.network.indexOf("TEST") != 0) {
-        return validate(this.destinationETHAdress, "ETH", "both");
+        return validate(this.destinationETHAddress, "ETH", "both");
       }
 
-      return validate(this.destinationETHAdress, "ETH");
+      return validate(this.destinationETHAddress, "ETH");
     },
 
     validPPCAddress() {
@@ -100,8 +99,7 @@ export default {
         unwrapTxid: null,
         unwrapNonce: false,
         unwrapPPCAddress: null,
-        ERC20Address: null,
-        inStorage: false
+        ERC20Address: null
       };
     },
 

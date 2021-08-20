@@ -39,8 +39,7 @@ app.post("/api/v1/wrap", function(req, res, next) {
       unwrapTxid: null,
       unwrapNonce: false,
       unwrapPPCAddress: null,
-      ERC20Address: null,
-      inStorage: false 
+      ERC20Address: null
     },
   });
 });

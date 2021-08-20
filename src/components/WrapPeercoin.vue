@@ -35,7 +35,7 @@
           :disabled="!!session._id"
           type="text"
           :class="{ 'row-input-field': true, invalid: !validETHAddress }"
-          v-model="destinationETHAdress"
+          v-model="destinationETHAddress"
         />
       </column>
     </row>
@@ -160,11 +160,10 @@ export default {
 
       try {
         const res = await axios.get(this.endpoints(id).session);
-
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
 
-          if (this.session.inStorage) {
+          if (!!this.session.wrapTxid && !!this.session.wrapSignature && !!this.session.wrapNonce) {
             this.popupModal = true;
           }
         }
@@ -194,7 +193,7 @@ export default {
       let nb = parseFloat(this.amount);
       const data = {
         amount: nb,
-        destinationAddress: this.destinationETHAdress,
+        destinationAddress: this.destinationETHAddress,
       };
 
       const config = {
@@ -207,7 +206,7 @@ export default {
         },
         params: data,
       };
-      console.log("POST Wrap to wrapmeister");
+
       let response = await axios.post(this.endpoints().wrap, null, config);
       this.session = response.data.data;
 
