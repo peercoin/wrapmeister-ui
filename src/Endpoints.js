@@ -1,11 +1,15 @@
-const isNullOrEmpty = function(value) {
+const isNullOrEmpty = function (value) {
   return !(typeof value === "string" && value.length > 0);
-}
+};
 
 export function wrapEndpoints(id) {
   //todo change
-  let _host = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOST ? "http://localhost:3000":process.env.VUE_APP_WRAPPERHOST;
-  let wsshost = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOSTWSS? "ws://localhost:3000" :  process.env.VUE_APP_WRAPPERHOSTWSS;
+  let _host = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOST)
+    ? "http://localhost:3000"
+    : process.env.VUE_APP_WRAPPERHOST;
+  let wsshost = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOSTWSS)
+    ? "ws://localhost:3000"
+    : process.env.VUE_APP_WRAPPERHOSTWSS;
 
   return {
     wrap: `${_host}/api/v1/wrap`,
