@@ -75,7 +75,9 @@
 
     <row v-if="!session._id">
       <column :lg="12" :xl="12" class="margin-auto m-top-lg">
-        <m-button type="success" @mbclick="wrap" :disabled="!validForm">Tokenise Peercoin</m-button>
+        <m-button type="success" @mbclick="wrap" :disabled="!validForm"
+          >Tokenise Peercoin</m-button
+        >
       </column>
     </row>
   </div>
@@ -90,16 +92,21 @@ import MButton from "@/components/Button.vue";
 import Countdown from "@/components/Countdown.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
-import Web3 from "web3";
+//import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "./BaseWrapper.js";
 
 export default {
   extends: BaseWrapper,
+
+  props: {
+    propsessionid: String,
+  },
+
   data() {
     return {
       countDown: 100,
-      countDownHandle: null
+      countDownHandle: null,
     };
   },
 
@@ -109,6 +116,15 @@ export default {
 
     this.resetSession();
 
+    if (!!this.propsessionid) {
+      console.log("do some initialisation instead here...");
+      // (this.amount = ""), (this.destinationETHAddress = "");
+      // this.destinationPPCAddress = "";
+      // this.network = "";
+      //this.session = {...}
+    }
+
+    // todo replace this with connect() + disconnect():
     clearInterval(this.countDownHandle);
     if (!!this.countDownHandle) {
       (async () => {
@@ -163,7 +179,11 @@ export default {
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
 
-          if (!!this.session.wrapTxid && !!this.session.wrapSignature && !!this.session.wrapNonce) {
+          if (
+            !!this.session.wrapTxid &&
+            !!this.session.wrapSignature &&
+            !!this.session.wrapNonce
+          ) {
             this.popupModal = true;
           }
         }
@@ -226,14 +246,16 @@ export default {
         !this.session ||
         !this.session.wrapSignature ||
         !this.session.ERC20Address ||
-        !this.session.network 
+        !this.session.network
       ) {
         return;
       }
 
       const contractAddress = getContractAddress(this.session.network);
       if (!contractAddress) {
-        return console.error("No contract address found for network: " + this.session.network);
+        return console.error(
+          "No contract address found for network: " + this.session.network
+        );
       }
 
       try {
@@ -244,14 +266,16 @@ export default {
         const signature = JSON.parse(this.session.wrapSignature);
         const decimals = await contract.methods.decimals().call();
 
-        const result = await contract.methods.claimTokens(
-          this.session.amount * (10 ** decimals),
-          this.session.wrapNonce,
-          this.session.ERC20Address,
-          signature.v,
-          signature.r,
-          signature.s
-        ).send();
+        const result = await contract.methods
+          .claimTokens(
+            this.session.amount * 10 ** decimals,
+            this.session.wrapNonce,
+            this.session.ERC20Address,
+            signature.v,
+            signature.r,
+            signature.s
+          )
+          .send();
 
         this.resetSession();
         this.gotoHome("Successfully wrapped " + this.amount + "PCC to WPPC");

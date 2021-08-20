@@ -21,7 +21,11 @@
         </div>
       </column> -->
       <column :xs="12" :lg="1 == 2 && !!metaMaskEnabled ? 9 : 12">
-        <div v-if="iswrapping || isUnwrapping" class="gobackdiv" @click="onBackClick">
+        <div
+          v-if="iswrapping || isUnwrapping"
+          class="gobackdiv"
+          @click="onBackClick"
+        >
           Back
         </div>
         <div class="body-column">
@@ -46,7 +50,7 @@
           <collapse-transition>
             <div v-if="!showSession">
               <div v-if="iswrapping">
-                <wrap-peercoin />
+                <wrap-peercoin :propsessionid="propsessionid" />
               </div>
               <div v-if="isUnwrapping">
                 <unwrap-peercoin />
@@ -70,13 +74,24 @@ import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 export default {
   name: "Home",
 
+  props: {
+    propsessionid: String,
+  },
+
   data() {
-    return {
+    let defaultState = {
       enteringSession: false,
       sessionId: "",
       iswrapping: false,
       isUnwrapping: false,
     };
+
+    if (!!this.propsessionid) {
+      defaultState.iswrapping = true;
+      defaultState.sessionId = this.propsessionid;
+    }
+
+    return defaultState;
   },
 
   created() {

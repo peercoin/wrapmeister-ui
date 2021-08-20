@@ -7,6 +7,12 @@ const routes = [
     name: "Home",
     component: Home,
   },
+  {
+    // e.g: http://localhost:8080/#/continuewith?sessionid=asfdg33dfsv24e
+    path: '/continuewith',
+    component: Home,
+    props: route => ({ propsessionid: route.query.sessionid })
+  }
 ];
 
 const router = createRouter({
