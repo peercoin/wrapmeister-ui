@@ -30,7 +30,7 @@
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validETHAddress }"
-          v-model="erc20Address"
+          v-model="destinationETHAddress"
         />
       </column>
     </row>
@@ -42,7 +42,7 @@
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validPPCAddress }"
-          v-model="destinationETHAdress"
+          v-model="destinationPPCAddress"
         />
       </column>
     </row>
@@ -173,8 +173,8 @@ export default {
         },
         params: {
           amount: this.amount,
-          PPCAddress: this.destintionPPCAdress,
-          ERC20Address: this.erc20Address,
+          PPCAddress: this.destinationPPCAddress,
+          ERC20Address: this.destinationETHAddress,
         },
       });
 
