@@ -2,8 +2,6 @@ var cors = require("cors");
 
 const express = require("express");
 const nocache = require("nocache");
-const ws = require("ws");
-
 const app = express();
 // const options = {
 //   inflate: true,
@@ -20,10 +18,10 @@ app.use(cors());
 app.use(nocache());
 
 app.get("/", (req, res) => {
-  res.send("mockserver at 3000");
+  res.send("mockserver");
 });
 
-app.post("/api/v1/wrap", function (req, res, next) {
+app.post("/api/v1/wrap", function(req, res, next) {
   console.log(req.body); // {'amount':"1984.42", 'erc20Address': "", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     //error: false,
@@ -42,12 +40,12 @@ app.post("/api/v1/wrap", function (req, res, next) {
       unwrapNonce: false,
       unwrapPPCAddress: null,
       ERC20Address: null,
-      inStorage: false,
+      inStorage: false 
     },
   });
 });
 
-app.post("/api/v1/unwrap", function (req, res, next) {
+app.post("/api/v1/unwrap", function(req, res, next) {
   console.log(req.body); // // {'amount':"1984.42",  'erc20Address': "0xeee84A4E17eaA817e72FED60EEd579eE8cb5BBcC", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     success: true,
@@ -55,24 +53,20 @@ app.post("/api/v1/unwrap", function (req, res, next) {
     data: {
       _id: "piwcayw9m1PG9CCr",
       network: "BSC_TESTNET",
-
-      amount: 99.99,
-      wrapSignature: null,
-      wrapTxid: null,
-      wrapNonce: null,
-      wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
-      unwrapSignature:
-        '{"message":"0x2225b71678bdce5f7f13efd911e41c980ad4af2b92e4468eba591ab4d2b2f6f8","messageHash":"0x1f9c424590f61d8d73c5b3b8701352d6a388b67ce18198233e231058d4b12922","v":"0x1c","r":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab","s":"0x0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b98553","signature":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b985531c"}',
-      unwrapTxid: null,
-      unwrapNonce: false,
-      unwrapPPCAddress: null,
-      ERC20Address: null,
-      inStorage: false,
+      wrapping: false,
+      signed: true,
+      signature: '{"message":"0x2225b71678bdce5f7f13efd911e41c980ad4af2b92e4468eba591ab4d2b2f6f8","messageHash":"0x1f9c424590f61d8d73c5b3b8701352d6a388b67ce18198233e231058d4b12922","v":"0x1c","r":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab","s":"0x0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b98553","signature":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b985531c"}',
+      erc20Address: "",
+      amount: req.body.amount,
+      ppcAddress: req.body.destinationAddress,
+      completed: false,
+      erc20TransactionHash: "sometxidontheotherblockchainforUNwrapping",
+      ppcTransactionHash: "ppc receiving transaction hash",
     },
   });
 });
 
-app.get("/api/v1/session/:sessionId", function (req, res, next) {
+app.get("/api/v1/session/:sessionId", function(req, res, next) {
   // Retrieve the tag from our URL path
   var id = req.params.sessionId;
   var ret =
@@ -82,106 +76,39 @@ app.get("/api/v1/session/:sessionId", function (req, res, next) {
           message: "wrap request received and is being processed",
           data: {
             _id: "70F4E46ABF55E1FF",
-
             network: "BSC_TESTNET",
-            amount: 47.56,
-            wrapSignature: null,
-            wrapTxid: null,
-            wrapNonce: null,
-            wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
-            unwrapSignature: null,
-            unwrapTxid: null,
-            unwrapNonce: false,
-            unwrapPPCAddress: null,
-            ERC20Address: null,
-            inStorage: false,
+            wrapping: true,
+            signed: false,
+            signature: '{"message":"0x2225b71678bdce5f7f13efd911e41c980ad4af2b92e4468eba591ab4d2b2f6f8","messageHash":"0x1f9c424590f61d8d73c5b3b8701352d6a388b67ce18198233e231058d4b12922","v":"0x1c","r":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab","s":"0x0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b98553","signature":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b985531c"}',  
+            erc20Address: "aERC20Address",
+            amount: 123.45,
+            ppcAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
+            completed: false,
+            erc20TransactionHash: "sometxidontheotherblockchainforwrapping",
+            ppcTransactionHash: "ppc receiving transaction hash",
           },
         }
       : {
           success: true,
           message: "wrap request received and is being processed",
           data: {
-            _id: "piwcayw9m1PG9CCr",
+            _id: "someunwrapid",
             network: "BSC_TESTNET",
-
-            amount: 99.99,
-            wrapSignature: null,
-            wrapTxid: null,
-            wrapNonce: null,
-            wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
-            unwrapSignature:
+            wrapping: false,
+            signed: true,
+            signature:
               '{"message":"0x2225b71678bdce5f7f13efd911e41c980ad4af2b92e4468eba591ab4d2b2f6f8","messageHash":"0x1f9c424590f61d8d73c5b3b8701352d6a388b67ce18198233e231058d4b12922","v":"0x1c","r":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab","s":"0x0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b98553","signature":"0x2127929fa25de5a6f50bb107ba0606468e7c26b14bfd37561ff3bf15329941ab0db2954c47b4f0afa627561dd2ccfff8297689e879f744db94c4eed1d2b985531c"}',
-            unwrapTxid: null,
-            unwrapNonce: false,
-            unwrapPPCAddress: null,
-            ERC20Address: null,
-            inStorage: false,
+            nonce: "6430808011",
+            erc20Address: "",
+            amount: 43.56,
+            ppcAddress: "P8hVyPCKnFjGNDck9kMFzQTZ7GDym7VzA2",
+            completed: false,
+            erc20TransactionHash: "sometxidontheotherblockchainforUNwrapping",
+            ppcTransactionHash: "ppc receiving transaction hash",
           },
         };
 
   res.json(ret);
 });
 
-const server = app.listen(3000);
-
-const wss = new ws.Server({ server /*path: "/someendpoint"  */ });
-
-wss.on("connection", (mywebsocket) => {
-  console.log("connection");
-  mywebsocket.isAlive = true;
-
-  mywebsocket.send(
-    JSON.stringify({
-      Id: 42,
-      content: "hello world!",
-      isBroadcast: false,
-      sender: "NS",
-    })
-  );
-
-  mywebsocket.on("pong", () => {
-    mywebsocket.isAlive = true;
-  });
-
-  mywebsocket.on("error", (err) => {
-    console.warn(`Client disconnected - reason: ${err}`);
-  });
-
-  //connection is up, let's add a simple simple event
-  mywebsocket.on("message", (message) => {
-    //log the received message and send it back to the client
-    console.log("received: %s", message);
-    //myws.send(`Hello, you sent -> ${message}`);
-  });
-
-  // //send   a feedback to the incoming connection
-  // setTimeout(function () {
-
-  //   mywebsocket.send("Hi client! You are now connected to me!");
-
-  //   // mywebsocket.send(
-  //   //   JSON.stringify({
-  //   //     Id: 42,
-  //   //     content: "hello world!",
-  //   //     isBroadcast: false,
-  //   //     sender: "NS",
-  //   //   })
-  //   // );
-
-  // }, 1000);
-});
-
-//cleanup
-setInterval(() => {
-  wss.clients.forEach((myWebSocket) => {
-    if (!myWebSocket.isAlive) {
-      console.warn("I am the terminator", myWebSocket);
-      return myWebSocket.terminate();
-    }
-
-    // myWebSocket.isAlive = false;
-    // myWebSocket.ping(null, undefined);
-  });
-}, 10000);
-
-console.log("mock started on port 3000)");
+app.listen(3000);
