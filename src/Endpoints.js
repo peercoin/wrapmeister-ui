@@ -23,14 +23,14 @@ export function getNetworks() {
     console.log("config networks: ", process.env.VUE_APP_NETWORKS);
     return JSON.parse(process.env.VUE_APP_NETWORKS);
   } catch {
-    return JSON.parse([
+    return [
       {
         key: "BSC_TESTNET",
         description: "Binance Smart Chain (BSC) - Testnet",
         active: true,
         contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
       },
-    ]);
+    ];
   }
 
   /*
