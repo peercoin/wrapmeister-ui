@@ -38,11 +38,11 @@
           <collapse-transition>
             <div class="body-mid center" v-if="showMenu">
               <m-button block size="max" type="success" @mbclick="toggleWrap"
-                >Bridge Peercoin to token</m-button
+                >Wrap Peercoin</m-button
               >
 
               <m-button block size="max" type="success" @mbclick="toggleUnwrap"
-                >Unbridge token back to Peercoin</m-button
+                >Unwrap Peercoin</m-button
               >
             </div>
           </collapse-transition>
