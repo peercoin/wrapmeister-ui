@@ -98,6 +98,10 @@ export default {
   },
 
   computed: {
+    header() {
+      return "Unwrap Peercoin";
+    },
+
     validForm() {
       return this.validAmount && this.validPPCAddress && !!this.network;
     },

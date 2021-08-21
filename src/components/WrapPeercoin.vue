@@ -152,6 +152,10 @@ export default {
   },
 
   computed: {
+    header() {
+      return "Wrap Peercoin";
+    },
+
     showProgressbar() {
       return (
         !!this.session &&

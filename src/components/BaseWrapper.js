@@ -38,10 +38,6 @@ export default {
   },
 
   computed: {
-    header() {
-      return "Wrap Peercoin";
-    },
-
     validETHAddress() {
       if (!!this.network && this.network.indexOf("TEST") != 0) {
         return validate(this.destinationETHAddress, "ETH", "both");
