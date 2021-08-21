@@ -62,13 +62,17 @@
         <row>
           <vue-q-r-code-component
             class="margin-auto"
-            v-if="!!session.wrapPPCAddress"
+            v-if="!!URIencodeWrapPPCAddress"
             :size="250"
-            :text="session.wrapPPCAddress"
+            :text="URIencodeWrapPPCAddress"
           />
         </row>
         <row>
           <small class="margin-auto">{{ session.wrapPPCAddress }}</small>
+          <small
+            class="margin-auto"
+            v-html="URIencodeWrapPPCAddressLink"
+          ></small>
         </row>
       </column>
     </row>
@@ -113,7 +117,7 @@ export default {
   async mounted() {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
-    if (!!this.networks && this.networks.length == 1) {
+    if (!!this.networks && this.networks.length > 0) {
       this.network = this.networks[0].key;
     }
 
@@ -156,6 +160,45 @@ export default {
         !this.session.wrapSignature &&
         !this.comfirmedProceedMetaMask
       );
+    },
+
+    URIencodeWrapPPCAddress() {
+      const scheme = "peercoin";
+      const amount = this.session.amount;
+      const address = this.session.wrapPPCAddress;
+
+      if (!!amount && !!address) {
+        const today = new Date();
+
+        let strDate = "Y-m-d"
+          .replace("Y", today.getFullYear())
+          .replace("m", today.getMonth() + 1)
+          .replace("d", today.getDate());
+        return (
+          scheme +
+          ":" +
+          address +
+          "?amount=" +
+          amount +
+          "&message=wrapmeister" +
+          encodeURI(strDate)
+        );
+      }
+
+      return "";
+    },
+
+    URIencodeWrapPPCAddressLink() {
+      if (!!this.URIencodeWrapPPCAddress) {
+        return (
+          "<a href='" +
+          this.URIencodeWrapPPCAddress +
+          "'>" +
+          this.URIencodeWrapPPCAddress +
+          "</a>"
+        );
+      }
+      return "";
     },
 
     validForm() {

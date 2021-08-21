@@ -92,7 +92,7 @@ export default {
   mounted() {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
-    if (!!this.networks && this.networks.length == 1) {
+    if (!!this.networks && this.networks.length > 0) {
       this.network = this.networks[0].key;
     }
   },
