@@ -39,7 +39,7 @@ export default {
 
   computed: {
     header() {
-      return "Bridge Peercoin";
+      return "Wrap Peercoin";
     },
 
     validETHAddress() {
