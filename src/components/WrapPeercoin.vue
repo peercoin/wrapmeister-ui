@@ -281,7 +281,7 @@ export default {
           .send();
 
         this.resetSession();
-        this.gotoHome("Successfully wrapped " + this.amount + "PCC to WPPC");
+        this.gotoHome("Successfully wrapped " + this.amount + "PPC to WPPC");
       } catch (e) {
         console.log(e);
       }
