@@ -193,7 +193,7 @@ export default {
         return (
           "<a href='" +
           this.URIencodeWrapPPCAddress +
-          "'>" +
+          '\' target="_blank" rel="nofollow" >' +
           this.URIencodeWrapPPCAddress +
           "</a>"
         );
