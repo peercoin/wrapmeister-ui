@@ -77,12 +77,12 @@ import axios from "axios";
 import MButton from "@/components/Button.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
-import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
-import BaseWrapper from "./BaseWrapper.js";
+import BaseWrapper from "@/components/BaseWrapper.vue";
 
 export default {
   extends: BaseWrapper,
+
   data() {
     return {
       erc20Address: "",

@@ -96,9 +96,9 @@ import MButton from "@/components/Button.vue";
 import Countdown from "@/components/Countdown.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
-//import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
-import BaseWrapper from "./BaseWrapper.js";
+import BaseWrapper from "@/components/BaseWrapper.vue";
+
 
 export default {
   extends: BaseWrapper,
