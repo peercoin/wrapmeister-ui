@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
+  <div class="home center">
     <row :gutter="12">
-      <column :xs="12" :lg="3" class="margin-auto">
+      <column :xs="12" :md="12" :lg="3" class="margin-auto">
         <img
           alt="Peercoin"
           class="logopeercoin"
@@ -9,7 +9,7 @@
           src="../assets/logo-white.svg"
         />
       </column>
-      <column :xs="12" :lg="9">
+      <column :xs="12" :md="12" :lg="9">
         <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
       </column>
     </row>
@@ -182,6 +182,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.home {
+    max-width: 900px;
+}
+
 .center {
   margin: auto;
   width: 50%;
