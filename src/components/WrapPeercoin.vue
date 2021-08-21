@@ -180,7 +180,7 @@ export default {
           address +
           "?amount=" +
           amount +
-          "&message=wrapmeister" +
+          "&message=wrapmeister:" +
           encodeURI(strDate)
         );
       }
