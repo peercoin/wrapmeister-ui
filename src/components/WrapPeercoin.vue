@@ -80,7 +80,7 @@
     <row v-if="!session._id">
       <column :lg="12" :xl="12" class="margin-auto m-top-lg">
         <m-button type="success" @mbclick="wrap" :disabled="!validForm"
-          >Tokenise Peercoin</m-button
+          >Wrap Peercoin</m-button
         >
       </column>
     </row>
