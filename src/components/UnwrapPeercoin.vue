@@ -65,7 +65,7 @@
           type="success"
           @mbclick="enableMetaMaskConfirmationModal"
           :disabled="!validForm"
-          >Convert Peercoin Tokens</m-button
+          >Redeem wrapped Peercoin</m-button
         >
       </column>
     </row>
