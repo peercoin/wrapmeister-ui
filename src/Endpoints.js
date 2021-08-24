@@ -1,15 +1,16 @@
-const APP_WRAPPERHOST='http://localhost:3000';
-const APP_WRAPPERHOSTWSS='ws://localhost:3000';
+//todo change these vars:
+const APP_WRAPPERHOST = "http://localhost:3000";
+const APP_WRAPPERHOSTWSS = "ws://localhost:3000";
 
+//////////////////////////////////////////////////////////////
 const isNullOrEmpty = function (value) {
   return !(typeof value === "string" && value.length > 0);
 };
 
 export function wrapEndpoints(id) {
-  //todo change
   let _host = isNullOrEmpty(APP_WRAPPERHOST)
     ? "http://localhost:3000"
-    : process.env.APP_WRAPPERHOST;
+    : APP_WRAPPERHOST;
   let wsshost = isNullOrEmpty(APP_WRAPPERHOSTWSS)
     ? "ws://localhost:3000"
     : APP_WRAPPERHOSTWSS;
@@ -29,48 +30,47 @@ export function getContractAddress(network) {
   return !!ne ? ne.contract : "";
 }
 
+//todo change these vars:
 export function getNetworks() {
   try {
-
     return [
       {
         key: "BSC_TESTNET",
         description: "Binance Smart Chain (BSC) - Testnet",
         active: true,
-        contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1"
+        contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
       },
       {
         key: "BSC_MAINNET",
         description: "Binance Smart Chain (BSC)",
         active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
       {
         key: "MATIC_TESTNET",
         description: "Polygon (Matic) - Testnet",
         active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
       {
         key: "MATIC_MAINNET",
         description: "Polygon (Matic)",
         active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
       {
         key: "ETH_TESTNET",
         description: "Ethereum (ETH) - Testnet",
         active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
       {
         key: "ETH_MAINNET",
         description: "Ethereum (ETH)",
         active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
     ];
-
   } catch {
     return [
       {
@@ -81,5 +81,4 @@ export function getNetworks() {
       },
     ];
   }
- 
 }

@@ -99,7 +99,6 @@ import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 
-
 export default {
   extends: BaseWrapper,
 
@@ -134,10 +133,8 @@ export default {
     // todo replace this with connect() + disconnect():
     clearInterval(this.countDownHandle);
     if (!!this.countDownHandle) {
-      (async () => {
-        await clearIntervalAsync(this.countDownHandle);
-        this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
-      })();
+      await clearIntervalAsync(this.countDownHandle);
+      this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     } else {
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
@@ -145,9 +142,7 @@ export default {
 
   async unmounted() {
     if (!!this.countDownHandle) {
-      (async () => {
-        await clearIntervalAsync(this.countDownHandle);
-      })();
+      await clearIntervalAsync(this.countDownHandle);
     }
   },
 
@@ -246,7 +241,7 @@ export default {
       }
     },
 
-    onModalConfirm() {
+    async onModalConfirm() {
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
@@ -255,7 +250,7 @@ export default {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
 
-        this.claimTokens();
+        await this.claimTokens();
       }
     },
 

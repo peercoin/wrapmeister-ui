@@ -108,15 +108,15 @@ export default {
   },
 
   methods: {
-    onModalConfirm() {
+    async onModalConfirm() {
       if (!this.comfirmedProceedMetaMask) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
-        this.unwrap();
+        await this.unwrap();
       }
     },
 
-    async enableMetaMaskConfirmationModal() {
+    enableMetaMaskConfirmationModal() {
       this.popupModal = true;
     },
 
@@ -152,7 +152,7 @@ export default {
           )
           .send();
 
-        axios.post(this.endpoints().confirmBurn, null, {
+        await axios.post(this.endpoints().confirmBurn, null, {
           headers: {
             "Cache-Control": "no-cache",
             Pragma: "no-cache",
@@ -204,7 +204,7 @@ export default {
         });
 
         this.session = response.data.data;
-        this.burnTokens();
+        await this.burnTokens();
       }
     },
   },
