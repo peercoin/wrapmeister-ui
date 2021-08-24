@@ -1,15 +1,18 @@
+const APP_WRAPPERHOST='http://localhost:3000';
+const APP_WRAPPERHOSTWSS='ws://localhost:3000';
+
 const isNullOrEmpty = function (value) {
   return !(typeof value === "string" && value.length > 0);
 };
 
 export function wrapEndpoints(id) {
   //todo change
-  let _host = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOST)
+  let _host = isNullOrEmpty(APP_WRAPPERHOST)
     ? "http://localhost:3000"
-    : process.env.VUE_APP_WRAPPERHOST;
-  let wsshost = isNullOrEmpty(process.env.VUE_APP_WRAPPERHOSTWSS)
+    : process.env.APP_WRAPPERHOST;
+  let wsshost = isNullOrEmpty(APP_WRAPPERHOSTWSS)
     ? "ws://localhost:3000"
-    : process.env.VUE_APP_WRAPPERHOSTWSS;
+    : APP_WRAPPERHOSTWSS;
 
   return {
     wrap: `${_host}/api/v1/wrap`,
@@ -28,8 +31,46 @@ export function getContractAddress(network) {
 
 export function getNetworks() {
   try {
-    console.log("config networks: ", process.env.VUE_APP_NETWORKS);
-    return JSON.parse(process.env.VUE_APP_NETWORKS);
+
+    return [
+      {
+        key: "BSC_TESTNET",
+        description: "Binance Smart Chain (BSC) - Testnet",
+        active: true,
+        contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1"
+      },
+      {
+        key: "BSC_MAINNET",
+        description: "Binance Smart Chain (BSC)",
+        active: false,
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      },
+      {
+        key: "MATIC_TESTNET",
+        description: "Polygon (Matic) - Testnet",
+        active: false,
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      },
+      {
+        key: "MATIC_MAINNET",
+        description: "Polygon (Matic)",
+        active: false,
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      },
+      {
+        key: "ETH_TESTNET",
+        description: "Ethereum (ETH) - Testnet",
+        active: false,
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      },
+      {
+        key: "ETH_MAINNET",
+        description: "Ethereum (ETH)",
+        active: false,
+        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      },
+    ];
+
   } catch {
     return [
       {
@@ -40,44 +81,5 @@ export function getNetworks() {
       },
     ];
   }
-
-  /*
-  return [
-    {
-      key: "BSC_TESTNET",
-      description: "Binance Smart Chain (BSC) - Testnet",
-      active: true,
-      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-    {
-      key: "BSC_MAINNET",
-      description: "Binance Smart Chain (BSC)",
-      active: true,
-      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-    {
-      key: "MATIC_TESTNET",
-      description: "Polygon (Matic) - Testnet",
-      active: true
-      ,contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-    {
-      key: "MATIC_MAINNET",
-      description: "Polygon (Matic)",
-      active: true,
-      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-    {
-      key: "ETH_TESTNET",
-      description: "Ethereum (ETH) - Testnet",
-      active: true,
-      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-    {
-      key: "ETH_MAINNET",
-      description: "Ethereum (ETH)",
-      active: true,
-      contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-    },
-  ];*/
+ 
 }
