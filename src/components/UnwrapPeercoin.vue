@@ -152,7 +152,7 @@ export default {
           )
           .send();
 
-        axios.post(this.endpoints().confirmBurn, null, {
+        await axios.post(this.endpoints().confirmBurn, null, {
           headers: {
             "Cache-Control": "no-cache",
             Pragma: "no-cache",
@@ -204,7 +204,7 @@ export default {
         });
 
         this.session = response.data.data;
-        this.burnTokens();
+        await this.burnTokens();
       }
     },
   },
