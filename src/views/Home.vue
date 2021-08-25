@@ -57,7 +57,7 @@
       </collapse-transition>
 
       <collapse-transition>
-        <div v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)">
+        <div class="mt-5 g-0" v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)">
           <session-overview/>
         </div>
       </collapse-transition>
