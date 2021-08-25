@@ -37,7 +37,7 @@ export function getNetworks() {
       {
         key: "BSC_TESTNET",
         description: "Binance Smart Chain (BSC) - Testnet",
-        active: true,
+        active: false,
         contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
       },
       {
@@ -61,8 +61,8 @@ export function getNetworks() {
       {
         key: "ETH_TESTNET",
         description: "Ethereum (ETH) - Testnet",
-        active: false,
-        contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        active: true,
+        contract: "0x5B8eF6EE9ec9Df9f240FEbACa2AE88ce3eb950dc",
       },
       {
         key: "ETH_MAINNET",
