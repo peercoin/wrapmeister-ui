@@ -82,7 +82,7 @@ body {
   -moz-border-radius: 3px;
   padding: 7px;
   outline: none;
-
+  font-size: 14px;
   &:focus {
     border: 1px solid #0c0;
   }
