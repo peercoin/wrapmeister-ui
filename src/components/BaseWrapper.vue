@@ -3,7 +3,8 @@
 
 <script>
 import { wrapEndpoints } from "@/Endpoints.js";
-import { validate } from "wallet-address-validator";
+import { isValidETHAddress } from "../crypto/ethereum_validator";
+import { isValidAddress } from "../crypto/peercoin_validator.js";
 import Web3 from "web3";
 
 export default {
@@ -43,20 +44,16 @@ export default {
 
   computed: {
     validETHAddress() {
-      if (!!this.network && this.network.indexOf("TEST") != 0) {
-        return validate(this.destinationETHAddress, "ETH", "both");
-      }
-
-      return validate(this.destinationETHAddress, "ETH");
+      return isValidETHAddress(this.destinationETHAddress);
     },
 
     validPPCAddress() {
       if (!!this.destinationPPCAddress) {
         if (!!this.network && this.network.indexOf("TEST") != 0) {
-          return validate(this.destinationPPCAddress, "PPC", "both");
+          return isValidAddress(this.destinationPPCAddress, null, "both");
         }
 
-        return validate(this.destinationPPCAddress, "PPC");
+        return isValidAddress(this.destinationPPCAddress, null, "prod");
       }
 
       return false;
