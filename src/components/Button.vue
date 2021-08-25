@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    :class="{ btn:true, 'btn-success': type==='success' }"
+    :class="{ btn:true, 'btn-success': type==='success', 'btn-danger': type==='danger' }"
     @click="handleClick"
     :disabled="disabled"
   >
