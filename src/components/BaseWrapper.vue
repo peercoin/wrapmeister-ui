@@ -233,3 +233,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.wrap-container-heading {
+  font-weight: bold;
+  font-style: italic;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
+  font-size: 15px;
+  padding-bottom: 3px;
+}
+</style>

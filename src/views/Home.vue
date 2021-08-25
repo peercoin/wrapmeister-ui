@@ -1,65 +1,61 @@
 <template>
-  <div class="home center">
-    <row :gutter="12">
-      <column :xs="12" :md="12" :lg="3" class="margin-auto">
+  <div class="container home mt-5">
+    <div class="row">
+      <div class="col-xs-12 col-lg-2">
         <img
           alt="Peercoin"
           class="logopeercoin"
           height="75"
           src="../assets/logo-white.svg"
         />
-      </column>
-      <column :xs="12" :md="12" :lg="9">
+      </div>
+      <div class="col-xs-12 col-lg-10">
         <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
-      </column>
-    </row>
+      </div>
+    </div>
 
-    <row :gutter="50">
-      <!--      <column :xs="12" :lg="3" v-if="metaMaskEnabled">
-        <div class="body-column">
-          <steps />
+    <div class="row mt-3 mx-1">
+      <collapse-transition>
+        <div v-if="!metaMaskEnabled">
+          <meta-mask-info />
         </div>
-      </column> -->
-      <column :xs="12" :lg="1 == 2 && !!metaMaskEnabled ? 9 : 12">
+      </collapse-transition>
+    </div>
+
+    <div class="row mt-3 mx-1">
+      <collapse-transition>
         <div
-          v-if="iswrapping || isUnwrapping"
+          v-if="metaMaskEnabled && (iswrapping || isUnwrapping)"
           class="gobackdiv"
           @click="onBackClick"
         >
           Back
         </div>
-        <div class="body-column">
-          <collapse-transition>
-            <div class="body-mid center" v-if="!metaMaskEnabled">
-              <meta-mask-info />
-            </div>
-          </collapse-transition>
+      </collapse-transition>
 
-          <collapse-transition>
-            <div class="body-mid center" v-if="showMenu">
-              <m-button block size="max" type="success" @mbclick="toggleWrap"
-                >Wrap Peercoin</m-button
-              >
+      <collapse-transition>
+        <div class="col py-3 px-3 body-mid" v-if="showMenu">
+          <m-button class="mx-1" type="success" @mbclick="toggleWrap"
+            >Wrap Peercoin</m-button
+          >
 
-              <m-button block size="max" type="success" @mbclick="toggleUnwrap"
-                >Unwrap Peercoin</m-button
-              >
-            </div>
-          </collapse-transition>
-
-          <collapse-transition>
-            <div v-if="!showSession">
-              <div v-if="iswrapping">
-                <wrap-peercoin :propsessionid="propsessionid" />
-              </div>
-              <div v-if="isUnwrapping">
-                <unwrap-peercoin />
-              </div>
-            </div>
-          </collapse-transition>
+          <m-button class="mx-1" type="success" @mbclick="toggleUnwrap"
+            >Unwrap Peercoin</m-button
+          >
         </div>
-      </column>
-    </row>
+      </collapse-transition>
+
+      <collapse-transition>
+        <div v-if="iswrapping || isUnwrapping">
+          <div v-if="iswrapping">
+            <wrap-peercoin :propsessionid="propsessionid" />
+          </div>
+          <div v-if="isUnwrapping">
+            <unwrap-peercoin />
+          </div>
+        </div>
+      </collapse-transition>
+    </div>
   </div>
 </template>
 
@@ -80,7 +76,6 @@ export default {
 
   data() {
     let defaultState = {
-      enteringSession: false,
       sessionId: "",
       iswrapping: false,
       isUnwrapping: false,
@@ -104,7 +99,6 @@ export default {
 
   methods: {
     gotoHome() {
-      this.enteringSession = false;
       this.sessionId = "";
       this.iswrapping = false;
       this.isUnwrapping = false;
@@ -125,22 +119,12 @@ export default {
       });
     },
 
-    toggleEnterSession() {
-      this.enteringSession = !this.enteringSession;
-    },
-
     toggleWrap() {
       this.iswrapping = !this.iswrapping;
     },
 
     toggleUnwrap() {
       this.isUnwrapping = !this.isUnwrapping;
-    },
-
-    onSessionEntered() {
-      if (!this.sessionId) return;
-      this.gotoSession(this.sessionId);
-      this.enteringSession = false;
     },
   },
 
@@ -152,22 +136,9 @@ export default {
     showMenu() {
       return (
         !!this.metaMaskEnabled &&
-        !this.currentSessionId &&
         !this.iswrapping &&
-        !this.isUnwrapping &&
-        !this.enteringSession &&
-        !this.showSession
+        !this.isUnwrapping
       );
-    },
-
-    showSession() {
-      return !!this.$route.params.id;
-    },
-
-    currentSessionId() {
-      if (this.enteringSession) return "";
-
-      return this.sessionId || this.$route.params.id;
     },
   },
 
@@ -183,62 +154,18 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-    max-width: 900px;
+  max-width: 900px;
+  min-width: 400px;
 }
-
-.center {
-  margin: auto;
-  width: 50%;
-  padding: 10px;
+.page-title {
+  color: rgb(251, 251, 251);
+  font-size: 2rem;
 }
-.body-mid {
-  width: 70%;
-}
-@media screen and (max-width: 770px) {
-  .body-mid {
-    width: 100%;
-  }
-}
-
 .gobackdiv {
   text-align: left;
   font-size: 70%;
   &:hover {
     cursor: pointer;
-  }
-}
-
-.body-column {
-  padding: 25px;
-  background-color: rgba(255, 255, 255, 0.85);
-  min-height: 100px;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.7;
-}
-.page-title {
-  color: rgb(251, 251, 251);
-  font-size: 2rem;
-  // &:hover {
-  //   cursor: pointer;
-  // }
-}
-.form-group {
-  overflow: hidden;
-  clear: both;
-  width: 50%;
-  margin: auto;
-}
-// .logopeercoin {
-// &:hover {
-//   cursor: pointer;
-// }
-// }
-
-@media screen and (max-width: 992px) {
-  .logopeercoin {
-    margin-top: 20px;
   }
 }
 </style>

@@ -1,17 +1,17 @@
 <template>
   <div class="ftralert ftralert-warning">
-    <row :gutter="12">
-      <column :xs="12" :md="7" :lg="4" class="margin-auto">
+    <div class="row">
+      <div class="col-xs-12 col-lg-3">
         <img
           alt="MetaFlask"
           height="35"
           src="../assets/metamask-logo-horizontal.svg"
         />
-      </column>
-      <column :xs="12" :md="5" :lg="8">
+      </div>
+      <div class="col-xs-12 col-lg-9">
         <p v-html="missingPlugin"></p>
-      </column>
-    </row>
+      </div>
+    </div>
   </div>
 </template>
 

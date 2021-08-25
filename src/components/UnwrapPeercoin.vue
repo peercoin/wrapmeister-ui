@@ -1,17 +1,19 @@
 <template>
-  <div class="wrap-container">
+  <div class="col-xs-12 body-mid py-3">
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
       body="Proceed with MetaMask?"
     ></modal>
+
     <div class="wrap-container-heading">{{ header }}</div>
-    <row>
-      <column :lg="12" :xl="6">
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>Choose network to bridge</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <select
           :class="{ 'row-input-field': true, invalid: !network }"
           v-model="network"
@@ -20,46 +22,50 @@
             {{ item.description }}
           </option>
         </select>
-      </column>
-    </row>
-    <row>
-      <column :lg="12" :xl="6">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>ERC20 Address</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validETHAddress }"
           v-model="destinationETHAddress"
         />
-      </column>
-    </row>
-    <row>
-      <column :lg="12" :xl="6">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>Peercoin Address</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validPPCAddress }"
           v-model="destinationPPCAddress"
         />
-      </column>
-    </row>
-    <row>
-      <column :lg="12" :xl="6">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>Amount</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <input
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAmount }"
           v-model="amount"
         />
-      </column>
-    </row>
-    <row v-if="!comfirmedProceedMetaMask">
-      <column :lg="12" :xl="12" class="margin-auto m-top-lg">
+      </div>
+    </div>
+
+    <div class="row mb-2" v-if="!comfirmedProceedMetaMask">
+      <div class="col-xs-12 col-md-6">
         <m-button
           class="m-top-sm"
           type="success"
@@ -67,8 +73,8 @@
           :disabled="!validForm"
           >Redeem wrapped Peercoin</m-button
         >
-      </column>
-    </row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -215,19 +221,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.wrap-container {
-  padding: 20px 12px 10px 20px;
-  margin: auto;
-  width: 50%;
-}
-.wrap-container-heading {
-  font-weight: bold;
-  font-style: italic;
-  border-bottom: 2px solid #ddd;
-  margin-bottom: 20px;
-  font-size: 15px;
-  padding-bottom: 3px;
-}
-</style>

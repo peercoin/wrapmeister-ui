@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-container">
+  <div class="col-xs-12 body-mid py-3">
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
@@ -9,11 +9,13 @@
     <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
 
     <div class="wrap-container-heading">{{ header }}</div>
-    <row>
-      <column :lg="12" :xl="6">
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>Choose network to bridge</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+
+      <div class="col-xs-12 col-md-6">
         <select
           :class="{ 'row-input-field': true, invalid: !network }"
           v-model="network"
@@ -23,67 +25,67 @@
             {{ item.description }}
           </option>
         </select>
-      </column>
-    </row>
+      </div>
+    </div>
 
-    <row>
-      <column :lg="12" :xl="6">
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
         <p>ERC-20 Address</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <input
           :disabled="!!session._id"
           type="text"
           :class="{ 'row-input-field': true, invalid: !validETHAddress }"
           v-model="destinationETHAddress"
         />
-      </column>
-    </row>
+      </div>
+    </div>
 
-    <row>
-      <column :lg="12" :xl="6">
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
         <p>Amount</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
+      </div>
+      <div class="col-xs-12 col-md-6">
         <input
           :disabled="!!session._id"
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAmount }"
           v-model="amount"
         />
-      </column>
-    </row>
+      </div>
+    </div>
 
-    <row v-if="!!session.wrapPPCAddress">
-      <column :lg="12" :xl="6">
+    <div class="row" v-if="!!session.wrapPPCAddress">
+      <div class="col-xs-12 col-md-6 py-3">
         <p>Peercoin deposit address</p>
-      </column>
-      <column :lg="12" :xl="6" class="margin-auto">
-        <row>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="row">
           <vue-q-r-code-component
             class="margin-auto"
             v-if="!!URIencodeWrapPPCAddress"
             :size="250"
             :text="URIencodeWrapPPCAddress"
           />
-        </row>
-        <row>
+        </div>
+        <div class="row">
           <small class="margin-auto">{{ session.wrapPPCAddress }}</small>
           <small
             class="margin-auto"
             v-html="URIencodeWrapPPCAddressLink"
           ></small>
-        </row>
-      </column>
-    </row>
+        </div>
+      </div>
+    </div>
 
-    <row v-if="!session._id">
-      <column :lg="12" :xl="12" class="margin-auto m-top-lg">
+    <div class="row" v-if="!session._id">
+      <div class="col-xs-12 mt-3">
         <m-button type="success" @mbclick="wrap" :disabled="!validForm"
           >Wrap Peercoin</m-button
         >
-      </column>
-    </row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -338,19 +340,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.wrap-container {
-  padding: 20px 12px 10px 20px;
-  margin: auto;
-  width: 60%;
-}
-.wrap-container-heading {
-  font-weight: bold;
-  font-style: italic;
-  border-bottom: 2px solid #ddd;
-  margin-bottom: 20px;
-  font-size: 15px;
-  padding-bottom: 3px;
-}
-</style>

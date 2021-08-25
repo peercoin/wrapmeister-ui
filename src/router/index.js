@@ -10,6 +10,7 @@ const routes = [
   {
     // e.g: http://localhost:8080/#/continuewith?sessionid=asfdg33dfsv24e
     path: '/continuewith',
+    name: "ContinueWith",
     component: Home,
     props: route => ({ propsessionid: route.query.sessionid })
   }
