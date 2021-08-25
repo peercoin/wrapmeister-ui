@@ -56,7 +56,7 @@ html {
 
 body {
   font-size: 1.5rem;
-  min-height: 800px;
+  background: url("./assets/pixel.png") bottom left no-repeat;
 }
 
 .body-mid {
