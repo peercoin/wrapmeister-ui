@@ -95,11 +95,16 @@ export default {
     };
   },
 
-  mounted() {
+  async mounted() {
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
     if (!!this.networks && this.networks.length > 0) {
       this.network = this.networks[0].key;
+    }
+
+    this.accounts = await this.getAccounts();
+    if (Array.isArray(this.accounts) && this.accounts.length > 0) {
+      this.destinationETHAddress = this.accounts[0];
     }
   },
 

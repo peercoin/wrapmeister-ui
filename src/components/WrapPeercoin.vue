@@ -124,6 +124,11 @@ export default {
 
     this.resetSession();
 
+    this.accounts = await this.getAccounts();
+    if (Array.isArray(this.accounts) && this.accounts.length > 0) {
+      this.destinationETHAddress = this.accounts[0];
+    }
+
     if (!!this.propsessionid) {
       console.log("do some initialisation instead here...");
       // (this.amount = ""), (this.destinationETHAddress = "");
