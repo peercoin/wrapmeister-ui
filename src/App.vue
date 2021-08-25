@@ -57,11 +57,6 @@ html {
 body {
   font-size: 1.5rem;
   min-height: 800px;
-
-  background: url("./assets/efficient-and-sustainable.svg") bottom left no-repeat;
-  background-size: 400px;
-  background-repeat:no-repeat;
-  background-position: center 88%;
 }
 
 .body-mid {
