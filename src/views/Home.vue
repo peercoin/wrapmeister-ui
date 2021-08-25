@@ -45,8 +45,8 @@
         </div>
       </collapse-transition>
 
-      <collapse-transition>
-        <div v-if="iswrapping || isUnwrapping">
+      <collapse-transition> 
+        <div v-if="metaMaskEnabled && (iswrapping || isUnwrapping)">
           <div v-if="iswrapping">
             <wrap-peercoin :propsessionid="propsessionid" />
           </div>
@@ -55,6 +55,13 @@
           </div>
         </div>
       </collapse-transition>
+
+      <collapse-transition>
+        <div v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)">
+          <session-overview/>
+        </div>
+      </collapse-transition>
+
     </div>
   </div>
 </template>
@@ -66,6 +73,7 @@ import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
+import SessionOverview from "@/components/SessionOverview.vue";
 
 export default {
   name: "Home",
@@ -148,6 +156,7 @@ export default {
     WrapPeercoin,
     UnwrapPeercoin,
     MetaMaskInfo,
+    SessionOverview
   },
 };
 </script>
