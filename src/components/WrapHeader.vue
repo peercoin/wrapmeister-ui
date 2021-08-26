@@ -4,7 +4,7 @@
       <img alt="Peercoin" height="75" src="../assets/logo-white.svg" />
     </div>
     <div class="col-xs-12 col-lg-10">
-      <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
+    <p class="page-title">Peercoin ↔ Ethereum Bridge</p>
     </div>
   </div>
 </template>
