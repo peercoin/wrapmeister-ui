@@ -236,7 +236,6 @@ export default {
 
     showSessions() {
       return (
-        //4 === 5 &&
         !!this.metaMaskEnabled &&
         !(this.iswrapping || this.isUnwrapping) &&
         this.selectedAccount.length > 0
