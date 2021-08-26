@@ -96,8 +96,15 @@
         </div>
       </collapse-transition>
 
-      <official-total v-if="selectedAccount.length>0" :propsaccounts="selectedAccount"></official-total>
+      <official-total
+        v-if="selectedAccount.length > 0"
+        :propsaccounts="selectedAccount"
+      ></official-total>
 
+      <account-total
+        v-if="selectedAccount.length > 0"
+        :propsaccounts="selectedAccount"
+      />
     </div>
   </div>
 </template>
@@ -113,6 +120,7 @@ import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import SessionOverview from "@/components/SessionOverview.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
+import AccountTotal from "@/components/AccountTotal.vue";
 
 export default {
   name: "Home",
@@ -260,7 +268,8 @@ export default {
     MetaMaskInfo,
     SessionOverview,
     Modal,
-    OfficialTotal
+    OfficialTotal,
+    AccountTotal,
   },
 };
 </script>

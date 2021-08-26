@@ -1,12 +1,10 @@
 <template>
-  <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">
-    <div class="col"></div>
-    <div class="col-9">
+  <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">    
+    <div class="col-md-10 offset-md-1">
       <div class="totalofficialppc" @click="onClick">
         official wrapped peercoin token: <strong>{{ token }}</strong>
       </div>
-    </div>
-    <div class="col"></div>
+    </div> 
   </div>
 </template>
 
@@ -40,8 +38,8 @@ export default {
 
 <style lang="scss" scoped>
 .totalofficialppc {
-  padding-bottom: 5px;
-  padding-top: 5px;
+  padding-bottom: 7px;
+  padding-top: 7px;
   text-transform: uppercase;
   border: 1px solid white;
   background-color: #3cb054;
