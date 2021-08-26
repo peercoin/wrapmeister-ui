@@ -95,6 +95,9 @@
           <session-overview :propsaccounts="selectedAccount" />
         </div>
       </collapse-transition>
+
+      <official-total v-if="selectedAccount.length>0" :propsaccounts="selectedAccount"></official-total>
+
     </div>
   </div>
 </template>
@@ -108,6 +111,7 @@ import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import SessionOverview from "@/components/SessionOverview.vue";
+import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
 
 export default {
@@ -188,7 +192,7 @@ export default {
         this.popupModal = false;
       }
     },
-    
+
     onModalClose() {
       this.popupModal = false;
     },
@@ -240,6 +244,7 @@ export default {
 
     showSessions() {
       return (
+        4 === 5 &&
         !!this.metaMaskEnabled &&
         !(this.iswrapping || this.isUnwrapping) &&
         this.selectedAccount.length > 0
@@ -255,6 +260,7 @@ export default {
     MetaMaskInfo,
     SessionOverview,
     Modal,
+    OfficialTotal
   },
 };
 </script>
