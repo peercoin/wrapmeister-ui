@@ -20,12 +20,14 @@ export default {
   },
 
   async mounted() {
-    this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc"; // todo: place hardcoded values in Endpoints.js
-    const url = `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${this.token}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`;
-    let query = await axios.get(url);
-    if (!!query && !!query.data && !!query.data.result) {
-      this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
-    }
+    try {
+      this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc"; // todo: place hardcoded values in Endpoints.js
+      const url = `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${this.token}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`;
+      let query = await axios.get(url);
+      if (!!query && !!query.data && !!query.data.result) {
+        this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
+      }
+    } catch {}
   },
 };
 </script>
