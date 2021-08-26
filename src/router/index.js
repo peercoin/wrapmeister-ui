@@ -12,7 +12,7 @@ const routes = [
     }),
   },
   {
-    path: "/continuewith/:sessionid",
+    path: "/continuewith/account/:selectedaccount/session/:sessionid",
     name: "ContinueWith",
     component: WrapSession,
     props: (route) => ({
