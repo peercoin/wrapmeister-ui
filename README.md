@@ -19,5 +19,6 @@ npm run serve
 npm run build
 ```
 
-### deploy folder
-everything in dist folder
+### Deploy
+
+everything in the `dist` folder
