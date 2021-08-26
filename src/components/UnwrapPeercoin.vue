@@ -65,7 +65,7 @@
     </div>
 
     <div class="row mb-2" v-if="!comfirmedProceedMetaMask">
-      <div class="col-xs-12 col-md-6">
+      <div class="col-xs-12 mt-3">
         <m-button
           class="m-top-sm"
           type="success"
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import Web3 from "web3";
 import axios from "axios";
 import MButton from "@/components/Button.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";

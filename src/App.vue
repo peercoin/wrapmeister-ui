@@ -55,6 +55,7 @@ html {
 }
 
 body {
+  font-family: "Red Hat Text", sans-serif;
   font-size: 1.5rem;
   background: url("./assets/pixel.png") bottom left no-repeat;
 }

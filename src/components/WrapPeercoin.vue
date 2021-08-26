@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import Web3 from "web3";
 import axios from "axios";
 import { setIntervalAsync } from "set-interval-async/fixed";
 import { clearIntervalAsync } from "set-interval-async";
