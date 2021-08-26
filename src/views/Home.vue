@@ -34,6 +34,17 @@
       </collapse-transition>
 
       <collapse-transition>
+        <div
+          class="col py-3 px-3 body-mid"
+          v-if="metaMaskEnabled && accounts.length === 0"
+        >
+          <m-button class="mx-1" type="success" @mbclick="getAccounts"
+            >Connect with MetaMask</m-button
+          >
+        </div>
+      </collapse-transition>
+
+      <collapse-transition>
         <div class="col py-3 px-3 body-mid" v-if="showMenu">
           <m-button class="mx-1" type="success" @mbclick="toggleWrap"
             >Wrap Peercoin</m-button
@@ -45,28 +56,44 @@
         </div>
       </collapse-transition>
 
-      <collapse-transition> 
-        <div v-if="metaMaskEnabled && (iswrapping || isUnwrapping)">
+      <collapse-transition>
+        <div
+          v-if="
+            metaMaskEnabled &&
+              (iswrapping || isUnwrapping) &&
+              accounts.length > 0
+          "
+        >
           <div v-if="iswrapping">
-            <wrap-peercoin :propsessionid="propsessionid" />
+            <wrap-peercoin
+              :propsessionid="propsessionid"
+              :propsaccounts="accounts"
+            />
           </div>
           <div v-if="isUnwrapping">
-            <unwrap-peercoin />
+            <unwrap-peercoin :propsaccounts="accounts" />
           </div>
         </div>
       </collapse-transition>
 
       <collapse-transition>
-        <div class="mt-5 g-0" v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)">
-          <session-overview/>
+        <div
+          class="mt-5 g-0"
+          v-if="
+            metaMaskEnabled &&
+              !(iswrapping || isUnwrapping) &&
+              accounts.length > 0
+          "
+        >
+          <session-overview :propsaccounts="accounts" />
         </div>
       </collapse-transition>
-
     </div>
   </div>
 </template>
 
 <script>
+import Web3 from "web3";
 // @ is an alias to /src
 import MButton from "@/components/Button.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
@@ -87,6 +114,7 @@ export default {
       sessionId: "",
       iswrapping: false,
       isUnwrapping: false,
+      accounts: [],
     };
 
     if (!!this.propsessionid) {
@@ -120,6 +148,25 @@ export default {
       this.gotoHome();
     },
 
+    async getAccounts() {
+      if (!window.ethereum) return;
+
+      try {
+        if (!!this.accounts && this.accounts.length > 0) {
+          return;
+        }
+
+        await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        const web3 = new Web3(ethereum);
+        this.accounts = await web3.eth.getAccounts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     gotoSession(id) {
       this.$router.push({
         name: "Session",
@@ -144,6 +191,7 @@ export default {
     showMenu() {
       return (
         !!this.metaMaskEnabled &&
+        this.accounts.length > 0 &&
         !this.iswrapping &&
         !this.isUnwrapping
       );
@@ -156,7 +204,7 @@ export default {
     WrapPeercoin,
     UnwrapPeercoin,
     MetaMaskInfo,
-    SessionOverview
+    SessionOverview,
   },
 };
 </script>

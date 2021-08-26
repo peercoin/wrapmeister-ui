@@ -8,6 +8,10 @@ import { isValidAddress } from "../crypto/peercoin_validator.js";
 import Web3 from "web3";
 
 export default {
+  props: {
+    propsaccounts: Array,
+  },
+
   data() {
     return {
       requestId: null,

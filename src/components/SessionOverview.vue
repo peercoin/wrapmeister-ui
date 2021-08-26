@@ -19,9 +19,9 @@
             @click="onRowClick(item)"
             :key="item.txid"
           >
-            <td>{{item.txid}}</td>
-            <td class="to-upper">{{item.direction}}</td>
-            <td>{{item.amount}}</td>
+            <td>{{ item.txid }}</td>
+            <td class="to-upper">{{ item.direction }}</td>
+            <td>{{ item.amount }}</td>
           </tr>
         </tbody>
       </table>
@@ -31,103 +31,122 @@
 
 <script>
 export default {
+  props: {
+    propsaccounts: Array,
+  },
+
   data() {
     return {
-        mysessions: []
+      mysessions: [],
     };
   },
 
   computed: {
-    showTable() {        
+    showTable() {
       return this.mysessions.length > 0;
     },
   },
-  
-  async mounted() {
 
+  async mounted() {
     //get data somewhere with axios:
-    setTimeout(()=>{
-        this.mysessions=[
+    setTimeout(() => {
+      this.mysessions = [
         {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
-        },        {
-            txid:"0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-            direction:"wrap",
-            amount: "1234.567",
-            otherdata: "for flying start wrap"
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
         },
-    ]
-    },1000);
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+        {
+          txid:
+            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
+          direction: "wrap",
+          amount: "1234.567",
+          otherdata: "for flying start wrap",
+        },
+      ];
+    }, 1000);
   },
 
   methods: {
     onRowClick(item) {
       cosole.log(item.direction);
-        if (item.direction=='wrap'){
-
-            // this.$router.push({
-            //     path: '/continuewith',
-            //     params: {
-            //         sessionid:"asfdg33dfsv24e"
-            //     }
-            // });
-
-        }
+      if (item.direction == "wrap") {
+        // this.$router.push({
+        //     path: '/continuewith',
+        //     params: {
+        //         sessionid:"asfdg33dfsv24e"
+        //     }
+        // });
+      }
     },
-  }
-
-}
+  },
+};
 </script>
-
-
 
 <style lang="scss" scoped>
 $table-bg: #54ac49;
@@ -182,7 +201,7 @@ td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-} 
+}
 .to-upper {
   text-transform: uppercase;
 }
@@ -190,15 +209,14 @@ td {
 /* for custom scrollbar for webkit browser*/
 
 ::-webkit-scrollbar {
-    width: 6px;
-} 
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-} 
-::-webkit-scrollbar-thumb {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  width: 6px;
 }
-
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
 </style>

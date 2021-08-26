@@ -124,7 +124,12 @@ export default {
 
     this.resetSession();
 
-    this.accounts = await this.getAccounts();
+    if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+      this.accounts = await this.propsaccounts;
+    } else {
+      this.accounts = await this.getAccounts();
+    }
+    
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
     }
@@ -311,6 +316,8 @@ export default {
       }
 
       try {
+        if (!this.web3) this.web3 = new Web3(ethereum);
+
         const contract = new this.web3.eth.Contract(ABI, contractAddress, {
           from: this.session.ERC20Address,
         });
