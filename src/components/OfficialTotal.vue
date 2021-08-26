@@ -3,7 +3,7 @@
     <div class="col"></div>
     <div class="col-9">
       <div class="totalofficialppc" @click="onClick">
-        official wrapped peercoin token: <strong>{{ total }}</strong>
+        official wrapped peercoin token: <strong>{{ token }}</strong>
       </div>
     </div>
     <div class="col"></div>
@@ -18,18 +18,18 @@ export default {
 
   data() {
     return {
-      total: 0,
+      token: "",
     };
   },
 
   async mounted() {
-    this.total = 123.456;
+    this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc";
   },
 
   methods: {
     onClick() {
       if (this.propsaccounts.length > 0) {
-        let url = `https://ropsten.etherscan.io/token/0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc?a=${this.propsaccounts[0]}`;
+        let url = `https://ropsten.etherscan.io/token/${this.token}?a=${this.propsaccounts[0]}`;
 
         window.open(url, "_blank");
       }
