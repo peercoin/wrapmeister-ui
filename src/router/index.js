@@ -1,19 +1,25 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import WrapSession from "../views/WrapSession.vue";
 
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
+    props: (route) => ({
+      propsaccounts: route.params.selectedaccount,
+    }),
   },
   {
-    // e.g: http://localhost:8080/#/continuewith?sessionid=asfdg33dfsv24e
-    path: '/continuewith',
+    path: "/continuewith/:sessionid",
     name: "ContinueWith",
-    component: Home,
-    props: route => ({ propsessionid: route.query.sessionid })
-  }
+    component: WrapSession,
+    props: (route) => ({
+      propsessionid: route.params.sessionid,
+      propsaccounts: route.params.selectedaccount,
+    }),
+  },
 ];
 
 const router = createRouter({

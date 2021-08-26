@@ -22,6 +22,7 @@ export function wrapEndpoints(id) {
     session: `${_host}/api/v1/session/${id}`,
     confirmBurn: `${_host}/api/v1/confirm-burn`,
     websocket: wsshost,
+    openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}` // id is metamask account here
   };
 }
 
@@ -32,7 +33,7 @@ export function getContractAddress(network) {
 
 //todo change these vars:
 export function getNetworks() {
-  try {
+ 
     return [
       {
         key: "BSC_TESTNET",
@@ -71,14 +72,5 @@ export function getNetworks() {
         contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       },
     ];
-  } catch {
-    return [
-      {
-        key: "BSC_TESTNET",
-        description: "Binance Smart Chain (BSC) - Testnet",
-        active: true,
-        contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
-      },
-    ];
-  }
+ 
 }

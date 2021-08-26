@@ -4,9 +4,10 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
           <tr>
-            <th>TXID</th>
+            <th>Wrap session</th>
             <th>Direction</th>
-            <th>Volume</th>
+            <th>Amount</th>
+            <th>Status</th>
           </tr>
         </thead>
       </table>
@@ -16,12 +17,14 @@
         <tbody>
           <tr
             v-for="item in mysessions"
+            :class="{ clickable: item.status === 'open' }"
             @click="onRowClick(item)"
-            :key="item.txid"
+            :key="item.sessionId"
           >
-            <td>{{ item.txid }}</td>
+            <td>{{ item.sessionId }}</td>
             <td class="to-upper">{{ item.direction }}</td>
             <td>{{ item.amount }}</td>
+            <td class="to-upper">{{ item.status }}</td>
           </tr>
         </tbody>
       </table>
@@ -30,6 +33,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { wrapEndpoints } from "@/Endpoints.js";
+
 export default {
   props: {
     propsaccounts: Array,
@@ -37,6 +43,7 @@ export default {
 
   data() {
     return {
+      endpoints: wrapEndpoints,
       mysessions: [],
     };
   },
@@ -48,100 +55,51 @@ export default {
   },
 
   async mounted() {
-    //get data somewhere with axios:
-    setTimeout(() => {
-      this.mysessions = [
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-        {
-          txid:
-            "0xd6c021b604c6753ab79c1f2e75703f6884d0fbda96b745d312892b061ab34059",
-          direction: "wrap",
-          amount: "1234.567",
-          otherdata: "for flying start wrap",
-        },
-      ];
-    }, 1000);
+    await this.getWrapSessions();
   },
 
   methods: {
+    async getWrapSessions() {
+      if (this.propsaccounts.length === 0) return [];
+
+      try {
+        const id = this.propsaccounts[0];
+
+        const res = await axios.get(this.endpoints(id).openwrapsessions);
+
+        if (!!res && !!res.data && !!res.data.data) {
+          let sessions = res.data.data;
+
+          if (Array.isArray(sessions) && sessions.length > 0) {
+            this.mysessions = sessions.map((asession) => {
+              return {
+                status: "open",
+                txid: "",
+                direction: "wrap",
+                amount: asession.amount,
+                sessionId: asession._id,
+              };
+            });
+          }
+        }
+      } catch (error) {
+        console.warn(error);
+        this.eventBus.emit("add-toastr", {
+          text: `Unable to retrieve open wrap sessions ${id}`,
+          type: "error",
+        });
+      }
+    },
+
     onRowClick(item) {
-      cosole.log(item.direction);
-      if (item.direction == "wrap") {
-        // this.$router.push({
-        //     path: '/continuewith',
-        //     params: {
-        //         sessionid:"asfdg33dfsv24e"
-        //     }
-        // });
+      if (item.direction === "wrap" && item.status === "status") {
+        this.$router.push({
+          name: "ContinueWith",
+          params: {
+            sessionid: item.sessionId,
+            selectedaccount: this.propsaccounts,
+          },
+        });
       }
     },
   },
@@ -149,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$table-bg: #54ac49;
+$table-bg: tranparent;
 
 .table-overview {
   opacity: 0.9;
@@ -168,7 +126,7 @@ table {
 }
 .tbl-header {
   background-color: #fff;
-  color: #29881d;
+  color: transparent;
 }
 .tbl-content {
   height: 300px;
@@ -185,7 +143,7 @@ th {
   color: #29881d;
   text-transform: uppercase;
 }
-tr:hover {
+.clickable:hover {
   background-color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
 }
@@ -197,7 +155,7 @@ td {
   font-size: 12px;
   color: #fff;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
-  width: 280px;
+  width: 80px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

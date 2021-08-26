@@ -20,19 +20,8 @@
         </select>
       </template>
     </modal>
-    <div class="row">
-      <div class="col-xs-12 col-lg-2">
-        <img
-          alt="Peercoin"
-          class="logopeercoin"
-          height="75"
-          src="../assets/logo-white.svg"
-        />
-      </div>
-      <div class="col-xs-12 col-lg-10">
-        <p class="page-title">Ethereum ↔ Peercoin Bridge</p>
-      </div>
-    </div>
+
+    <wrap-header />
 
     <div class="row mt-3 mx-1">
       <collapse-transition>
@@ -79,10 +68,7 @@
       <collapse-transition>
         <div v-if="showWrapOrUnwrap">
           <div v-if="iswrapping">
-            <wrap-peercoin
-              :propsessionid="propsessionid"
-              :propsaccounts="selectedAccount"
-            />
+            <wrap-peercoin :propsaccounts="selectedAccount" />
           </div>
           <div v-if="isUnwrapping">
             <unwrap-peercoin :propsaccounts="selectedAccount" />
@@ -90,16 +76,16 @@
         </div>
       </collapse-transition>
 
+      <official-total
+        v-if="selectedAccount.length > 0"
+        :propsaccounts="selectedAccount"
+      ></official-total>
+
       <collapse-transition>
         <div class="mt-5 g-0" v-if="showSessions">
           <session-overview :propsaccounts="selectedAccount" />
         </div>
       </collapse-transition>
-
-      <official-total
-        v-if="selectedAccount.length > 0"
-        :propsaccounts="selectedAccount"
-      ></official-total>
 
       <account-total />
     </div>
@@ -118,16 +104,17 @@ import SessionOverview from "@/components/SessionOverview.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
+import WrapHeader from "@/components/WrapHeader.vue";
 
 export default {
   name: "Home",
 
   props: {
-    propsessionid: String,
+    propsaccounts: Array,
   },
 
   data() {
-    let defaultState = {
+    return {
       sessionId: "",
       iswrapping: false,
       isUnwrapping: false,
@@ -136,17 +123,17 @@ export default {
       modalaccount: null,
       popupModal: false,
     };
-
-    if (!!this.propsessionid) {
-      defaultState.iswrapping = true;
-      defaultState.sessionId = this.propsessionid;
-    }
-
-    return defaultState;
   },
 
   created() {
+    console.log("created");
     this.eventBus.on("goto-home", this.gotoHome);
+  },
+
+  mounted() {
+    if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+      this.account = this.propsaccounts[0];
+    }
   },
 
   beforeUnmount() {
@@ -249,7 +236,7 @@ export default {
 
     showSessions() {
       return (
-        4 === 5 &&
+        //4 === 5 &&
         !!this.metaMaskEnabled &&
         !(this.iswrapping || this.isUnwrapping) &&
         this.selectedAccount.length > 0
@@ -267,6 +254,7 @@ export default {
     Modal,
     OfficialTotal,
     AccountTotal,
+    WrapHeader,
   },
 };
 </script>
@@ -276,10 +264,7 @@ export default {
   max-width: 900px;
   min-width: 400px;
 }
-.page-title {
-  color: rgb(251, 251, 251);
-  font-size: 2rem;
-}
+
 .gobackdiv {
   text-align: left;
   font-size: 70%;

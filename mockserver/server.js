@@ -17,6 +17,8 @@ app.use(
 app.use(cors());
 app.use(nocache());
 
+app.set('query parser', 'simple');
+
 app.get("/", (req, res) => {
   res.send("mockserver");
 });
@@ -64,6 +66,46 @@ app.post("/api/v1/unwrap", function(req, res, next) {
     },
   });
 });
+
+
+function unfinishedSessions(req, res, next){
+  let mockResponse=  {
+  data:  [
+        {
+            "network": "ETH_TESTNET",
+            "amount": "1.234",
+            "wrapSignature": null,
+            "wrapTxid": null,
+            "wrapNonce": null,
+            "wrapPPCAddress": "mknrT8gvsUwADkUwH3pbrBeGFMKsn2QXZ5",
+            "unwrapSignature": null,
+            "unwrapTxid": null,
+            "unwrapNonce": null,
+            "unwrapPPCAddress": null,
+            "ERC20Address": "0x93E16885EE732BFF281285efe2f2F46Dc92590C5",
+            "_id": "0SeZp78Jg8ZE4C4q",
+            "txid":"gsdfgkldgkhdsfghkgdsfh"
+        },
+        {
+            "network": "ETH_TESTNET",
+            "amount": "123.45",
+            "wrapSignature": null,
+            "wrapTxid": null,
+            "wrapNonce": null,
+            "wrapPPCAddress": "msSDctnCauMhKES8ZS4zcap9MuQjC7Uzwi",
+            "unwrapSignature": null,
+            "unwrapTxid": null,
+            "unwrapNonce": null,
+            "unwrapPPCAddress": null,
+            "ERC20Address": "0x93E16885EE732BFF281285efe2f2F46Dc92590C5",//"0x79969B981326C56fE638b176c5D5A6Cc4C6A910F",
+            "_id": "2jNtPy75UIEkRR6G",
+            "txid":"dsbdsfnfj2768376823"
+        }
+    ]};
+    res.json(mockResponse);
+}
+
+app.get("/api/v1/sessions", unfinishedSessions);
 
 app.get("/api/v1/session/:sessionId", function(req, res, next) {
   // Retrieve the tag from our URL path

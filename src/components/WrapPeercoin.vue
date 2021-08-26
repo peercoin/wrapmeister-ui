@@ -136,11 +136,9 @@ export default {
     }
 
     if (!!this.propsessionid) {
-      console.log("do some initialisation instead here...");
-      // (this.amount = ""), (this.destinationETHAddress = "");
-      // this.destinationPPCAddress = "";
-      // this.network = "";
-      //this.session = {...}
+      this.session._id = this.propsessionid;      
+      await this.getSession(this.session._id);
+      this.network = this.session.network;
     }
 
     // todo replace this with connect() + disconnect():
