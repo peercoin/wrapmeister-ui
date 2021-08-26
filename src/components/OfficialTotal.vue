@@ -20,7 +20,7 @@ export default {
     };
   },
 
-  async mounted() {
+  mounted() {
     this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc";
   },
 

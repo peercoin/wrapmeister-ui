@@ -101,10 +101,7 @@
         :propsaccounts="selectedAccount"
       ></official-total>
 
-      <account-total
-        v-if="selectedAccount.length > 0"
-        :propsaccounts="selectedAccount"
-      />
+      <account-total />
     </div>
   </div>
 </template>
