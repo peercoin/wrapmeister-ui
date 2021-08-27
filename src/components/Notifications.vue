@@ -24,7 +24,7 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: 300,
+      default: 380,
     },
     max: {
       type: Number,
@@ -39,7 +39,7 @@ export default {
   data: () => {
     return {
       list: [],
-      duration: 5000,
+      duration: 7000,
       speed: 300,
       IDLE: 0,
       DESTROYED: 2,
