@@ -85,7 +85,7 @@ export default {
       } catch (error) {
         console.warn(error);
         this.eventBus.emit("add-toastr", {
-          text: `Unable to retrieve open wrap sessions ${id}`,
+          text: `Unable to connect to backend with account ${this.propsaccounts[0]}. Please try again later.`,
           type: "error",
         });
       }
