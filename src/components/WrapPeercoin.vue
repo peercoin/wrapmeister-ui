@@ -126,7 +126,7 @@ export default {
     this.resetSession();
 
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-      this.accounts = await this.propsaccounts;
+      this.accounts = this.propsaccounts;
     } else {
       this.accounts = await this.getAccounts();
     }
@@ -139,6 +139,7 @@ export default {
       this.session._id = this.propsessionid;      
       await this.getSession(this.session._id);
       this.network = this.session.network;
+      this.amount = this.session.amount;
     }
 
     // todo replace this with connect() + disconnect():
