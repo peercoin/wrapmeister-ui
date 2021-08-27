@@ -179,8 +179,8 @@ export default {
             network: this.network,
           },
           params: {
-            txid: result.transactionHash,
-            address: this.erc20Address,
+            id: this.session._id,
+            txid: result.transactionHash
           },
         });
 
