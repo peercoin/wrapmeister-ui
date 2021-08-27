@@ -126,7 +126,6 @@ export default {
   },
 
   created() {
-    console.log("created");
     this.eventBus.on("goto-home", this.gotoHome);
   },
 

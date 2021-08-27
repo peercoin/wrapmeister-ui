@@ -25,14 +25,26 @@ export default {
     propsaccounts: Array,
   },
 
+  created() {
+    this.eventBus.on("goto-home", this.gotoHome);
+  },
+
+  beforeUnmount() {
+    this.eventBus.off("goto-home", this.gotoHome);
+  },
+
   methods: {
-    onBackClick() {
+    gotoHome() {
       this.$router.push({
         name: "Home",
         params: {
           selectedaccount: this.propsaccounts,
         },
       });
+    },
+
+    onBackClick() {
+      this.gotoHome();
     },
   },
 
