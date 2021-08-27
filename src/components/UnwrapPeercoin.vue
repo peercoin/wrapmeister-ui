@@ -104,7 +104,7 @@ export default {
     }
     
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-      this.accounts = await this.propsaccounts;
+      this.accounts = this.propsaccounts;
     } else {
       this.accounts = await this.getAccounts();
     }
