@@ -323,7 +323,7 @@ export default {
 
         const result = await contract.methods
           .claimTokens(
-            this.session.amount * 10 ** decimals,
+            this.session.amount * (10 ** decimals),
             this.session.wrapNonce,
             this.session.ERC20Address,
             signature.v,
@@ -331,6 +331,18 @@ export default {
             signature.s
           )
           .send();
+
+        await axios.post(this.endpoints().confirmMint, null, {
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+            network: this.network,
+          },
+          params: {
+            id: this.session._id
+          },
+        });
 
         this.resetSession();
         this.gotoHome("Successfully wrapped " + this.amount + "PPC to WPPC");

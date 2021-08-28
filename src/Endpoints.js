@@ -21,6 +21,7 @@ export function wrapEndpoints(id) {
     //retrieve: `${_host}/api/v1/peercoin/retrieve`,
     session: `${_host}/api/v1/session/${id}`,
     confirmBurn: `${_host}/api/v1/confirm-burn`,
+    confirmMint: `${_host}/api/v1/confirm-mint`,
     websocket: wsshost,
     openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}` // id is metamask account here
   };
