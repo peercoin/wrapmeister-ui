@@ -22,18 +22,12 @@
 
           <div class="d-flex justify-content-center">
             <div class="moditem">
-              <m-button
-                class="m-top-sm"
-                type="success"
-                @mbclick="confirm"
+              <m-button type="success" @mbclick="confirm"
                 >Confirm</m-button
               >
             </div>
             <div class="moditem">
-              <m-button
-                class="m-top-sm"
-                type="danger"
-                @mbclick="close"
+              <m-button type="danger" @mbclick="close"
                 >Cancel</m-button
               >
             </div>
@@ -95,14 +89,16 @@ export default {
 .modal-header,
 .modal-footer {
   padding: 15px;
+  padding-bottom: 5px;
   display: flex;
 }
 
 .modal-header {
   position: relative;
   border-bottom: 1px solid #eeeeee;
-  color: #4aae9b;
+  color: #fff;
   justify-content: space-between;
+  background-color: #3cb054;
 }
 
 .modal-footer {
@@ -115,30 +111,10 @@ export default {
   padding: 20px 10px;
 }
 
-.btn-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: none;
-  font-size: 20px;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #4aae9b;
-  background: transparent;
-}
-
-.moditem { 
+.moditem {
   flex-basis: 100px;
   height: 50px;
   margin: 5px;
-}
-
-.btn-green {
-  color: white;
-  background: #4aae9b;
-  border: 1px solid #4aae9b;
-  border-radius: 2px;
 }
 
 .modal-fade-enter,

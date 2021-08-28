@@ -67,7 +67,6 @@
     <div class="row mb-2" v-if="!comfirmedProceedMetaMask">
       <div class="col-xs-12 mt-3">
         <m-button
-          class="m-top-sm"
           type="success"
           @mbclick="enableMetaMaskConfirmationModal"
           :disabled="!validForm"
