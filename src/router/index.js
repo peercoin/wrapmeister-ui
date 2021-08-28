@@ -9,7 +9,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/account/:selectedaccount",
+    path: "/account/:selectedaccount+",
     name: "HomeAccount",
     component: Home,
     props: (route) => ({
@@ -17,7 +17,7 @@ const routes = [
     }),
   },
   {
-    path: "/continuewith/account/:selectedaccount/session/:sessionid",
+    path: "/continuewith/account/:selectedaccount+/session/:sessionid",
     name: "ContinueWith",
     component: WrapSession,
     props: (route) => ({
