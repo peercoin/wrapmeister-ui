@@ -7,32 +7,28 @@
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
       >
-        <header class="modal-header" id="modalTitle">
+        <div class="modal-header" id="modalTitle">
           <slot name="header"> </slot>
-        </header>
+        </div>
 
-        <section class="modal-body" id="modalDescription">
+        <div class="modal-body" id="modalDescription">
           <slot name="body">
             {{ body }}
           </slot>
-        </section>
+        </div>
 
-        <footer class="modal-footer">
+        <div class="modal-footer">
           <slot name="footer"> </slot>
 
           <div class="d-flex justify-content-center">
             <div class="moditem">
-              <m-button type="success" @mbclick="confirm"
-                >Confirm</m-button
-              >
+              <m-button type="success" @mbclick="confirm">Confirm</m-button>
             </div>
             <div class="moditem">
-              <m-button type="danger" @mbclick="close"
-                >Cancel</m-button
-              >
+              <m-button type="danger" @mbclick="close">Cancel</m-button>
             </div>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
   </transition>
@@ -79,11 +75,17 @@ export default {
 }
 
 .modal {
-  background: #ffffff;
-  box-shadow: 2px 2px 20px 1px;
+  background: #3cb054;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 5px outset #36a04b;
+  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+    8px 0px 22px -3px rgba(0, 0, 0, 0.55);
+  box-shadow: 0px 10px 13px -7px #000000, 8px 0px 22px -3px rgba(0, 0, 0, 0.55);
 }
 
 .modal-header,
@@ -95,20 +97,23 @@ export default {
 
 .modal-header {
   position: relative;
-  border-bottom: 1px solid #eeeeee;
+  //border-bottom: 1px solid #eeeeee;
   color: #fff;
   justify-content: space-between;
   background-color: #3cb054;
 }
 
 .modal-footer {
-  border-top: 1px solid #eeeeee;
+  // border-top: 1px solid #eeeeee;
   flex-direction: column;
 }
 
 .modal-body {
-  position: relative;
-  padding: 20px 10px;
+  position: relative; 
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 
 .moditem {
