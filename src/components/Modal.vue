@@ -20,10 +20,10 @@
         <footer class="modal-footer">
           <slot name="footer"> </slot>
 
-          <div class="modcontainer">
+          <div class="d-flex justify-content-center">
             <div class="moditem">
               <m-button
-                class="m-top-sm margin-auto"
+                class="m-top-sm"
                 type="success"
                 @mbclick="confirm"
                 >Confirm</m-button
@@ -31,7 +31,7 @@
             </div>
             <div class="moditem">
               <m-button
-                class="m-top-sm margin-auto"
+                class="m-top-sm"
                 type="danger"
                 @mbclick="close"
                 >Cancel</m-button
@@ -126,10 +126,6 @@ export default {
   font-weight: bold;
   color: #4aae9b;
   background: transparent;
-}
-
-.modcontainer {
-  display: flex;
 }
 
 .moditem { 

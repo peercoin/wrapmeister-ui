@@ -61,20 +61,16 @@
         <p>Peercoin deposit address</p>
       </div>
       <div class="col-xs-12 col-md-6">
-        <div class="row">
+        <div class="row mt-2 pt-2">
           <vue-q-r-code-component
-            class="margin-auto"
             v-if="!!URIencodeWrapPPCAddress"
             :size="250"
             :text="URIencodeWrapPPCAddress"
           />
         </div>
         <div class="row">
-          <small class="margin-auto">{{ session.wrapPPCAddress }}</small>
-          <small
-            class="margin-auto"
-            v-html="URIencodeWrapPPCAddressLink"
-          ></small>
+          <small>{{ session.wrapPPCAddress }}</small>
+          <small v-html="URIencodeWrapPPCAddressLink"></small>
         </div>
       </div>
     </div>
@@ -130,13 +126,13 @@ export default {
     } else {
       this.accounts = await this.getAccounts();
     }
-    
+
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
     }
 
     if (!!this.propsessionid) {
-      this.session._id = this.propsessionid;      
+      this.session._id = this.propsessionid;
       await this.getSession(this.session._id);
       this.network = this.session.network;
       this.amount = this.session.amount;
