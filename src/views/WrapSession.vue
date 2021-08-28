@@ -36,7 +36,7 @@ export default {
   methods: {
     gotoHome() {
       this.$router.push({
-        name: "Home",
+        name: "HomeAccount",
         params: {
           selectedaccount: this.propsaccounts,
         },

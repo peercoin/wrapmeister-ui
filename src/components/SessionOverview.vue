@@ -69,18 +69,7 @@ export default {
 
         if (!!res && !!res.data && !!res.data.data) {
           let sessions = res.data.data;
-
-          if (Array.isArray(sessions) && sessions.length > 0) {
-            this.mysessions = sessions.map((asession) => {
-              return {
-                status: "open",
-                txid: "",
-                direction: "wrap",
-                amount: asession.amount,
-                sessionId: asession._id,
-              };
-            });
-          }
+          this.setSessions(sessions);
         }
       } catch (error) {
         console.warn(error);
@@ -91,8 +80,28 @@ export default {
       }
     },
 
+    setSessions(sessions) {
+      if (Array.isArray(sessions) && sessions.length > 0) {
+        let isOpen = (session) => {
+          if (!session.wrapSignature) return true;
+          if (!(session.claimed ?? false)) return true;
+          return false;
+        };
+
+        this.mysessions = sessions.map((session) => {
+          return {
+            status: isOpen(session) ? "open" : "closed",
+            txid: "", //figure out UI columns later when we add completed txids too
+            direction: "wrap",
+            amount: session.amount,
+            sessionId: session._id,
+          };
+        });
+      }
+    },
+
     onRowClick(item) {
-      if (item.direction === "wrap" && item.status === "status") {
+      if (item.direction === "wrap" && item.status === "open") {
         this.$router.push({
           name: "ContinueWith",
           params: {

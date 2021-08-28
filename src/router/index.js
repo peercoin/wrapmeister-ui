@@ -7,6 +7,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/account/:selectedaccount",
+    name: "HomeAccount",
+    component: Home,
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
     }),

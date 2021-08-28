@@ -42,6 +42,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
+        claimed: false
       },
     };
   },
@@ -106,6 +107,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
+        claimed: false
       };
     },
 
