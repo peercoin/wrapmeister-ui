@@ -65,12 +65,9 @@
       </div>
     </div>
 
-    <div class="row mb-2" v-if="!comfirmedProceedMetaMask">
+    <div class="row mb-2" v-if="!callingunwrap">
       <div class="col-xs-12 mt-3">
-        <m-button
-          type="success"
-          @mbclick="enableMetaMaskConfirmationModal"
-          :disabled="!validForm"
+        <m-button type="success" @mbclick="unwrap" :disabled="!validForm"
           >Redeem wrapped Peercoin</m-button
         >
       </div>
@@ -93,6 +90,7 @@ export default {
   data() {
     return {
       erc20Address: "",
+      callingunwrap: false,
     };
   },
 
@@ -102,7 +100,7 @@ export default {
     if (!!this.networks && this.networks.length > 0) {
       this.network = this.networks[0].key;
     }
-    
+
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
       this.accounts = this.propsaccounts;
     } else {
@@ -129,7 +127,7 @@ export default {
       if (!this.comfirmedProceedMetaMask) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
-        await this.unwrap();
+        await this.burnTokens();
       }
     },
 
@@ -180,7 +178,7 @@ export default {
           },
           params: {
             id: this.session._id,
-            txid: result.transactionHash
+            txid: result.transactionHash,
           },
         });
 
@@ -192,38 +190,50 @@ export default {
     },
 
     async unwrap() {
-      let response = await axios.post(this.endpoints().unwrap, null, {
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-          network: this.network,
-          "Idempotency-Key": this.requestId,
-        },
-        params: {
-          amount: this.amount,
-          PPCAddress: this.destinationPPCAddress,
-          ERC20Address: this.destinationETHAddress,
-        },
-      });
+      try {
+        this.callingunwrap = true;
 
-      if (
-        !!response &&
-        !!response &&
-        !!response.data &&
-        !!response.data.data &&
-        !!response.data.data._id
-      ) {
-        const success =
-          !!response && !!response.data && !!response.data.message;
-
-        this.eventBus.emit("add-toastr", {
-          text: success ? response.data.message : `Unable to unwrap`,
-          type: success ? "success" : "error",
+        let response = await axios.post(this.endpoints().unwrap, null, {
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+            network: this.network,
+            "Idempotency-Key": this.requestId,
+          },
+          params: {
+            amount: this.amount,
+            PPCAddress: this.destinationPPCAddress,
+            ERC20Address: this.destinationETHAddress,
+          },
         });
 
-        this.session = response.data.data;
-        await this.burnTokens();
+        if (
+          !!response &&
+          !!response &&
+          !!response.data &&
+          !!response.data.data &&
+          !!response.data.data._id
+        ) {
+          const success =
+            !!response && !!response.data && !!response.data.message;
+
+          this.eventBus.emit("add-toastr", {
+            text: success ? response.data.message : `Unable to unwrap`,
+            type: success ? "success" : "error",
+          });
+
+          this.session = response.data.data;
+          // show popup, then burn tokens:
+          this.enableMetaMaskConfirmationModal();
+        }
+      } catch (e) {
+        console.log(e);
+
+        this.eventBus.emit("add-toastr", {
+          text: `Unable to unwrap`,
+          type: "error",
+        });
       }
     },
   },

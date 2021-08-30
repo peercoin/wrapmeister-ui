@@ -281,15 +281,23 @@ export default {
         params: data,
       };
 
-      let response = await axios.post(this.endpoints().wrap, null, config);
-      this.session = response.data.data;
+      try {
+        let response = await axios.post(this.endpoints().wrap, null, config);
+        this.session = response.data.data;
 
-      const success = response && !response.error;
+        const success = response && !response.error;
 
-      this.eventBus.emit("add-toastr", {
-        text: response.data.message,
-        type: success ? "success" : "error",
-      });
+        this.eventBus.emit("add-toastr", {
+          text: response.data.message,
+          type: success ? "success" : "error",
+        });
+      } catch (e) {
+        console.log(e);
+        this.eventBus.emit("add-toastr", {
+          text: "Unable to wrap",
+          type: "error",
+        });
+      }
     },
 
     async claimTokens() {
@@ -324,7 +332,7 @@ export default {
 
         const result = await contract.methods
           .claimTokens(
-            this.session.amount * (10 ** decimals),
+            this.session.amount * 10 ** decimals,
             this.session.wrapNonce,
             this.session.ERC20Address,
             signature.v,
@@ -341,7 +349,7 @@ export default {
             network: this.network,
           },
           params: {
-            id: this.session._id
+            id: this.session._id,
           },
         });
 
