@@ -1,5 +1,5 @@
 //todo change these vars:
-const APP_WRAPPERHOST = "https://wrapmeister.peercoin.net:3000";
+const APP_WRAPPERHOST = "https://wrapmeister.peercoin.net";
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000";
 
 //////////////////////////////////////////////////////////////
