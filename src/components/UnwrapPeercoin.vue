@@ -60,6 +60,7 @@
           type="text"
           :class="{ 'row-input-field': true, invalid: !validAmount }"
           v-model="amount"
+          @keypress="onlyForCurrency"
         />
       </div>
     </div>

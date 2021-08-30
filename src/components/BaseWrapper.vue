@@ -1,5 +1,4 @@
-<template>  
-</template>
+<template> </template>
 
 <script>
 import { wrapEndpoints } from "@/Endpoints.js";
@@ -42,7 +41,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
-        claimed: false
+        claimed: false,
       },
     };
   },
@@ -79,14 +78,13 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-        /[xy]/g,
-        function (c) {
-          const r = (Math.random() * 16) | 0,
-            v = c === "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        }
-      );
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+        c
+      ) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
     },
 
     resetSession() {
@@ -107,7 +105,7 @@ export default {
         unwrapNonce: false,
         unwrapPPCAddress: null,
         ERC20Address: null,
-        claimed: false
+        claimed: false,
       };
     },
 
@@ -232,6 +230,28 @@ export default {
       }
 
       return [];
+    },
+
+    onlyForCurrency($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+
+      // only allow number and one dot
+      if (
+        (keyCode < 48 || keyCode > 57) &&
+        (keyCode !== 46 || this.amount.indexOf(".") != -1)
+      ) {
+        // 46 is dot
+        $event.preventDefault();
+      }
+
+      // restrict to 6 decimal places
+      if (
+        this.amount != null &&
+        this.amount.indexOf(".") > -1 &&
+        this.amount.split(".")[1].length > 5
+      ) {
+        $event.preventDefault();
+      }
     },
   },
 };
