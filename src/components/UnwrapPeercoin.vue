@@ -192,6 +192,7 @@ export default {
           },
         });
 
+        this.unwrapstatus="";
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
       } catch (e) {
