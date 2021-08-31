@@ -1,5 +1,6 @@
 <template>
   <div class="col-xs-12 body-mid py-3">
+    <loading-overlay :loading="!!unwrapstatus" :text="unwrapstatus" />
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
@@ -85,6 +86,7 @@ import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
 
 export default {
   extends: BaseWrapper,
@@ -92,11 +94,13 @@ export default {
   data() {
     return {
       erc20Address: "",
+      unwrapstatus: "",
       callingunwrap: false,
     };
   },
 
   async mounted() {
+    this.unwrapstatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks().filter((nw) => nw.active);
     if (!!this.networks && this.networks.length > 0) {
@@ -138,6 +142,7 @@ export default {
     },
 
     async burnTokens() {
+      this.unwrapstatus="Burning tokens on MetaMask";
       this.accounts = await this.getAccounts();
 
       if (!this.accounts || this.accounts.length < 1) {
@@ -171,6 +176,8 @@ export default {
           )
           .send();
 
+      this.unwrapstatus="One more thing...";
+
         await axios.post(this.endpoints().confirmBurn, null, {
           headers: {
             "Cache-Control": "no-cache",
@@ -181,7 +188,7 @@ export default {
           params: {
             txid: result.transactionHash,
             PPCAddress: this.destinationPPCAddress,
-            ERC20Address: this.destinationETHAddress
+            ERC20Address: this.destinationETHAddress,
           },
         });
 
@@ -189,13 +196,14 @@ export default {
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
       } catch (e) {
         console.log(e);
+        this.unwrapstatus="";
       }
     },
 
     async unwrap() {
       try {
         this.callingunwrap = true;
-
+       
         const response = await axios.post(this.endpoints().unwrap, null, {
           headers: {
             "Cache-Control": "no-cache",
@@ -243,6 +251,7 @@ export default {
   components: {
     MButton,
     Modal,
+    LoadingOverlay,
   },
 };
 </script>
