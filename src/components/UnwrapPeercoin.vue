@@ -179,8 +179,9 @@ export default {
             network: this.network,
           },
           params: {
-            id: this.session._id,
             txid: result.transactionHash,
+            PPCAddress: this.destinationPPCAddress,
+            ERC20Address: this.destinationETHAddress
           },
         });
 
@@ -195,7 +196,7 @@ export default {
       try {
         this.callingunwrap = true;
 
-        let response = await axios.post(this.endpoints().unwrap, null, {
+        const response = await axios.post(this.endpoints().unwrap, null, {
           headers: {
             "Cache-Control": "no-cache",
             Pragma: "no-cache",
@@ -214,8 +215,7 @@ export default {
           !!response &&
           !!response &&
           !!response.data &&
-          !!response.data.data &&
-          !!response.data.data._id
+          !!response.data.data //&& !!response.data.data._id
         ) {
           const success =
             !!response && !!response.data && !!response.data.message;
