@@ -28,20 +28,6 @@
       </div>
     </div>
 
-    <div class="row mb-2">
-      <div class="col-xs-12 col-md-6">
-        <p>ERC-20 Address</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          :disabled="!!session._id"
-          type="text"
-          :class="{ 'row-input-field': true, invalid: !validETHAddress }"
-          v-model="destinationETHAddress"
-        />
-      </div>
-    </div>
-
     <div class="row">
       <div class="col-xs-12 col-md-6">
         <p>Amount</p>
@@ -54,6 +40,21 @@
           v-model="amount"
           @keypress="onlyForCurrency"
         />
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <div class="col-xs-12 col-md-8 offset-md-4">
+        <div class="d-grid gap-2 d-md-block text-end">
+          <button class="btn btn-outline-primary btn-sm foxy" type="button">
+            <span class="btn-label">
+              <img
+                alt="MetaMask"
+                height="25"
+                src="../assets/metamask-fox.svg"/></span
+            >{{ destinationETHAddress }}
+          </button>
+        </div>
       </div>
     </div>
 

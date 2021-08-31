@@ -28,6 +28,8 @@ export function wrapEndpoints(id) {
 }
 
 export function getContractAddress(network) {
+  //todo: change default network:
+  if (!network) network="ETH_TESTNET";
   const ne = getNetworks().find((nw) => nw.key === network);
   return !!ne ? ne.contract : "";
 }

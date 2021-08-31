@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12 col-lg-3">
         <img
-          alt="MetaFlask"
+          alt="MetaMask"
           height="35"
           src="../assets/metamask-logo-horizontal.svg"
         />

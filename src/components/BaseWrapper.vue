@@ -2,7 +2,7 @@
 
 <script>
 import { wrapEndpoints } from "@/Endpoints.js";
-import { isValidETHAddress } from "../crypto/ethereum_validator";
+//import { isValidETHAddress } from "../crypto/ethereum_validator";
 import { isValidAddress } from "../crypto/peercoin_validator.js";
 import Web3 from "web3";
 
@@ -47,9 +47,9 @@ export default {
   },
 
   computed: {
-    validETHAddress() {
-      return isValidETHAddress(this.destinationETHAddress);
-    },
+    // validETHAddress() {
+    //   return isValidETHAddress(this.destinationETHAddress);
+    // },
 
     validPPCAddress() {
       if (!!this.destinationPPCAddress) {
@@ -265,5 +265,16 @@ export default {
   margin-bottom: 20px;
   font-size: 15px;
   padding-bottom: 3px;
+}
+.foxy {
+  font-size: 70%;
+  color: #a04612;
+  border-color: #a04612;
+  &:hover {
+    cursor: default;
+    color: #a04612;
+    background-color: transparent;
+    border-color: #a04612;
+  }
 }
 </style>

@@ -10,6 +10,7 @@
 
 <script>
 import axios from "axios";
+import { getContractAddress } from "@/Endpoints.js";
 
 export default {
   data() {
@@ -21,7 +22,7 @@ export default {
 
   async mounted() {
     try {
-      this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc"; // todo: place hardcoded values in Endpoints.js
+      this.token = getContractAddress();
       const url = `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${this.token}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`;
       let query = await axios.get(url);
       if (!!query && !!query.data && !!query.data.result) {

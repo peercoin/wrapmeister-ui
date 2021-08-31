@@ -1,14 +1,16 @@
 <template>
-  <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">    
+  <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">
     <div class="col-md-10 offset-md-1">
       <div class="totalofficialppc" @click="onClick">
         official wrapped peercoin token: <strong>{{ token }}</strong>
       </div>
-    </div> 
+    </div>
   </div>
 </template>
 
 <script>
+import { getContractAddress } from "@/Endpoints.js";
+
 export default {
   props: {
     propsaccounts: Array,
@@ -21,7 +23,7 @@ export default {
   },
 
   mounted() {
-    this.token = "0x5b8ef6ee9ec9df9f240febaca2ae88ce3eb950dc";
+    this.token = getContractAddress();
   },
 
   methods: {
