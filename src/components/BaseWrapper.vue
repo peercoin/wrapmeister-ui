@@ -3,7 +3,7 @@
 <script>
 import { wrapEndpoints } from "@/Endpoints.js";
 //import { isValidETHAddress } from "../crypto/ethereum_validator";
-import { isValidAddress } from "../crypto/peercoin_validator.js";
+import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 import Web3 from "web3";
 
 export default {
@@ -47,17 +47,13 @@ export default {
   },
 
   computed: {
-    // validETHAddress() {
-    //   return isValidETHAddress(this.destinationETHAddress);
-    // },
-
     validPPCAddress() {
       if (!!this.destinationPPCAddress) {
         if (!!this.network && this.network.indexOf("TEST") != 0) {
-          return isValidAddress(this.destinationPPCAddress, null, "both");
+          return isValidAddress(this.destinationPPCAddress, "both");
         }
 
-        return isValidAddress(this.destinationPPCAddress, null, "prod");
+        return isValidAddress(this.destinationPPCAddress, "prod");
       }
 
       return false;
