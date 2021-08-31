@@ -131,7 +131,7 @@ mainnet p2sh: p92W3t7YkKfQEPDb7cG9jQ6iMh7cpKLvwK
 mainnet segwit: pc1qavd24cqa5ksujqkx795za3n5wshk3j6lgvj6ea
 
 testnet p2pkh: muuaf6eHen5dP2HMjttW7KNFJYjGzWaZYA
-testnet p2sh: ???
+testnet p2sh: 2NEuk2hwRsTW2Xj4TkHjnkJRfkwKjE7kg5L
 testnet segwit: tpc1qrq9n4dahfk620l8ue8xhkru0hqfhsmpzgyj5u6
 */
 
