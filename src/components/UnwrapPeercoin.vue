@@ -178,8 +178,9 @@ export default {
             network: this.network,
           },
           params: {
-            id: this.session._id,
-            txid: result.transactionHash
+            txid: result.transactionHash,
+            PPCAddress: this.destinationPPCAddress,
+            ERC20Address: this.destinationETHAddress
           },
         });
 
@@ -210,8 +211,7 @@ export default {
         !!response &&
         !!response &&
         !!response.data &&
-        !!response.data.data &&
-        !!response.data.data._id
+        !!response.data.data
       ) {
         const success =
           !!response && !!response.data && !!response.data.message;
