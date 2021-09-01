@@ -1,15 +1,13 @@
 <template>
-  <div class="row mt-5 mx-1 g-0">
-    <div class="row justify-content-between">
-      <div class="col-6">
-        <div class="totalppc">
-          total peercoin wrapped: <strong>{{ amount }}</strong>
-        </div>
+  <div class="row justify-content-between mt-2 mx-1 g-0">
+    <div class="col-md-6 pe-md-2 mt-3">
+      <div class="totalppc">
+        total peercoin wrapped: <strong>{{ amount }}</strong>
       </div>
-      <div class="col-6">
-        <div class="totalstorageppc" @click="onClick">
-          custodian balance: <strong>{{ amountStorage }}</strong>
-        </div>
+    </div>
+    <div class="col-md-6 ps-md-2 mt-3" >
+      <div class="totalstorageppc" @click="onClick">
+        custodian balance: <strong>{{ amountStorage }}</strong>
       </div>
     </div>
   </div>
