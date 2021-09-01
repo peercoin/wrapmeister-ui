@@ -2,7 +2,6 @@
 
 <script>
 import { wrapEndpoints } from "@/Endpoints.js";
-//import { isValidETHAddress } from "../crypto/ethereum_validator";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 import Web3 from "web3";
 

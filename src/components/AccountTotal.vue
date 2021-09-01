@@ -1,8 +1,15 @@
 <template>
   <div class="row mt-5 mx-1 g-0">
-    <div class="col-md-4">
-      <div class="totalppc">
-        total peercoin wrapped: <strong>{{ amount }}</strong>
+    <div class="row justify-content-between">
+      <div class="col-6">
+        <div class="totalppc">
+          total peercoin wrapped: <strong>{{ amount }}</strong>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="totalstorageppc" @click="onClick">
+          custodian balance: <strong>{{ amountStorage }}</strong>
+        </div>
       </div>
     </div>
   </div>
@@ -10,25 +17,72 @@
 
 <script>
 import axios from "axios";
-import { getContractAddress } from "@/Endpoints.js";
+import { getContractAddress, wrapEndpoints } from "@/Endpoints.js";
+import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 
 export default {
   data() {
     return {
+      endpoints: wrapEndpoints,
       token: "",
       amount: 0,
+      amountStorage: "",
+      peercoinAddressStorage: "",
     };
   },
 
   async mounted() {
     try {
       this.token = getContractAddress();
-      const url = `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${this.token}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`;
+      const url = this.endpoints(this.token).accountTotalUrl;
       let query = await axios.get(url);
       if (!!query && !!query.data && !!query.data.result) {
         this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
       }
-    } catch {}
+
+      const storagedata = await axios.get(this.endpoints().storageAddress);
+      if (!!storagedata && !!storagedata.data && !!storagedata.data.data) {
+        this.peercoinAddressStorage = storagedata.data.data;
+
+        let storageDetails;
+        if (isValidAddress(this.peercoinAddressStorage, "prod")) {
+          storageDetails = await axios.get(
+            this.endpoints(this.peercoinAddressStorage)
+              .APIaddressPeercoinExplorer
+          );
+        } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
+          storageDetails = await axios.get(
+            this.endpoints(this.peercoinAddressStorage)
+              .APIaddressPeercoinExplorerTest
+          );
+        }
+
+        if (
+          !!storageDetails &&
+          !!storageDetails.data &&
+          !!storageDetails.data.balance
+        ) {
+          this.amountStorage = storageDetails.data.balance;
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  },
+  methods: {
+    onClick() {
+      let url = "";
+      if (isValidAddress(this.peercoinAddressStorage, "prod")) {
+        url = this.endpoints(this.peercoinAddressStorage)
+          .addressPeercoinExplorer;
+        window.open(url, "_blank");
+      } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
+        url = this.endpoints(this.peercoinAddressStorage)
+          .addressPeercoinExplorerTest;
+        window.open(url, "_blank");
+      }
+      if (!!url) window.open(url, "_blank");
+    },
   },
 };
 </script>
@@ -44,5 +98,21 @@ export default {
   opacity: 1;
   font-size: 14px;
   color: white;
+}
+.totalstorageppc {
+  padding-bottom: 7px;
+  padding-top: 7px;
+  text-transform: uppercase;
+  border: 1px solid white;
+  background-color: #3cb054;
+  text-align: center;
+  opacity: 1;
+  font-size: 14px;
+  color: white;
+  &:hover {
+    cursor: pointer;
+    color: #3cb054;
+    background-color: white;
+  }
 }
 </style>

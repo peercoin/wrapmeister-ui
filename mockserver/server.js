@@ -107,6 +107,14 @@ function unfinishedSessions(req, res, next){
     res.json(mockResponse);
 }
 
+app.get("/api/v1/storage-address",function(req, res, next) {
+  let ret={  
+      data: "muG29oWq6PpwGRWMtmLt5oAurrQXPjzVC7"
+  };
+ 
+  res.json(ret);
+  });
+
 app.get("/api/v1/sessions", unfinishedSessions);
 
 app.get("/api/v1/session/:sessionId", function(req, res, next) {

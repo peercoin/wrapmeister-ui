@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getContractAddress } from "@/Endpoints.js";
+import { getContractAddress, wrapEndpoints } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -18,6 +18,7 @@ export default {
 
   data() {
     return {
+      endpoints: wrapEndpoints,
       token: "",
     };
   },
@@ -29,8 +30,7 @@ export default {
   methods: {
     onClick() {
       if (this.propsaccounts.length > 0) {
-        let url = `https://ropsten.etherscan.io/token/${this.token}?a=${this.propsaccounts[0]}`;
-
+        const url = this.endpoints(this.propsaccounts[0]).officialTotalUrl;
         window.open(url, "_blank");
       }
     },
