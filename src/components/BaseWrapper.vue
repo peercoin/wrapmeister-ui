@@ -69,6 +69,14 @@ export default {
 
       return typeof n == "number" && !isNaN(n) && isFinite(n) && n > 0;
     },
+
+    minAmountNotExceeded() {
+      if (!this.validAmount) return false;
+
+      let n = parseFloat(this.amount);
+
+      return n < 1000;
+    },
   },
 
   methods: {

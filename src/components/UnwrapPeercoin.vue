@@ -50,6 +50,9 @@
           v-model="amount"
           @keypress="onlyForCurrency"
         />
+        <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
+          Minimum amount is set at 1000
+        </p>
       </div>
     </div>
 
@@ -124,7 +127,12 @@ export default {
     },
 
     validForm() {
-      return this.validAmount && this.validPPCAddress && !!this.network;
+      return (
+        this.validAmount &&
+        this.validPPCAddress &&
+        !!this.network &&
+        !this.minAmountNotExceeded
+      );
     },
   },
 
@@ -142,7 +150,7 @@ export default {
     },
 
     async burnTokens() {
-      this.unwrapstatus="Burning tokens on MetaMask";
+      this.unwrapstatus = "Burning tokens on MetaMask";
       this.accounts = await this.getAccounts();
 
       if (!this.accounts || this.accounts.length < 1) {
@@ -176,7 +184,7 @@ export default {
           )
           .send();
 
-      this.unwrapstatus="One more thing...";
+        this.unwrapstatus = "One more thing...";
 
         await axios.post(this.endpoints().confirmBurn, null, {
           headers: {
@@ -192,19 +200,19 @@ export default {
           },
         });
 
-        this.unwrapstatus="";
+        this.unwrapstatus = "";
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
       } catch (error) {
-        console.log({...error}); 
-        this.unwrapstatus="";
+        console.log({ ...error });
+        this.unwrapstatus = "";
       }
     },
 
     async unwrap() {
       try {
         this.callingunwrap = true;
-       
+
         const response = await axios.post(this.endpoints().unwrap, null, {
           headers: {
             "Cache-Control": "no-cache",
@@ -239,7 +247,7 @@ export default {
           this.enableMetaMaskConfirmationModal();
         }
       } catch (error) {
-        console.log({...error});
+        console.log({ ...error });
 
         this.eventBus.emit("add-toastr", {
           text: `Unable to unwrap`,

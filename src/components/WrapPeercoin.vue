@@ -40,6 +40,9 @@
           v-model="amount"
           @keypress="onlyForCurrency"
         />
+        <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
+          Minimum amount is set at 1000
+        </p>
       </div>
     </div>
 
@@ -211,7 +214,12 @@ export default {
     },
 
     validForm() {
-      return this.validAmount && !!this.network && !!this.destinationETHAddress;
+      return (
+        this.validAmount &&
+        !!this.network &&
+        !!this.destinationETHAddress &&
+        !this.minAmountNotExceeded
+      );
     },
   },
 
