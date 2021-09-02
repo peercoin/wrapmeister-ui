@@ -211,7 +211,7 @@ export default {
     },
 
     validForm() {
-      return this.validAmount && !!this.network;
+      return this.validAmount && !!this.network && !!this.destinationETHAddress;
     },
   },
 
