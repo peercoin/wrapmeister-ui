@@ -85,7 +85,7 @@
         <p>Confirmations</p>
       </div>
       <div class="col-xs-12 col-md-6">
-        <div class="progress mt-2" style="height: 10px;">
+        <div class="progress mt-2 custprogress">
           <div
             class="progress-bar progress-bar-striped bg-success progress-bar-animated"
             role="progressbar"
@@ -431,3 +431,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" >
+.custprogress {
+  background-color: #c7c7c7;
+  height: 10px;
+}
+</style>
