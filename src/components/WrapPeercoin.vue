@@ -41,7 +41,7 @@
           @keypress="onlyForCurrency"
         />
         <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
-          Minimum amount is set at 10
+          Minimum amount is set at {{minAmount}}
         </p>
       </div>
     </div>

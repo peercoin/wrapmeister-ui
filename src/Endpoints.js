@@ -7,6 +7,10 @@ const isNullOrEmpty = function(value) {
   return !(typeof value === "string" && value.length > 0);
 };
 
+export function getMinAmount() {
+  return 10.0
+}
+
 export function getContractAddress(network) {
   //todo: change default network:
   if (!network) network = "ETH_TESTNET";

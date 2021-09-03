@@ -1,7 +1,7 @@
 <template> </template>
 
 <script>
-import { wrapEndpoints } from "@/Endpoints.js";
+import { wrapEndpoints, getMinAmount } from "@/Endpoints.js";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 import Web3 from "web3";
 
@@ -57,6 +57,10 @@ export default {
 
       return false;
     },
+    
+    minAmount(){
+      return getMinAmount();
+    },
 
     validAmount() {
       if (!this.amount) return false;
@@ -75,7 +79,7 @@ export default {
 
       let n = parseFloat(this.amount);
 
-      return n < 10;
+      return n < getMinAmount();
     },
   },
 
