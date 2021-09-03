@@ -20,7 +20,21 @@ export default {
 
 @import "@/variables.scss";
 
-@import "../node_modules/bootstrap/scss/bootstrap";
+//@import "../node_modules/bootstrap/scss/bootstrap";
+
+// see node_modules/bootstrap/scss/bootstrap.scss  
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/forms";
+//@import "../node_modules/bootstrap/scss/spinners";
+@import "../node_modules/bootstrap/scss/helpers";
+@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/progress";
+@import "../node_modules/bootstrap/scss/utilities/api";
  
 #app {
   font-family: "Red Hat Text", sans-serif;
