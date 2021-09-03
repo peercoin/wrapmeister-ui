@@ -75,7 +75,7 @@ export default {
 
       let n = parseFloat(this.amount);
 
-      return n < 1000;
+      return n < 10;
     },
   },
 
