@@ -12,7 +12,7 @@
 
     <div class="row mb-2">
       <div class="col-xs-12 col-md-6">
-        <p>Choose network to bridge</p>
+        <p>Bridge from Peercoin to?</p>
       </div>
 
       <div class="col-xs-12 col-md-6">
