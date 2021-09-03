@@ -41,6 +41,10 @@ export default {
         unwrapPPCAddress: null,
         ERC20Address: null,
         claimed: false,
+        confirmations: {
+          current: 0,
+          required: 1,
+        },
       },
     };
   },
@@ -57,8 +61,8 @@ export default {
 
       return false;
     },
-    
-    minAmount(){
+
+    minAmount() {
       return getMinAmount();
     },
 

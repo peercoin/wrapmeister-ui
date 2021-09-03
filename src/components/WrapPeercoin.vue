@@ -41,7 +41,7 @@
           @keypress="onlyForCurrency"
         />
         <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
-          Minimum amount is set at {{minAmount}}
+          Minimum amount is set at {{ minAmount }}
         </p>
       </div>
     </div>
@@ -76,6 +76,24 @@
         <div class="row">
           <small>{{ session.wrapPPCAddress }}</small>
           <small v-html="URIencodeWrapPPCAddressLink"></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="!!session.wrapPPCAddress">
+      <div class="col-xs-12 col-md-6">
+        <p>Confirmations</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="progress mt-2" style="height: 10px;">
+          <div
+            class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+            role="progressbar"
+            :style="styleConfirmations"
+            aria-valuenow="confirmationCurrent"
+            aria-valuemin="0"
+            aria-valuemax="confirmationMax"
+          ></div>
         </div>
       </div>
     </div>
@@ -162,6 +180,41 @@ export default {
   computed: {
     header() {
       return "Wrap Peercoin";
+    },
+
+    confirmationMax() {
+      try {
+        if (!this.session || !this.session.confirmations) return 0;
+        let max = this.session.confirmations.required;
+
+        if (typeof myVar === "string" || myVar instanceof String)
+          return parseInt(max);
+        else return max;
+      } catch (err) {
+        return 3;
+      }
+    },
+
+    confirmationCurrent() {
+      try {
+        if (!this.session || !this.session.confirmations) return 0;
+        let cur = this.session.confirmations.current;
+
+        if (typeof myVar === "string" || myVar instanceof String)
+          return parseInt(cur);
+        else return cur;
+      } catch (err) {
+        return 0;
+      }
+    },
+
+    styleConfirmations() {
+      return {
+        width:
+          Math.ceil(
+            100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
+          ) + "%",
+      };
     },
 
     showProgressbar() {
