@@ -23,47 +23,55 @@
 
     <wrap-header />
 
-    <div class="row mt-3 mx-1">
-      <collapse-transition>
-        <div v-if="!metaMaskEnabled">
-          <meta-mask-info />
-        </div>
-      </collapse-transition>
+    <div class="row my-3 mx-1">
+      <div v-if="!metaMaskEnabled">
+        <meta-mask-info />
+      </div>
     </div>
 
-    <div class="row mt-3 mx-1">
-      <collapse-transition>
-        <div
+    <div class="row g-0 mb-2 px-1">
+      <div class="col-md-6 text-start fs-5 ">
+        <span
           v-if="metaMaskEnabled && (iswrapping || isUnwrapping)"
           class="gobackdiv"
           @click="onBackClick"
+          >Back</span
         >
-          Back
-        </div>
-      </collapse-transition>
+      </div>
+      <div class="col-md-6 text-end">
+        <network-chooser
+          v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)"
+        />
+      </div>
+    </div>
 
-      <collapse-transition>
-        <div
-          class="col py-3 px-3 body-mid"
-          v-if="metaMaskEnabled && selectedAccount.length === 0"
+    <div class="row  mx-1 g-0">
+      <div
+        class="col py-3 px-3 body-mid"
+        v-if="metaMaskEnabled && selectedAccount.length === 0"
+      >
+        <m-button class="mx-1" type="success" @mbclick="getAccounts"
+          >Connect with MetaMask</m-button
         >
-          <m-button class="mx-1" type="success" @mbclick="getAccounts"
-            >Connect with MetaMask</m-button
-          >
-        </div>
-      </collapse-transition>
+      </div>
 
-      <collapse-transition>
-        <div class="col py-3 px-3 body-mid" v-if="showMenu">
-          <m-button class="mx-1" type="success" @mbclick="toggleWrap"
-            >Wrap Peercoin</m-button
-          >
+      <div class="col py-3 px-3 body-mid" v-if="showMenu">
+        <m-button
+          class="mx-1"
+          :disabled="!curNetwork"
+          type="success"
+          @mbclick="toggleWrap"
+          >Wrap Peercoin</m-button
+        >
 
-          <m-button class="mx-1" type="success" @mbclick="toggleUnwrap"
-            >Unwrap Peercoin</m-button
-          >
-        </div>
-      </collapse-transition>
+        <m-button
+          class="mx-1"
+          type="success"
+          :disabled="!curNetwork"
+          @mbclick="toggleUnwrap"
+          >Unwrap Peercoin</m-button
+        >
+      </div>
 
       <collapse-transition>
         <div v-if="showWrapOrUnwrap">
@@ -105,6 +113,8 @@ import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
+import NetworkChooser from "@/components/NetworkChooser.vue";
+import { getNetworks } from "@/Endpoints.js";
 
 export default {
   name: "Home",
@@ -132,6 +142,13 @@ export default {
   mounted() {
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
       this.account = this.propsaccounts[0];
+    }
+    const networks = getNetworks().filter((nw) => nw.active);
+
+    if (!!networks && networks.length > 0) {
+      const network = networks[0].key;
+
+      this.$store.commit("setNetwork", network);
     }
   },
 
@@ -205,6 +222,10 @@ export default {
   },
 
   computed: {
+    curNetwork() {
+      return this.$store.state.network;
+    },
+
     selectedAccount() {
       if (!!this.account) {
         return [this.account];
@@ -253,6 +274,7 @@ export default {
     OfficialTotal,
     AccountTotal,
     WrapHeader,
+    NetworkChooser,
   },
 };
 </script>
@@ -264,8 +286,6 @@ export default {
 }
 
 .gobackdiv {
-  text-align: left;
-  font-size: 70%;
   &:hover {
     cursor: pointer;
   }

@@ -85,6 +85,12 @@ export default {
 
       return n < getMinAmount();
     },
+
+    activeNetworks() {
+      if (!this.networks) return [];
+
+      return this.networks.filter((nw) => nw.active);
+    },
   },
 
   methods: {

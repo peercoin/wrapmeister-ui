@@ -21,8 +21,10 @@
     "set-interval-async": "^2.0.3",
     "sha.js": "^2.4.11",
     "vue": "^3.0.0",
+    "vue-multiselect": "^3.0.0-alpha.2",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.2",
     "web3": "^1.4.0"
   },
   "devDependencies": {

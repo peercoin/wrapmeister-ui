@@ -12,14 +12,19 @@
 
     <div class="row mb-2">
       <div class="col-xs-12 col-md-6">
-        <p>Choose network to bridge</p>
+        <p>Smart contract platform</p>
       </div>
       <div class="col-xs-12 col-md-6">
         <select
           :class="{ 'row-input-field': true, invalid: !network }"
           v-model="network"
+          :disabled="true"
         >
-          <option v-for="item in networks" :value="item.key" :key="item.key">
+          <option
+            v-for="item in activeNetworks"
+            :value="item.key"
+            :key="item.key"
+          >
             {{ item.description }}
           </option>
         </select>
@@ -51,7 +56,7 @@
           @keypress="onlyForCurrency"
         />
         <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
-          Minimum amount is set at {{minAmount}}
+          Minimum amount is set at {{ minAmount }}
         </p>
       </div>
     </div>
@@ -105,9 +110,10 @@ export default {
   async mounted() {
     this.unwrapstatus = "";
     this.requestId = this.newId();
-    this.networks = getNetworks().filter((nw) => nw.active);
-    if (!!this.networks && this.networks.length > 0) {
-      this.network = this.networks[0].key;
+    this.networks = getNetworks();
+
+    if (!!this.$store.state.network) {
+      this.network = this.$store.state.network;
     }
 
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {

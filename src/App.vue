@@ -35,7 +35,9 @@ export default {
 @import "../node_modules/bootstrap/scss/list-group";
 @import "../node_modules/bootstrap/scss/progress";
 @import "../node_modules/bootstrap/scss/utilities/api";
- 
+  
+@import "~vue-multiselect/dist/vue-multiselect.css";
+
 #app {
   font-family: "Red Hat Text", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -91,6 +93,10 @@ body {
   &.invalid {
     border: 1px solid rgb(223, 98, 98);
   }
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+    background: #2ea566 !important; 
 }
  
 </style>

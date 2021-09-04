@@ -12,16 +12,16 @@
 
     <div class="row mb-2">
       <div class="col-xs-12 col-md-6">
-        <p>Bridge from Peercoin to?</p>
+        <p>Smart contract platform</p>
       </div>
 
       <div class="col-xs-12 col-md-6">
         <select
           :class="{ 'row-input-field': true, invalid: !network }"
           v-model="network"
-          :disabled="!!session._id"
+          :disabled="true"
         >
-          <option v-for="item in networks" :value="item.key" :key="item.key">
+          <option v-for="item in activeNetworks" :value="item.key" :key="item.key">
             {{ item.description }}
           </option>
         </select>
@@ -137,9 +137,10 @@ export default {
 
   async mounted() {
     this.requestId = this.newId();
-    this.networks = getNetworks().filter((nw) => nw.active);
-    if (!!this.networks && this.networks.length > 0) {
-      this.network = this.networks[0].key;
+    this.networks = getNetworks();
+
+    if (!!this.$store.state.network) {
+      this.network = this.$store.state.network;
     }
 
     this.resetSession();
@@ -431,7 +432,8 @@ export default {
   },
 };
 </script>
-<style lang="scss" >
+
+<style lang="scss" scoped>
 .custprogress {
   background-color: #c7c7c7;
   height: 10px;

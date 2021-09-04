@@ -24,13 +24,30 @@ export default {
   },
 
   mounted() {
-    this.token = getContractAddress();
+    this.inititialise();
+  },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv, oldValue) {
+        console.log("inititialise official total", nv);
+        this.inititialise();
+      },
+      immediate: true,
+    },
   },
 
   methods: {
+    inititialise() {
+      const nw = this.$store.state.network;
+      if (!nw) return;
+      this.token = getContractAddress(nw);
+    },
+
     onClick() {
-      if (this.propsaccounts.length > 0) {
-        const url = this.endpoints(this.propsaccounts[0]).officialTotalUrl;
+      if (this.propsaccounts.length > 0 && !!this.token) {
+        const url = this.endpoints(this.propsaccounts[0], this.token)
+          .officialTotalUrl;
         window.open(url, "_blank");
       }
     },

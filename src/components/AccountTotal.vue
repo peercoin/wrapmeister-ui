@@ -5,7 +5,7 @@
         total peercoin wrapped: <strong>{{ amount }}</strong>
       </div>
     </div>
-    <div class="col-md-6 ps-md-2 mt-3" >
+    <div class="col-md-6 ps-md-2 mt-3">
       <div class="totalstorageppc" @click="onClick">
         custodian balance: <strong>{{ amountStorage }}</strong>
       </div>
@@ -30,44 +30,61 @@ export default {
   },
 
   async mounted() {
-    try {
-      this.token = getContractAddress();
-      const url = this.endpoints(this.token).accountTotalUrl;
-      let query = await axios.get(url);
-      if (!!query && !!query.data && !!query.data.result) {
-        this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
-      }
-
-      const storagedata = await axios.get(this.endpoints().storageAddress);
-      if (!!storagedata && !!storagedata.data && !!storagedata.data.data) {
-        this.peercoinAddressStorage = storagedata.data.data;
-
-        let storageDetails;
-        if (isValidAddress(this.peercoinAddressStorage, "prod")) {
-          storageDetails = await axios.get(
-            this.endpoints(this.peercoinAddressStorage)
-              .APIaddressPeercoinExplorer
-          );
-        } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
-          storageDetails = await axios.get(
-            this.endpoints(this.peercoinAddressStorage)
-              .APIaddressPeercoinExplorerTest
-          );
-        }
-
-        if (
-          !!storageDetails &&
-          !!storageDetails.data &&
-          !!storageDetails.data.balance
-        ) {
-          this.amountStorage = storageDetails.data.balance;
-        }
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+    await this.inititialise();
   },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv, oldValue) {
+        console.log("inititialise account total", nv);
+        this.inititialise();
+      },
+      immediate: true,
+    },
+  },
+
   methods: {
+    async inititialise() {
+      try {
+        const nw = this.$store.state.network;
+        if (!nw) return;
+        this.token = getContractAddress(nw);
+        const url = this.endpoints(this.token).accountTotalUrl;
+        let query = await axios.get(url);
+        if (!!query && !!query.data && !!query.data.result) {
+          this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
+        }
+
+        const storagedata = await axios.get(this.endpoints().storageAddress);
+        if (!!storagedata && !!storagedata.data && !!storagedata.data.data) {
+          this.peercoinAddressStorage = storagedata.data.data;
+
+          let storageDetails;
+          if (isValidAddress(this.peercoinAddressStorage, "prod")) {
+            storageDetails = await axios.get(
+              this.endpoints(this.peercoinAddressStorage)
+                .APIaddressPeercoinExplorer
+            );
+          } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
+            storageDetails = await axios.get(
+              this.endpoints(this.peercoinAddressStorage)
+                .APIaddressPeercoinExplorerTest
+            );
+          }
+
+          if (
+            !!storageDetails &&
+            !!storageDetails.data &&
+            !!storageDetails.data.balance
+          ) {
+            this.amountStorage = storageDetails.data.balance;
+          }
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    },
+
     onClick() {
       let url = "";
       if (isValidAddress(this.peercoinAddressStorage, "prod")) {

@@ -1,8 +1,7 @@
 //todo change these vars:
 const APP_WRAPPERHOST = "https://wrapmeister.peercoin.net";
-const APP_WRAPPERHOSTWSS = "ws://localhost:3000";
+const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; 
 
-//////////////////////////////////////////////////////////////
 const isNullOrEmpty = function(value) {
   return !(typeof value === "string" && value.length > 0);
 };
@@ -12,22 +11,18 @@ export function getMinAmount() {
 }
 
 export function getContractAddress(network) {
-  //todo: change default network:
-  if (!network) network = "ETH_TESTNET";
   const ne = getNetworks().find((nw) => nw.key === network);
   return !!ne ? ne.contract : "";
 }
 
-export function wrapEndpoints(id) {
+export function wrapEndpoints(id, token) {
   let _host = isNullOrEmpty(APP_WRAPPERHOST)
     ? "http://localhost:3000"
     : APP_WRAPPERHOST;
   let wsshost = isNullOrEmpty(APP_WRAPPERHOSTWSS)
     ? "ws://localhost:3000"
     : APP_WRAPPERHOSTWSS;
-
-  let token = getContractAddress();
-
+ 
   return {
     wrap: `${_host}/api/v1/wrap`,
     unwrap: `${_host}/api/v1/unwrap`,
@@ -47,6 +42,7 @@ export function wrapEndpoints(id) {
 }
 
 //todo change these vars:
+//default is the first active network
 export function getNetworks() {
   return [
     {
