@@ -143,12 +143,15 @@ export default {
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
       this.account = this.propsaccounts[0];
     }
-    const networks = getNetworks().filter((nw) => nw.active);
 
-    if (!!networks && networks.length > 0) {
-      const network = networks[0].key;
+    if (!this.$store.state.network) {
+      const networks = getNetworks().filter((nw) => nw.active);
 
-      this.$store.commit("setNetwork", network);
+      if (!!networks && networks.length > 0) {
+        const network = networks[0].key;
+
+        this.$store.commit("setNetwork", network);
+      }
     }
   },
 
