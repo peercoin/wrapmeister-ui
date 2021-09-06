@@ -3,6 +3,11 @@ const APP_WRAPPERHOST = "https://wrapmeister.peercoin.net";
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; 
 
 const isNullOrEmpty = function(value) {
+
+
+
+//trigger build
+
   return !(typeof value === "string" && value.length > 0);
 };
 
