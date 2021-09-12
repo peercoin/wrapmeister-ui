@@ -1,5 +1,5 @@
 //todo change these vars:
-const APP_WRAPPERHOST = "https://wrapmeister.peercoin.net";
+const APP_WRAPPERHOST = "http://localhost:3000";
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; 
 
 const isNullOrEmpty = function(value) {
@@ -34,8 +34,6 @@ export function wrapEndpoints(id, token) {
     addressPeercoinExplorer: `https://blockbook.peercoin.net/address/${id}`, //id is address
     APIaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
     APIaddressPeercoinExplorer: `https://blockbook.peercoin.net/api/address/${id}`, //id is address
-    confirmBurn: `${_host}/api/v1/confirm-burn`,
-    confirmMint: `${_host}/api/v1/confirm-mint`,
     openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}`, // id is metamask account here
     websocket: wsshost,
   };

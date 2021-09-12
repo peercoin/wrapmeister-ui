@@ -192,20 +192,6 @@ export default {
 
         this.unwrapstatus = "One more thing...";
 
-        await axios.post(this.endpoints().confirmBurn, null, {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-            network: this.network,
-          },
-          params: {
-            txid: result.transactionHash,
-            PPCAddress: this.destinationPPCAddress,
-            ERC20Address: this.destinationETHAddress,
-          },
-        });
-
         this.unwrapstatus = "";
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
