@@ -404,18 +404,6 @@ export default {
           )
           .send();
 
-        await axios.post(this.endpoints().confirmMint, null, {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-            network: this.network,
-          },
-          params: {
-            id: this.session._id,
-          },
-        });
-
         this.resetSession();
         this.gotoHome("Successfully wrapped " + this.amount + "PPC to WPPC");
       } catch (e) {
