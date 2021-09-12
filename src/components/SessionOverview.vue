@@ -84,7 +84,7 @@ export default {
       if (Array.isArray(sessions) && sessions.length > 0) {
         let isOpen = (session) => {
           if (!session.wrapSignature) return true;
-          if (!(session.claimed ?? false)) return true;
+          //if (!(session.claimed ?? false)) return true;
           return false;
         };
 
