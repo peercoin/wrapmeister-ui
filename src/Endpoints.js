@@ -75,7 +75,7 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x5B8eF6EE9ec9Df9f240FEbACa2AE88ce3eb950dc",
+      contract: "0xeaa423cF3825617386CE6Cdc924700f058cA1D64",
       pagetitle: "Peercoin ↔ Ethereum Bridge"
     },
     {
