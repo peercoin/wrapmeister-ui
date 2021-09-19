@@ -183,10 +183,7 @@ export default {
         const result = await contract.methods
           .burnTokens(
             this.session.amount * 10 ** decimals,
-            this.session.unwrapNonce,
-            signature.v,
-            signature.r,
-            signature.s
+            this.destinationPPCAddress
           )
           .send();
 
@@ -196,7 +193,6 @@ export default {
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
       } catch (error) {
-        console.log({ ...error });
         this.unwrapstatus = "";
       }
     },
