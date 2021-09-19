@@ -21,4 +21,4 @@ npm run build
 
 ### Deploy
 
-everything in the `dist` folder
+everything in the `dist` folder.
