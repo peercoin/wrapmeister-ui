@@ -177,7 +177,6 @@ export default {
           from: this.session.ERC20Address,
         });
 
-        let signature = JSON.parse(this.session.unwrapSignature);
         const decimals = await contract.methods.decimals().call();
 
         const result = await contract.methods
