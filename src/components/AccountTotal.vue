@@ -1,12 +1,12 @@
 <template>
   <div class="row justify-content-between mt-2 mx-1 g-0">
     <div class="col-md-6 pe-md-2 mt-3">
-      <div class="totalppc">
+      <div class="totalppc" @click="onClick1">
         total peercoin wrapped: <strong>{{ amount }}</strong>
       </div>
     </div>
     <div class="col-md-6 ps-md-2 mt-3">
-      <div class="totalstorageppc" @click="onClick">
+      <div class="totalstorageppc" @click="onClick2">
         custodian balance: <strong>{{ amountStorage }}</strong>
       </div>
     </div>
@@ -81,11 +81,11 @@ export default {
           }
         }
       } catch (err) {
-        console.warn(err);
+        console.log(err);
       }
     },
 
-    onClick() {
+    onClick2() {
       let url = "";
       if (isValidAddress(this.peercoinAddressStorage, "prod")) {
         url = this.endpoints(this.peercoinAddressStorage)
@@ -96,6 +96,11 @@ export default {
           .addressPeercoinExplorerTest;
         window.open(url, "_blank");
       }
+      if (!!url) window.open(url, "_blank");
+    },
+
+    onClick1() {
+      const url = this.endpoints(this.token).accountTotalVisitUrl;
       if (!!url) window.open(url, "_blank");
     },
   },
@@ -113,6 +118,11 @@ export default {
   opacity: 1;
   font-size: 14px;
   color: white;
+  &:hover {
+    cursor: pointer;
+    color: #3cb054;
+    background-color: white;
+  }
 }
 .totalstorageppc {
   padding-bottom: 7px;

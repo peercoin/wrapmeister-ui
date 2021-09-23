@@ -28,6 +28,7 @@ export function wrapEndpoints(id, token) {
     unwrap: `${_host}/api/v1/unwrap`,
     officialTotalUrl: `https://ropsten.etherscan.io/token/${token}?a=${id}`,
     accountTotalUrl: `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${id}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`,
+    accountTotalVisitUrl:`https://ropsten.etherscan.io/address/${id}`,
     storageAddress: `${_host}/api/v1/storage-address`,
     session: `${_host}/api/v1/session/${id}`,
     addressPeercoinExplorerTest: `https://tblockbook.peercoin.net/address/${id}`, //id is address
