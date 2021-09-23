@@ -49,9 +49,16 @@ export default {
         const nw = this.$store.state.network;
         if (!nw) return;
         this.token = getContractAddress(nw);
-        const url = this.endpoints(this.token).accountTotalUrl;
+
+        const ne = getNetworks().find((n) => n.key === nw);
+
+        if (!ne) return;
+
+        const url = ne.accountTotalUrl;
+
         let query = await axios.get(url);
         if (!!query && !!query.data && !!query.data.result) {
+          //todo might not work for all urls:
           this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
         }
 
@@ -87,6 +94,7 @@ export default {
 
     onClick2() {
       let url = "";
+
       if (isValidAddress(this.peercoinAddressStorage, "prod")) {
         url = this.endpoints(this.peercoinAddressStorage)
           .addressPeercoinExplorer;

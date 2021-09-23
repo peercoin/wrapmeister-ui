@@ -15,7 +15,7 @@ export function getContractAddress(network) {
   return !!ne ? ne.contract : "";
 }
 
-export function wrapEndpoints(id, token) {
+export function wrapEndpoints(id) {
   let _host = isNullOrEmpty(APP_WRAPPERHOST)
     ? "http://localhost:3000"
     : APP_WRAPPERHOST;
@@ -26,8 +26,6 @@ export function wrapEndpoints(id, token) {
   return {
     wrap: `${_host}/api/v1/wrap`,
     unwrap: `${_host}/api/v1/unwrap`,
-    officialTotalUrl: `https://ropsten.etherscan.io/token/${token}?a=${id}`,
-    accountTotalUrl: `https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${id}&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ`,
     storageAddress: `${_host}/api/v1/storage-address`,
     session: `${_host}/api/v1/session/${id}`,
     addressPeercoinExplorerTest: `https://tblockbook.peercoin.net/address/${id}`, //id is address
@@ -49,7 +47,9 @@ export function getNetworks() {
       active: false,
       contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
-      viewContractUrl:'https://ropsten.etherscan.io/address/0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1',
+      viewContractUrl:'',
+      accountTotalUrl: '',
+      officialTotalUrl: ''
     },
     {
       key: "BSC_MAINNET",
@@ -57,7 +57,9 @@ export function getNetworks() {
       active: false,
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
-      viewContractUrl:'https://ropsten.etherscan.io/address/0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1',
+      viewContractUrl:'',
+      accountTotalUrl: '',
+      officialTotalUrl: ''
     },
     {
       key: "MATIC_TESTNET",
@@ -65,7 +67,9 @@ export function getNetworks() {
       active: false,
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
-      viewContractUrl:'https://ropsten.etherscan.io/address/0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1',
+      viewContractUrl:'',
+      accountTotalUrl: '',
+      officialTotalUrl: ''
     },
     {
       key: "MATIC_MAINNET",
@@ -73,7 +77,9 @@ export function getNetworks() {
       active: false,
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
-      viewContractUrl:'https://ropsten.etherscan.io/address/0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1',
+      viewContractUrl:'',
+      accountTotalUrl: '',
+      officialTotalUrl: ''
     },
     {
       key: "ETH_TESTNET",
@@ -82,6 +88,8 @@ export function getNetworks() {
       contract: "0xeaa423cF3825617386CE6Cdc924700f058cA1D64",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:'https://ropsten.etherscan.io/address/0xeaa423cF3825617386CE6Cdc924700f058cA1D64',
+      accountTotalUrl: 'https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xeaa423cF3825617386CE6Cdc924700f058cA1D64&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ', 
+      officialTotalUrl: 'https://ropsten.etherscan.io/token/0xeaa423cF3825617386CE6Cdc924700f058cA1D64?a={{{id}}}',      
     },
     {
       key: "ETH_MAINNET",
@@ -89,7 +97,9 @@ export function getNetworks() {
       active: false,
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
-      viewContractUrl:'https://ropsten.etherscan.io/address/0xeaa423cF3825617386CE6Cdc924700f058cA1D64',
+      viewContractUrl:'',
+      accountTotalUrl: '',
+      officialTotalUrl: ''
     },
   ];
 }

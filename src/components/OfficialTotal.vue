@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getContractAddress, wrapEndpoints } from "@/Endpoints.js";
+import { getContractAddress, wrapEndpoints, getNetworks } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -45,9 +45,16 @@ export default {
     },
 
     onClick() {
-      if (this.propsaccounts.length > 0 && !!this.token) {
-        const url = this.endpoints(this.propsaccounts[0], this.token)
-          .officialTotalUrl;
+      const nw = this.$store.state.network;
+      if (!nw) return;
+      if (this.propsaccounts.length > 0) {
+        const ne = getNetworks().find((n) => n.key === nw);
+        if (!ne || !ne.officialTotalUrl) return;
+
+        const url = ne.officialTotalUrl.replace(
+          "{{{id}}}",
+          this.propsaccounts[0]
+        );
         window.open(url, "_blank");
       }
     },
