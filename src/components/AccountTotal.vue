@@ -15,7 +15,7 @@
 
 <script>
 import axios from "axios";
-import { getContractAddress, wrapEndpoints } from "@/Endpoints.js";
+import { getContractAddress, wrapEndpoints, getNetworks } from "@/Endpoints.js";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 
 export default {
@@ -100,8 +100,10 @@ export default {
     },
 
     onClick1() {
-      const url = this.endpoints(this.token).accountTotalVisitUrl;
-      if (!!url) window.open(url, "_blank");
+      const network = this.$store.state.network;
+      if (!network) return;
+      const ne = getNetworks().find((nw) => nw.key === network);
+      if (!!ne) window.open(ne.viewContractUrl, "_blank");
     },
   },
 };
