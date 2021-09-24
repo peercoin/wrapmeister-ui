@@ -98,11 +98,9 @@ export default {
       if (isValidAddress(this.peercoinAddressStorage, "prod")) {
         url = this.endpoints(this.peercoinAddressStorage)
           .addressPeercoinExplorer;
-        window.open(url, "_blank");
       } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
         url = this.endpoints(this.peercoinAddressStorage)
           .addressPeercoinExplorerTest;
-        window.open(url, "_blank");
       }
       if (!!url) window.open(url, "_blank");
     },
