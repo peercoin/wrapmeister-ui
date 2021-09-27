@@ -150,7 +150,6 @@ export default {
     } else {
       this.accounts = await this.getAccounts();
     }
-
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
     }
@@ -298,8 +297,7 @@ export default {
 
           if (
             !!this.session.wrapTxid &&
-            !!this.session.wrapSignature &&
-            !!this.session.wrapNonce
+            !!this.session.wrapSignature
           ) {
             this.popupModal = true;
           }
@@ -396,11 +394,11 @@ export default {
         const result = await contract.methods
           .claimTokens(
             this.session.amount * 10 ** decimals,
-            this.session.wrapNonce,
+            this.session.wrapPPCAddress,
             this.session.ERC20Address,
-            signature.v,
-            signature.r,
-            signature.s
+            signature.signature.v,
+            signature.signature.r,
+            signature.signature.s
           )
           .send();
 
