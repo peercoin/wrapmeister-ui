@@ -396,9 +396,9 @@ export default {
             this.session.amount * 10 ** decimals,
             this.session.wrapPPCAddress,
             this.session.ERC20Address,
-            signature.signature.v,
-            signature.signature.r,
-            signature.signature.s
+            signature.v,
+            signature.r,
+            signature.s
           )
           .send();
 
