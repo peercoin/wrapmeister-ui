@@ -402,11 +402,11 @@ export default {
             this.session.amount * 10 ** decimals,
             this.session.wrapPPCAddress,
             this.session.ERC20Address,
-            this.session.signerAAddress,
+            this.session.witnessAAddress,
             signatureA.v,
             signatureA.r,
             signatureA.s,
-            this.session.signerBAddress,
+            this.session.witnessBAddress,
             signatureB.v,
             signatureB.r,
             signatureB.s
