@@ -340,18 +340,43 @@
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "_signerA",
+        "type": "address"
+      },
+      {
         "internalType": "uint8",
-        "name": "_sigV",
+        "name": "_sigAV",
         "type": "uint8"
       },
       {
         "internalType": "bytes32",
-        "name": "_sigR",
+        "name": "_sigAR",
         "type": "bytes32"
       },
       {
         "internalType": "bytes32",
-        "name": "_sigS",
+        "name": "_sigAS",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_signerB",
+        "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_sigBV",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_sigBR",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_sigBS",
         "type": "bytes32"
       }
     ],

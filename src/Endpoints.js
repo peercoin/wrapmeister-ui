@@ -33,6 +33,7 @@ export function wrapEndpoints(id) {
     APIaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
     APIaddressPeercoinExplorer: `https://blockbook.peercoin.net/api/address/${id}`, //id is address
     openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}`, // id is metamask account here
+    sign: `${_host}/api/v1/sessions/${id}/sign`, // id is metamask account here
     websocket: wsshost,
   };
 }
@@ -85,7 +86,7 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0xf894be75031202720f8713e1aE672FB601D4B8A2",
+      contract: "0xe04bd2d813c6Bf93715B3A98e958a45bCa9D92bF",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:'https://ropsten.etherscan.io/address/0xeaa423cF3825617386CE6Cdc924700f058cA1D64',
       accountTotalUrl: 'https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xeaa423cF3825617386CE6Cdc924700f058cA1D64&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ', 
