@@ -222,7 +222,8 @@ export default {
         !!this.session &&
         !!this.session._id &&
         this.session.wrapPPCAddress &&
-        !this.session.wrapSignature &&
+        !this.session.wrapSignatureA &&
+        !this.session.wrapSignatureB &&
         !this.comfirmedProceedMetaMask
       );
     },
@@ -297,7 +298,8 @@ export default {
 
           if (
             !!this.session.wrapTxid &&
-            !!this.session.wrapSignature
+            !!this.session.wrapSignatureA &&
+            !!this.session.wrapSignatureB
           ) {
             this.popupModal = true;
           }
@@ -312,10 +314,12 @@ export default {
     },
 
     async onModalConfirm() {
+      console.log(this.session);
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
-        !!this.session.wrapSignature
+        !!this.session.wrapSignatureA &&
+        !!this.session.wrapSignatureB
       ) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
@@ -367,7 +371,8 @@ export default {
         !this.accounts ||
         this.accounts.length < 1 ||
         !this.session ||
-        !this.session.wrapSignature ||
+        !this.session.wrapSignatureA ||
+        !this.session.wrapSignatureB ||
         !this.session.ERC20Address ||
         !this.session.network
       ) {
@@ -388,7 +393,8 @@ export default {
           from: this.session.ERC20Address,
         });
 
-        const signature = JSON.parse(this.session.wrapSignature);
+        const signatureA = JSON.parse(this.session.wrapSignatureA);
+        const signatureB = JSON.parse(this.session.wrapSignatureB);
         const decimals = await contract.methods.decimals().call();
 
         const result = await contract.methods
@@ -396,9 +402,14 @@ export default {
             this.session.amount * 10 ** decimals,
             this.session.wrapPPCAddress,
             this.session.ERC20Address,
-            signature.v,
-            signature.r,
-            signature.s
+            this.session.witnessAAddress,
+            signatureA.v,
+            signatureA.r,
+            signatureA.s,
+            this.session.witnessBAddress,
+            signatureB.v,
+            signatureB.r,
+            signatureB.s
           )
           .send();
 
