@@ -96,8 +96,8 @@ export default {
             direction: "wrap",
             amount: session.amount,
             sessionId: session._id,
-            signatureA: true, //todo
-            signatureB: false, //todo
+            signatureA: session.wrapSignatureA,
+            signatureB: session.wrapSignatureB,
           };
         });
       }
@@ -106,7 +106,7 @@ export default {
     onRowClick(item) {
       if (item.direction === "wrap" && item.status === "open") {
         this.$router.push({
-          name: "ContinueWith",
+          name: "SignWith",
           params: {
             sessionid: item.sessionId,
             selectedaccount: this.propsaccounts,

@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import WrapSession from "../views/WrapSession.vue";
 
 const routes = [
   {
@@ -19,11 +18,23 @@ const routes = [
   {
     path: "/continuewith/account/:selectedaccount+/session/:sessionid",
     name: "ContinueWith",
-    component: WrapSession,
+    component: () => import("../views/WrapSession.vue"),
     props: (route) => ({
       propsessionid: route.params.sessionid,
       propsaccounts: route.params.selectedaccount,
     }),
+  },
+  {
+    path: "/signwith/account/:selectedaccount+/session/:sessionid",
+    name: "SignWith",
+    props: (route) => ({
+      propsessionid: route.params.sessionid,
+      propsaccounts: route.params.selectedaccount,
+    }),
+    // route level code-splitting
+    // this generates a separate chunk (xxx.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/SignWrapSession.vue"),
   },
 ];
 
