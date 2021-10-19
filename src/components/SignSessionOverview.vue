@@ -96,8 +96,8 @@ export default {
             direction: "wrap",
             amount: session.amount,
             sessionId: session._id,
-            signatureA: session.wrapSignatureA,
-            signatureB: session.wrapSignatureB,
+            signatureA: !!session.wrapSignatureA,
+            signatureB: !!session.wrapSignatureB,
           };
         });
       }
