@@ -37,7 +37,7 @@ export function wrapEndpoints(id) {
     APIaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
     APIaddressPeercoinExplorer: `https://blockbook.peercoin.net/api/address/${id}`, //id is address
     openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}`, // id is metamask account here
-    signwrapsessions: `${_host}/api/v1/sessions?address[]=${id}`, // id is metamask account here
+    signwrapsessions: `${_host}/api/v1/sessions/unsigned`,
     sign: `${_host}/api/v1/sessions/${id}/sign`, // id is metamask account here
     websocket: wsshost,
   };
@@ -45,7 +45,10 @@ export function wrapEndpoints(id) {
 
 //todo: returns a list of special accounts who may sign sessions
 export function getSignAccounts() {
-  return ["0xd84Dd9Cd1048d2D1f592B8Be523136C5cf047477"];
+  return [
+    "0xd84Dd9Cd1048d2D1f592B8Be523136C5cf047477",
+    "0xC518bF880508a5e5facd0c1cC28044e74F38Ebbd"
+  ];
 }
 
 //todo change these vars:
