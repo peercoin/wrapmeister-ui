@@ -11,7 +11,7 @@ const isNullOrEmpty = function(value) {
 };
 
 export function getMinAmount() {
-  return 10.0;
+  return 1.0;
 }
 
 export function getContractAddress(network) {
@@ -101,14 +101,14 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x66C1dFcC9edc4bc2A61078438303A3d14E9d5b04",
+      contract: "0x21d28F6bf00762857081b2F628227C8d059C6557",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:
-        "https://ropsten.etherscan.io/address/0x66C1dFcC9edc4bc2A61078438303A3d14E9d5b04",
+        "https://ropsten.etherscan.io/address/0x21d28F6bf00762857081b2F628227C8d059C6557",
       accountTotalUrl:
-        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x66C1dFcC9edc4bc2A61078438303A3d14E9d5b04&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x21d28F6bf00762857081b2F628227C8d059C6557&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
-        "https://ropsten.etherscan.io/token/0x66C1dFcC9edc4bc2A61078438303A3d14E9d5b04?a={{{id}}}",
+        "https://ropsten.etherscan.io/token/0x21d28F6bf00762857081b2F628227C8d059C6557?a={{{id}}}",
     },
     {
       key: "ETH_MAINNET",
