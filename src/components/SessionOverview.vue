@@ -90,7 +90,7 @@ export default {
 
         this.mysessions = sessions.map((session) => {
           return {
-            status: isOpen(session) ? "open" : "closed",
+            status: isOpen(session) ? "open" : "open",
             txid: "", //figure out UI columns later when we add completed txids too
             direction: "wrap",
             amount: session.amount,
