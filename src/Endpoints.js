@@ -1,5 +1,5 @@
 //todo change these vars:
-const isDeveloping = true; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
   : "https://wrapmeister.peercoin.net";
