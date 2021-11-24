@@ -95,6 +95,12 @@
         </div>
       </collapse-transition>
 
+      <collapse-transition>
+        <div class="mt-5 g-0" v-if="isSigner">
+          <sign-session-overview :propsaccounts="selectedAccount" />
+        </div>
+      </collapse-transition>
+
       <account-total />
     </div>
   </div>
@@ -109,12 +115,13 @@ import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import SessionOverview from "@/components/SessionOverview.vue";
+import SignSessionOverview from "@/components/SignSessionOverview.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
 import NetworkChooser from "@/components/NetworkChooser.vue";
-import { getNetworks } from "@/Endpoints.js";
+import { getNetworks, getSignAccounts } from "@/Endpoints.js";
 
 export default {
   name: "Home",
@@ -264,6 +271,17 @@ export default {
         this.selectedAccount.length > 0
       );
     },
+
+    isSigner() {
+      if (
+        !!this.selectedAccount &&
+        !!this.selectedAccount[0] &&
+        getSignAccounts().includes(this.selectedAccount[0])
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
 
   components: {
@@ -273,6 +291,7 @@ export default {
     UnwrapPeercoin,
     MetaMaskInfo,
     SessionOverview,
+    SignSessionOverview,
     Modal,
     OfficialTotal,
     AccountTotal,

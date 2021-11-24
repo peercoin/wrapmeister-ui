@@ -345,19 +345,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint8",
-        "name": "_sigAV",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sigAR",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sigAS",
-        "type": "bytes32"
+        "internalType": "bytes",
+        "name": "_signatureA",
+        "type": "bytes"
       },
       {
         "internalType": "address",
@@ -365,19 +355,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint8",
-        "name": "_sigBV",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sigBR",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sigBS",
-        "type": "bytes32"
+        "internalType": "bytes",
+        "name": "_signatureB",
+        "type": "bytes"
       }
     ],
     "name": "claimTokens",
@@ -495,6 +475,30 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_ethSignedMessageHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "recoverSigner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_address",
         "type": "address"
@@ -510,6 +514,35 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "sig",
+        "type": "bytes"
+      }
+    ],
+    "name": "splitSignature",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {

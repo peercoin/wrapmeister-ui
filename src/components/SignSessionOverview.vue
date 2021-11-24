@@ -4,10 +4,10 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
           <tr>
-            <th>Wrap session</th>
-            <th>Direction</th>
+            <th>Sign Wrap session</th>
             <th>Amount</th>
-            <th>Status</th>
+            <th>Signer A</th>
+            <th>Signer B</th>
           </tr>
         </thead>
       </table>
@@ -22,9 +22,9 @@
             :key="item.sessionId"
           >
             <td>{{ item.sessionId }}</td>
-            <td class="to-upper">{{ item.direction }}</td>
             <td>{{ item.amount }}</td>
-            <td class="to-upper">{{ item.status }}</td>
+            <td>{{ item.signatureA ? "signed" : "..." }}</td>
+            <td>{{ item.signatureB ? "signed" : "..." }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,7 +34,7 @@
 
 <script>
 import axios from "axios";
-import { wrapEndpoints } from "@/Endpoints.js";
+import { wrapEndpoints, getSignAccounts } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -64,12 +64,13 @@ export default {
 
       try {
         const id = this.propsaccounts[0];
+        if (!!id && getSignAccounts().includes(id)) {
+          const res = await axios.get(this.endpoints(id).signwrapsessions);
 
-        const res = await axios.get(this.endpoints(id).openwrapsessions);
-
-        if (!!res && !!res.data && !!res.data.data) {
-          let sessions = res.data.data;
-          this.setSessions(sessions);
+          if (!!res && !!res.data && !!res.data.data) {
+            let sessions = res.data.data;
+            this.setSessions(sessions);
+          }
         }
       } catch (error) {
         console.warn(error);
@@ -90,11 +91,13 @@ export default {
 
         this.mysessions = sessions.map((session) => {
           return {
-            status: isOpen(session) ? "open" : "open",
-            txid: "", //figure out UI columns later when we add completed txids too
+            status: isOpen(session) ? "open" : "closed",
+            //txid: "", //figure out UI columns later when we add completed txids too
             direction: "wrap",
             amount: session.amount,
             sessionId: session._id,
+            signatureA: !!session.wrapSignatureA,
+            signatureB: !!session.wrapSignatureB,
           };
         });
       }
@@ -103,7 +106,7 @@ export default {
     onRowClick(item) {
       if (item.direction === "wrap" && item.status === "open") {
         this.$router.push({
-          name: "ContinueWith",
+          name: "SignWith",
           params: {
             sessionid: item.sessionId,
             selectedaccount: this.propsaccounts,

@@ -393,8 +393,6 @@ export default {
           from: this.session.ERC20Address,
         });
 
-        const signatureA = JSON.parse(this.session.wrapSignatureA);
-        const signatureB = JSON.parse(this.session.wrapSignatureB);
         const decimals = await contract.methods.decimals().call();
 
         const result = await contract.methods
@@ -403,13 +401,9 @@ export default {
             this.session.wrapPPCAddress,
             this.session.ERC20Address,
             this.session.witnessAAddress,
-            signatureA.v,
-            signatureA.r,
-            signatureA.s,
+            this.session.wrapSignatureA,
             this.session.witnessBAddress,
-            signatureB.v,
-            signatureB.r,
-            signatureB.s
+            this.session.wrapSignatureB
           )
           .send();
 
