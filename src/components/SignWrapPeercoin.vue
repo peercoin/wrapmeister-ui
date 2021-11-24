@@ -30,10 +30,13 @@
       </div>
     </div>
 
-    <div class="row" v-if="1 === 1">
+    <div class="row">
       <div class="col-xs-12 mt-3">
-        <m-button type="success" @mbclick="sign" :disabled="!validForm"
-          >Sign bla Wrap Peercoin</m-button
+        <m-button
+          type="success"
+          @mbclick="sign"
+          :disabled="!validForm || isSigning"
+          >Sign Wrap Peercoin</m-button
         >
       </div>
     </div>
@@ -42,8 +45,8 @@
 
 <script>
 import Web3 from "web3";
+import ethereumjsabi from "ethereumjs-abi";
 import axios from "axios";
-import VueQRCodeComponent from "vue-qrcode-component";
 import MButton from "@/components/Button.vue";
 import {
   getNetworks,
@@ -62,7 +65,8 @@ export default {
 
   data() {
     return {
-      witnessToken: ""
+      witnessToken: "",
+      isSigning: false,
     };
   },
 
@@ -100,47 +104,15 @@ export default {
       return "Sign Wrap Peercoin";
     },
 
-    URIencodeWrapPPCAddress() {
-      const scheme = "peercoin";
-      const amount = this.session.amount;
-      const address = this.session.wrapPPCAddress;
-
-      if (!!amount && !!address) {
-        const today = new Date();
-
-        let strDate = "Y-m-d"
-          .replace("Y", today.getFullYear())
-          .replace("m", today.getMonth() + 1)
-          .replace("d", today.getDate());
-        return (
-          scheme +
-          ":" +
-          address +
-          "?amount=" +
-          amount +
-          "&message=wrapmeister:" +
-          encodeURI(strDate)
-        );
-      }
-
-      return "";
-    },
-
-    URIencodeWrapPPCAddressLink() {
-      if (!!this.URIencodeWrapPPCAddress) {
-        return (
-          "<a href='" +
-          this.URIencodeWrapPPCAddress +
-          '\' target="_blank" rel="nofollow" >' +
-          this.URIencodeWrapPPCAddress +
-          "</a>"
-        );
-      }
-      return "";
-    },
-
-    validForm() {//todo
-      return this.witnessToken !== "";
+    validForm() {
+      return (
+        !!this.witnessToken &&
+        !!this.session &&
+        !!this.session.ERC20Address &&
+        !!this.session.amount &&
+        !!this.session.wrapPPCAddress &&
+        !!this.destinationETHAddress
+      );
     },
   },
 
@@ -162,7 +134,9 @@ export default {
       }
     },
 
-    async sign(){
+    async sign() {
+      if (this.isSigning) return;
+      this.isSigning = true;
       if (!this.web3) this.web3 = new Web3(ethereum);
 
       const contractAddress = getContractAddress(this.session.network);
@@ -171,32 +145,55 @@ export default {
       });
       const decimals = await contract.methods.decimals().call();
 
-      var hash = "0x" + require('ethereumjs-abi').soliditySHA3(
-        ["address", "uint256", "string", "address"],
-        [this.session.ERC20Address, this.session.amount * 10 ** decimals, this.session.wrapPPCAddress, this.destinationETHAddress]
-      ).toString("hex");
+      const hash =
+        "0x" +
+        ethereumjsabi
+          .soliditySHA3(
+            ["address", "uint256", "string", "address"],
+            [
+              this.session.ERC20Address,
+              this.session.amount * 10 ** decimals,
+              this.session.wrapPPCAddress,
+              this.destinationETHAddress,
+            ]
+          )
+          .toString("hex");
 
-      const signature = await this.web3.eth.personal.sign(hash, this.destinationETHAddress)
+      const signature = await this.web3.eth.personal.sign(
+        hash,
+        this.destinationETHAddress
+      );
 
+      let signBackend = false;
       try {
-        let response = await axios.post(this.endpoints(this.session._id).sign, null, {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-            token: this.witnessToken
-          },
-          params: {
-            Address: this.destinationETHAddress,
-            Signature: signature
-          },
-        });
+        let response = await axios.post(
+          this.endpoints(this.session._id).sign,
+          null,
+          {
+            headers: {
+              "Cache-Control": "no-cache",
+              Pragma: "no-cache",
+              Expires: "0",
+              token: this.witnessToken,
+            },
+            params: {
+              Address: this.destinationETHAddress,
+              Signature: signature,
+            },
+          }
+        );
         this.session = response.data.data;
+        
+        signBackend = !!response && !response.error;
 
-        this.eventBus.emit("add-toastr", {
-          text: response.data.message,
-          type: response && !response.error ? "success" : "error",
-        });
+        if (signBackend) {
+          this.gotoHome(response.data.message);
+        } else {
+          this.eventBus.emit("add-toastr", {
+            text: response.data.message,
+            type: signBackend ? "success" : "error",
+          });
+        }
       } catch (e) {
         console.log(e);
         this.eventBus.emit("add-toastr", {
@@ -204,19 +201,12 @@ export default {
           type: "error",
         });
       }
+      this.isSigning = false;
     },
   },
 
   components: {
-    VueQRCodeComponent,
     MButton,
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.custprogress {
-  background-color: #c7c7c7;
-  height: 10px;
-}
-</style>
