@@ -11,7 +11,7 @@ const isNullOrEmpty = function(value) {
 };
 
 export function getMinAmount() {
-  return 1.0;
+  return isDeveloping ? 1.0 : 10.0;
 }
 
 export function getContractAddress(network) {
