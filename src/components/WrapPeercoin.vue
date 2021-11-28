@@ -222,8 +222,9 @@ export default {
         !!this.session &&
         !!this.session._id &&
         this.session.wrapPPCAddress &&
-        !this.session.wrapSignatureA &&
-        !this.session.wrapSignatureB &&
+        !this.session.witnessASignature &&
+        !this.session.witnessBSignature &&
+        !this.session.witnessCSignature &&
         !this.comfirmedProceedMetaMask
       );
     },
@@ -298,8 +299,9 @@ export default {
 
           if (
             !!this.session.wrapTxid &&
-            !!this.session.wrapSignatureA &&
-            !!this.session.wrapSignatureB
+            !!this.session.witnessASignature &&
+            !!this.session.witnessBSignature &&
+            !!this.session.witnessCSignature
           ) {
             this.popupModal = true;
           }
@@ -318,8 +320,9 @@ export default {
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
-        !!this.session.wrapSignatureA &&
-        !!this.session.wrapSignatureB
+        !!this.session.witnessASignature &&
+        !!this.session.witnessBSignature &&
+        !!this.session.witnessCSignature
       ) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
@@ -371,8 +374,9 @@ export default {
         !this.accounts ||
         this.accounts.length < 1 ||
         !this.session ||
-        !this.session.wrapSignatureA ||
-        !this.session.wrapSignatureB ||
+        !this.session.witnessASignature ||
+        !this.session.witnessBSignature ||
+        !this.session.witnessCSignature ||
         !this.session.ERC20Address ||
         !this.session.network
       ) {
@@ -401,9 +405,11 @@ export default {
             this.session.wrapPPCAddress,
             this.session.ERC20Address,
             this.session.witnessAAddress,
-            this.session.wrapSignatureA,
+            this.session.witnessASignature,
             this.session.witnessBAddress,
-            this.session.wrapSignatureB
+            this.session.witnessBSignature,
+            this.session.witnessCAddress,
+            this.session.witnessCSignature
           )
           .send();
 

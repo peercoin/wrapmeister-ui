@@ -46,9 +46,14 @@ export function wrapEndpoints(id) {
 //todo: returns a list of special accounts who may sign sessions
 export function getSignAccounts() {
   return [
+    // Peerchemist
     "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
+    // SeverinDK
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
-    "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1"
+    // Mihai
+    "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
+    // learnmore
+    "0xfC8E07691feBBcdd54C290d256a19Cd59459aFD3"
   ];
 }
 
@@ -100,14 +105,14 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x39D8ef9B04Ebe8F80C0868981188caD69A6f0E0C",
+      contract: "0xe7d882E022A948f40B0C4b7fee24695F22D1815D",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:
-        "https://ropsten.etherscan.io/address/0x39D8ef9B04Ebe8F80C0868981188caD69A6f0E0C",
+        "https://ropsten.etherscan.io/address/0xe7d882E022A948f40B0C4b7fee24695F22D1815D",
       accountTotalUrl:
-        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x39D8ef9B04Ebe8F80C0868981188caD69A6f0E0C&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xe7d882E022A948f40B0C4b7fee24695F22D1815D&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
-        "https://ropsten.etherscan.io/token/0x39D8ef9B04Ebe8F80C0868981188caD69A6f0E0C?a={{{id}}}",
+        "https://ropsten.etherscan.io/token/0xe7d882E022A948f40B0C4b7fee24695F22D1815D?a={{{id}}}",
     },
     {
       key: "ETH_MAINNET",
