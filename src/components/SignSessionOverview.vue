@@ -6,8 +6,9 @@
           <tr>
             <th>Sign Wrap session</th>
             <th>Amount</th>
-            <th>Signer A</th>
-            <th>Signer B</th>
+            <th>Witness A</th>
+            <th>Witness B</th>
+            <th>Witness C</th>
           </tr>
         </thead>
       </table>
@@ -25,6 +26,7 @@
             <td>{{ item.amount }}</td>
             <td>{{ item.signatureA ? "signed" : "..." }}</td>
             <td>{{ item.signatureB ? "signed" : "..." }}</td>
+            <td>{{ item.signatureC ? "signed" : "..." }}</td>
           </tr>
         </tbody>
       </table>
@@ -84,8 +86,9 @@ export default {
     setSessions(sessions) {
       if (Array.isArray(sessions) && sessions.length > 0) {
         let isOpen = (session) => {
-          if (!session.wrapSignatureA) return true;
-          if (!session.wrapSignatureB) return true;
+          if (!session.witnessASignature) return true;
+          if (!session.witnessBSignature) return true;
+          if (!session.witnessCSignature) return true;
           return false;
         };
 
@@ -96,8 +99,9 @@ export default {
             direction: "wrap",
             amount: session.amount,
             sessionId: session._id,
-            signatureA: !!session.wrapSignatureA,
-            signatureB: !!session.wrapSignatureB,
+            signatureA: !!session.witnessASignature,
+            signatureB: !!session.witnessBSignature,
+            signatureC: !!session.witnessCSignature,
           };
         });
       }

@@ -83,14 +83,14 @@ export default {
     setSessions(sessions) {
       if (Array.isArray(sessions) && sessions.length > 0) {
         // let isOpen = (session) => {
-        //   if (!session.wrapSignatureA) return true;
-        //   if (!session.wrapSignatureB) return true;
+        //   if (!session.witnessASignature) return true;
+        //   if (!session.witnessBSignature) return true;
         //   return false;
         // };
 
         this.mysessions = sessions.map((session) => {
           return {
-            status: "open", //always open? 
+            status: "open", //always open?
             txid: "", //figure out UI columns later when we add completed txids too
             direction: "wrap",
             amount: session.amount,
