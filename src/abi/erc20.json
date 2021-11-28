@@ -358,6 +358,16 @@
         "internalType": "bytes",
         "name": "_signatureB",
         "type": "bytes"
+      },
+      {
+        "internalType": "address",
+        "name": "_signerC",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_signatureC",
+        "type": "bytes"
       }
     ],
     "name": "claimTokens",
