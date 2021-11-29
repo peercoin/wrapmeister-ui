@@ -25,7 +25,12 @@
           >
             <td>{{ item.sessionId }}</td>
             <td>{{ item.amount }}</td>
-            <td><a :href="item.explorerUrl + item.txId">{{ item.txId }}</a></td> <!-- This should not trigger click event -->
+            <td><a
+              v-on:click.stop=""
+              :href="item.explorerUrl + item.txId"
+              target="_blank"
+              rel="noopener noreferrer">{{ item.txId }}</a>
+            </td>
             <td>{{ item.signatureA ? "signed" : "..." }}</td>
             <td>{{ item.signatureB ? "signed" : "..." }}</td>
             <td>{{ item.signatureC ? "signed" : "..." }}</td>
@@ -102,7 +107,7 @@ export default {
             amount: session.amount,
             sessionId: session._id,
             txId: session.wrapTxid,
-            explorerUrl: getPeercoinExplorerUrl(),
+            explorerUrl: getPeercoinExplorerUrl(session.network),
             signatureA: !!session.witnessASignature,
             signatureB: !!session.witnessBSignature,
             signatureC: !!session.witnessCSignature,

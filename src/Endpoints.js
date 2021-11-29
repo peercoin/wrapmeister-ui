@@ -19,8 +19,8 @@ export function getContractAddress(network) {
   return !!ne ? ne.contract : "";
 }
 
-export function getPeercoinExplorerUrl() {
-  return isDeveloping ? 'https://tblockbook.peercoin.net/tx/' : 'https://blockbook.peercoin.net/tx/';
+export function getPeercoinExplorerUrl(network) {
+  return network.includes("TEST") ? 'https://tblockbook.peercoin.net/tx/' : 'https://blockbook.peercoin.net/tx/';
 }
 
 export function wrapEndpoints(id) {
