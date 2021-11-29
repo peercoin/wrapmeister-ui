@@ -6,6 +6,7 @@
           <tr>
             <th>Sign Wrap session</th>
             <th>Amount</th>
+            <th>Transaction</th>
             <th>Witness A</th>
             <th>Witness B</th>
             <th>Witness C</th>
@@ -24,6 +25,7 @@
           >
             <td>{{ item.sessionId }}</td>
             <td>{{ item.amount }}</td>
+            <td><a :href="item.explorerUrl + item.txId">{{ item.txId }}</a></td> <!-- This should not trigger click event -->
             <td>{{ item.signatureA ? "signed" : "..." }}</td>
             <td>{{ item.signatureB ? "signed" : "..." }}</td>
             <td>{{ item.signatureC ? "signed" : "..." }}</td>
@@ -36,7 +38,7 @@
 
 <script>
 import axios from "axios";
-import { wrapEndpoints, getSignAccounts } from "@/Endpoints.js";
+import { wrapEndpoints, getSignAccounts, getPeercoinExplorerUrl } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -99,6 +101,8 @@ export default {
             direction: "wrap",
             amount: session.amount,
             sessionId: session._id,
+            txId: session.wrapTxid,
+            explorerUrl: getPeercoinExplorerUrl(),
             signatureA: !!session.witnessASignature,
             signatureB: !!session.witnessBSignature,
             signatureC: !!session.witnessCSignature,

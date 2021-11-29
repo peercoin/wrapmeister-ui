@@ -1,5 +1,5 @@
 //todo change these vars:
-const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = true; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
   : "https://wrapmeister.peercoin.net";
@@ -17,6 +17,10 @@ export function getMinAmount() {
 export function getContractAddress(network) {
   const ne = getNetworks().find((nw) => nw.key === network);
   return !!ne ? ne.contract : "";
+}
+
+export function getPeercoinExplorerUrl() {
+  return isDeveloping ? 'https://tblockbook.peercoin.net/tx/' : 'https://blockbook.peercoin.net/tx/';
 }
 
 export function wrapEndpoints(id) {

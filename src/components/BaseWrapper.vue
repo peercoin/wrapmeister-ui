@@ -53,8 +53,8 @@ export default {
           current: 0,
           required: 1,
         },
-        expirationTimestamp: 0, //todo verify the fieldname
-        deposited_amount: 0,  
+        expiresAt: 0, //todo verify the fieldname
+        depositedAmount: 0,
       },
     };
   },
@@ -145,8 +145,8 @@ export default {
           current: 0,
           required: 1,
         },
-        expirationTimestamp: 0, //todo verify the fieldname
-        deposited_amount: 0,  
+        expiresAt: 0, //todo verify the fieldname
+        depositedAmount: 0,
       };
     },
 

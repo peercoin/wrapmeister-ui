@@ -206,14 +206,13 @@ export default {
       if (
         !this.session ||
         !this.session._id ||
-        !this.session.amount ||
-        !this.session.expirationTimestamp ||
-        !this.session.deposited_amount
+        this.session.amount === null ||
+        !this.session.expiresAt ||
+        this.session.depositedAmount === null
       )
         return "";
 
-      const unix = this.session.expirationTimestamp;
-      let m = new Date(unix * 1000);
+      let m = new Date(this.session.expiresAt);
       const dateString =
         m.getUTCFullYear() +
         "-" +
@@ -227,7 +226,8 @@ export default {
         ":" +
         ("0" + m.getUTCSeconds()).slice(-2);
 
-      return `Please deposit ${this.session.amount} peercoins before ${dateString}.`;
+        console.log(3);
+      return `Please deposit ${this.session.amount - this.session.depositedAmount} peercoins before ${dateString}.`;
     },
 
     confirmationMax() {
@@ -273,7 +273,7 @@ export default {
         !this.session.witnessASignature &&
         !this.session.witnessBSignature &&
         !this.session.witnessCSignature &&
-        this.session.amount !== this.session.deposited_amount &&
+        this.session.amount !== this.session.depositedAmount &&
         !this.comfirmedProceedMetaMask
       );
     },
