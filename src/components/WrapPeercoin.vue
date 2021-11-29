@@ -273,7 +273,7 @@ export default {
         !this.session.witnessASignature &&
         !this.session.witnessBSignature &&
         !this.session.witnessCSignature &&
-        this.session.amount !== this.session.depositedAmount &&
+        this.session.amount < this.session.depositedAmount &&
         !this.comfirmedProceedMetaMask
       );
     },
