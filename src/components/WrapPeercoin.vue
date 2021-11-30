@@ -110,20 +110,7 @@
       </div>
     </div>
 
-    <div class="incompleteAlert incompleteAlert-warning" v-if="!!session._id">
-      <div class="row">
-        <div class="col-xs-12 col-lg-3">
-          <font-awesome-icon
-            icon="exclamation-triangle"
-            size="1x"
-            :style="{ color: '#a04612' }"
-          />
-        </div>
-        <div class="col-xs-12 col-lg-9">
-          <p>{{ missingCoins }}</p>
-        </div>
-      </div>
-    </div>
+    <expiration-warning :session="session" />
   </div>
 </template>
 
@@ -139,7 +126,7 @@ import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ExpirationWarning from "@/components/ExpirationWarning.vue";
 
 export default {
   extends: BaseWrapper,
@@ -182,7 +169,7 @@ export default {
     }
 
     // todo replace this with connect() + disconnect():
-    clearInterval(this.countDownHandle);
+
     if (!!this.countDownHandle) {
       await clearIntervalAsync(this.countDownHandle);
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
@@ -200,34 +187,6 @@ export default {
   computed: {
     header() {
       return "Wrap Peercoin";
-    },
-
-    missingCoins() {
-      if (
-        !this.session ||
-        !this.session._id ||
-        this.session.amount === null ||
-        !this.session.expiresAt ||
-        this.session.depositedAmount === null
-      )
-        return "";
-
-      let m = new Date(this.session.expiresAt);
-      const dateString =
-        m.getUTCFullYear() +
-        "-" +
-        ("0" + (m.getUTCMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + m.getUTCDate()).slice(-2) +
-        " " +
-        ("0" + m.getUTCHours()).slice(-2) +
-        ":" +
-        ("0" + m.getUTCMinutes()).slice(-2) +
-        ":" +
-        ("0" + m.getUTCSeconds()).slice(-2);
-
-        console.log(3);
-      return `Please deposit ${this.session.amount - this.session.depositedAmount} peercoins before ${dateString}.`;
     },
 
     confirmationMax() {
@@ -475,7 +434,7 @@ export default {
     MButton,
     Countdown,
     Modal,
-    FontAwesomeIcon,
+    ExpirationWarning,
   },
 };
 </script>
@@ -484,21 +443,5 @@ export default {
 .custprogress {
   background-color: #c7c7c7;
   height: 10px;
-}
-
-.incompleteAlert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 1px;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
-.incompleteAlert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
 }
 </style>
