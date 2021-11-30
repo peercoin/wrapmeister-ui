@@ -1,7 +1,13 @@
 <template>
   <div
     class="incompleteAlert incompleteAlert-warning"
-    v-if="!!session && !!session._id && !!session.amount && !!session.expiresAt"
+    v-if="
+      !!session &&
+        !!session._id &&
+        !!session.amount &&
+        !!session.expiresAt &&
+        session.depositedAmount < session.amount
+    "
   >
     <div class="row">
       <div class="col-xs-12 col-lg-3">
