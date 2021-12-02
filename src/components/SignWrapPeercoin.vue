@@ -30,6 +30,19 @@
       </div>
     </div>
 
+    <div class="row my-3">
+      <div class="col-xs-12 col-md-6">
+        <p>Confirm amount</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <input
+          type="text"
+          :class="{ 'row-input-field': true }"
+          v-model="confirmAmount"
+        />
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-xs-12 mt-3">
         <m-button
@@ -66,6 +79,7 @@ export default {
   data() {
     return {
       witnessToken: "",
+      confirmAmount: null,
       isSigning: false,
     };
   },
@@ -179,11 +193,12 @@ export default {
             params: {
               Address: this.destinationETHAddress,
               Signature: signature,
+              Amount: this.confirmAmount
             },
           }
         );
         this.session = response.data.data;
-        
+
         signBackend = !!response && !response.error;
 
         if (signBackend) {

@@ -21,7 +21,11 @@
           v-model="network"
           :disabled="true"
         >
-          <option v-for="item in activeNetworks" :value="item.key" :key="item.key">
+          <option
+            v-for="item in activeNetworks"
+            :value="item.key"
+            :key="item.key"
+          >
             {{ item.description }}
           </option>
         </select>
@@ -105,6 +109,8 @@
         >
       </div>
     </div>
+
+    <expiration-warning :session="session" />
   </div>
 </template>
 
@@ -120,6 +126,7 @@ import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
+import ExpirationWarning from "@/components/ExpirationWarning.vue";
 
 export default {
   extends: BaseWrapper,
@@ -162,7 +169,7 @@ export default {
     }
 
     // todo replace this with connect() + disconnect():
-    clearInterval(this.countDownHandle);
+
     if (!!this.countDownHandle) {
       await clearIntervalAsync(this.countDownHandle);
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
@@ -225,6 +232,7 @@ export default {
         !this.session.witnessASignature &&
         !this.session.witnessBSignature &&
         !this.session.witnessCSignature &&
+        this.session.amount < this.session.depositedAmount &&
         !this.comfirmedProceedMetaMask
       );
     },
@@ -426,6 +434,7 @@ export default {
     MButton,
     Countdown,
     Modal,
+    ExpirationWarning,
   },
 };
 </script>

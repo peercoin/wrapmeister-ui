@@ -53,6 +53,8 @@ export default {
           current: 0,
           required: 1,
         },
+        expiresAt: 0, //todo verify the fieldname
+        depositedAmount: 0,
       },
     };
   },
@@ -139,6 +141,12 @@ export default {
         unwrapPPCAddress: null,
         ERC20Address: null,
         claimed: false,
+        confirmations: {
+          current: 0,
+          required: 1,
+        },
+        expiresAt: 0, //todo verify the fieldname
+        depositedAmount: 0,
       };
     },
 

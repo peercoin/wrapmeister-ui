@@ -3,10 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import mitt from "mitt";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCheckSquare } from "@fortawesome/free-solid-svg-icons";
-import store from './store';
-
-library.add(faCheckSquare);
+import {
+  faCheckSquare,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
+import store from "./store";
+ 
+library.add(faCheckSquare, faExclamationTriangle);
 
 const eventBus = mitt();
 const app = createApp(App);
