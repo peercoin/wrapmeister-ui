@@ -100,12 +100,12 @@ export default {
         return "";
       let pluralremain =
         this.session.amount - this.session.depositedAmount > 1
-          ? "Peercoin(s)"
+          ? "Peercoins"
           : "Peercoin";
 
       if (this.session.depositedAmount > 0) {
         let plural =
-          this.session.depositedAmount > 1 ? "Peercoin(s)" : "Peercoin";
+          this.session.depositedAmount > 1 ? "Peercoins" : "Peercoin";
 
         return `${
           this.session.depositedAmount
