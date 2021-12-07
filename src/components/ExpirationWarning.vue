@@ -65,7 +65,7 @@ export default {
     },
 
     async onCountDown() {
-      if (this.session.depositedAmount > 0) {
+      if (!!this.session && this.session.depositedAmount > 0) {
         this.time =
           "This process cannot be cancelled. You must proceed with this session.";
       } else {
@@ -98,14 +98,15 @@ export default {
         this.session.depositedAmount === null
       )
         return "";
+      let pluralremain =
+        this.session.amount - this.session.depositedAmount > 1
+          ? "Peercoin(s)"
+          : "Peercoin";
 
       if (this.session.depositedAmount > 0) {
         let plural =
           this.session.depositedAmount > 1 ? "Peercoin(s)" : "Peercoin";
-        let pluralremain =
-          his.session.amount - this.session.depositedAmount > 1
-            ? "Peercoin(s)"
-            : "Peercoin";
+
         return `${
           this.session.depositedAmount
         } ${plural} received, please deposit remaining ${
@@ -115,7 +116,7 @@ export default {
 
       return `Kindly deposit ${
         this.session.amount - this.session.depositedAmount
-      } peercoins within`;
+      } ${pluralremain} within`;
     },
   },
 
