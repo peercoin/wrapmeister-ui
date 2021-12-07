@@ -3,10 +3,10 @@
     class="incompleteAlert incompleteAlert-warning"
     v-if="
       !!session &&
-        !!session._id &&
-        !!session.amount &&
-        !!session.expiresAt &&
-        session.depositedAmount < session.amount
+      !!session._id &&
+      !!session.amount &&
+      !!session.expiresAt &&
+      session.depositedAmount < session.amount
     "
   >
     <div class="row">
@@ -65,17 +65,22 @@ export default {
     },
 
     async onCountDown() {
-      const now = new Date().getTime();
-      const countDownDate = this.session.expiresAt; //unix in ms
-      const distance = countDownDate - now;
-
-      if (distance > 0) {
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
+      if (this.session.depositedAmount > 0) {
         this.time =
-          this.zeroPadding(minutes, 2) + ":" + this.zeroPadding(seconds, 2);
-      } else this.time = !this.missingCoins ? "" : "session expired";
+          "This process cannot be cancelled. You must proceed with this session.";
+      } else {
+        const now = new Date().getTime();
+        const countDownDate = this.session.expiresAt; //unix in ms
+        const distance = countDownDate - now;
+
+        if (distance > 0) {
+          let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          this.time =
+            this.zeroPadding(minutes, 2) + ":" + this.zeroPadding(seconds, 2);
+        } else this.time = !this.missingCoins ? "" : "session expired";
+      }
     },
   },
 
@@ -94,8 +99,23 @@ export default {
       )
         return "";
 
-      return `Kindly deposit ${this.session.amount -
-        this.session.depositedAmount} peercoins within`;
+      if (this.session.depositedAmount > 0) {
+        let plural =
+          this.session.depositedAmount > 1 ? "Peercoin(s)" : "Peercoin";
+        let pluralremain =
+          his.session.amount - this.session.depositedAmount > 1
+            ? "Peercoin(s)"
+            : "Peercoin";
+        return `${
+          this.session.depositedAmount
+        } ${plural} received, please deposit remaining ${
+          this.session.amount - this.session.depositedAmount
+        } ${pluralremain}.`;
+      }
+
+      return `Kindly deposit ${
+        this.session.amount - this.session.depositedAmount
+      } peercoins within`;
     },
   },
 
