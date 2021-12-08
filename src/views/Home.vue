@@ -96,7 +96,7 @@
       </collapse-transition>
 
       <collapse-transition>
-        <div class="mt-5 g-0" v-if="isSigner">
+        <div class="mt-5 g-0" v-if="isSigner && showSessions">
           <sign-session-overview :propsaccounts="selectedAccount" />
         </div>
       </collapse-transition>
