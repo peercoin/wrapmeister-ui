@@ -1,5 +1,5 @@
 //todo change these vars:
-const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = true; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
   : "https://wrapmeister.peercoin.net";
@@ -35,7 +35,7 @@ export function wrapEndpoints(id) {
     wrap: `${_host}/api/v1/wrap`,
     unwrap: `${_host}/api/v1/unwrap`,
     storageAddress: `${_host}/api/v1/storage-address`,
-    session: `${_host}/api/v1/session/${id}`,
+    session: `${_host}/api/v1/sessions/${id}`,
     addressPeercoinExplorerTest: `https://tblockbook.peercoin.net/address/${id}`, //id is address
     addressPeercoinExplorer: `https://blockbook.peercoin.net/address/${id}`, //id is address
     APIaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
@@ -54,6 +54,10 @@ export function getSignAccounts() {
     "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
     // SeverinDK
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
+    // Witness B
+    "0xfCab1090e039D4B44c3862F46b7d55bC256AB041",
+    // Witness C
+    "0x2313D59CbEfd6c6eB5A72Ad439c0e3D0CB03d536",
     // Mihai
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
     // learnmore
@@ -111,14 +115,14 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x89B6f48d894717E2D14c8bAb5CFb3938c56289e4",
+      contract: "0xF3dfa50C0D7d86f0e7c1c8F9973F90E31EB1dAd7",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:
-        "https://ropsten.etherscan.io/address/0x89B6f48d894717E2D14c8bAb5CFb3938c56289e4",
+        "https://ropsten.etherscan.io/address/0xF3dfa50C0D7d86f0e7c1c8F9973F90E31EB1dAd7",
       accountTotalUrl:
-        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x89B6f48d894717E2D14c8bAb5CFb3938c56289e4&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xF3dfa50C0D7d86f0e7c1c8F9973F90E31EB1dAd7&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
-        "https://ropsten.etherscan.io/token/0x89B6f48d894717E2D14c8bAb5CFb3938c56289e4?a={{{id}}}",
+        "https://ropsten.etherscan.io/token/0xF3dfa50C0D7d86f0e7c1c8F9973F90E31EB1dAd7?a={{{id}}}",
     },
     {
       key: "ETH_MAINNET",
