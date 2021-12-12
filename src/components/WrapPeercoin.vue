@@ -70,16 +70,34 @@
         <p>Peercoin deposit address</p>
       </div>
       <div class="col-xs-12 col-md-6">
-        <div class="row mt-2 pt-2">
-          <vue-q-r-code-component
-            v-if="!!URIencodeWrapPPCAddress"
-            :size="250"
-            :text="URIencodeWrapPPCAddress"
-          />
+        <div class="row justify-content-center mt-2 pt-2">
+          <div class="col-xs-7 col-sm-5 col-md-7 text-center">
+            <vue-q-r-code-component
+              v-if="!!URIencodeWrapPPCAddress"
+              :size="250"
+              :text="URIencodeWrapPPCAddress"
+            />
+          </div>
         </div>
-        <div class="row">
-          <small>{{ session.wrapPPCAddress }}</small>
-          <small v-html="URIencodeWrapPPCAddressLink"></small>
+
+        <div class="row mt-2">
+          <button
+            class="btn btn-outline-primary btn-sm copyaddress my-1 px-3"
+            type="button"
+            @click="copyToClipboard"
+          >
+            <span class="btn-label">
+              <font-awesome-icon
+                :icon="['far', 'copy']"
+                size="1x"
+                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
+            >{{ session.wrapPPCAddress }}
+          </button>
+
+          <div
+            class="uri-wrap-ppc-address"
+            v-html="URIencodeWrapPPCAddressLink"
+          ></div>
         </div>
       </div>
     </div>
@@ -127,6 +145,7 @@ import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
@@ -439,6 +458,10 @@ export default {
         console.log(e);
       }
     },
+
+    copyToClipboard() {
+      navigator.clipboard.writeText(this.session.wrapPPCAddress);
+    },
   },
 
   components: {
@@ -447,6 +470,7 @@ export default {
     Countdown,
     Modal,
     ExpirationWarning,
+    FontAwesomeIcon,
   },
 };
 </script>
@@ -455,5 +479,18 @@ export default {
 .custprogress {
   background-color: #c7c7c7;
   height: 10px;
+}
+.uri-wrap-ppc-address {
+  font-size: 75%;
+}
+.copyaddress {
+  font-size: 75%;
+  color: #221b17;
+  border-color: #221b17;
+  &:hover {
+    color: #8f3e10;
+    background-color: transparent;
+    border-color: #8f3e10;
+  }
 }
 </style>
