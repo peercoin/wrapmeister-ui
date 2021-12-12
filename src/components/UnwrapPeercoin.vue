@@ -186,8 +186,6 @@ export default {
           )
           .send();
 
-        this.unwrapstatus = "One more thing...";
-
         this.unwrapstatus = "";
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
@@ -233,8 +231,13 @@ export default {
           // show popup, then burn tokens:
           this.enableMetaMaskConfirmationModal();
         }
-      } catch (error) {
-        console.log({ ...error });
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
 
         this.eventBus.emit("add-toastr", {
           text: `Unable to unwrap`,

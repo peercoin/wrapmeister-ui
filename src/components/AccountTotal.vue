@@ -1,12 +1,12 @@
 <template>
   <div class="row justify-content-between mt-2 mx-1 g-0">
     <div class="col-md-6 pe-md-2 mt-3">
-      <div class="totalppc" @click="onClick1">
+      <div class="totalppc" @click="gotoExternalWrappedTotal">
         total peercoin wrapped: <strong>{{ amount }}</strong>
       </div>
     </div>
     <div class="col-md-6 ps-md-2 mt-3">
-      <div class="totalstorageppc" @click="onClick2">
+      <div class="totalstorageppc" @click="gotoExternalCustodianBalance">
         custodian balance: <strong>{{ amountStorage }}</strong>
       </div>
     </div>
@@ -88,11 +88,16 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err);
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
       }
     },
 
-    onClick2() {
+    gotoExternalCustodianBalance() {
       let url = "";
 
       if (isValidAddress(this.peercoinAddressStorage, "prod")) {
@@ -105,7 +110,7 @@ export default {
       if (!!url) window.open(url, "_blank");
     },
 
-    onClick1() {
+    gotoExternalWrappedTotal() {
       const network = this.$store.state.network;
       if (!network) return;
       const ne = getNetworks().find((nw) => nw.key === network);

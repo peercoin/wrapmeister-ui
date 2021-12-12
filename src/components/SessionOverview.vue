@@ -71,8 +71,14 @@ export default {
           let sessions = res.data.data;
           this.setSessions(sessions);
         }
-      } catch (error) {
-        console.warn(error);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: `Unable to connect to backend with account ${this.propsaccounts[0]}. Please try again later.`,
           type: "error",

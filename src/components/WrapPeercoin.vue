@@ -314,8 +314,14 @@ export default {
             this.popupModal = true;
           }
         }
-      } catch (error) {
-        console.warn(error);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: `Unable to retrieve session ${id}`,
           type: "error",
@@ -367,8 +373,14 @@ export default {
           text: response.data.message,
           type: success ? "success" : "error",
         });
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: "Unable to wrap",
           type: "error",
