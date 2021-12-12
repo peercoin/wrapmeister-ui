@@ -101,6 +101,17 @@
         </div>
       </collapse-transition>
 
+      <div class="mt-5 g-0" v-if="isSigner && showSessions">
+        <!-- temporary place button here -->
+        <button
+          class="btn btn-outline-primary btn-sm xxx"
+          type="button"
+          @click="gotoNomination"
+        >
+          nominate
+        </button>
+      </div>
+
       <account-total />
     </div>
   </div>
@@ -273,6 +284,7 @@ export default {
     },
 
     isSigner() {
+      //return true;
       if (
         !!this.selectedAccount &&
         !!this.selectedAccount[0] &&
@@ -281,6 +293,16 @@ export default {
         return true;
       }
       return false;
+    },
+
+    gotoNomination() {
+      if (!!this.selectedAccount)
+        this.$router.push({
+          name: "NominateAndVote",
+          params: {
+            selectedaccount: this.selectedAccount,
+          },
+        });
     },
   },
 
