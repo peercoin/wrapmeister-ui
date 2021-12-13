@@ -122,9 +122,14 @@
 
     <div class="row" v-if="!session._id">
       <div class="col-xs-12 mt-3">
-        <m-button type="success" @mbclick="wrap" :disabled="!validForm"
-          >Wrap Peercoin</m-button
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="wrap"
+          :disabled="!validForm"
         >
+          Wrap Peercoin
+        </button>
       </div>
     </div>
 
@@ -138,7 +143,7 @@ import axios from "axios";
 import { setIntervalAsync } from "set-interval-async/fixed";
 import { clearIntervalAsync } from "set-interval-async";
 import VueQRCodeComponent from "vue-qrcode-component";
-import MButton from "@/components/Button.vue";
+
 import Countdown from "@/components/Countdown.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
@@ -466,7 +471,6 @@ export default {
 
   components: {
     VueQRCodeComponent,
-    MButton,
     Countdown,
     Modal,
     ExpirationWarning,

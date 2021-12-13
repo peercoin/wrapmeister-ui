@@ -45,12 +45,14 @@
 
     <div class="row">
       <div class="col-xs-12 mt-3">
-        <m-button
-          type="success"
-          @mbclick="sign"
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="sign"
           :disabled="!validForm || isSigning"
-          >Sign Wrap Peercoin</m-button
         >
+          Sign Wrap Peercoin
+        </button>
       </div>
     </div>
   </div>
@@ -60,7 +62,7 @@
 import Web3 from "web3";
 import ethereumjsabi from "ethereumjs-abi";
 import axios from "axios";
-import MButton from "@/components/Button.vue";
+
 import {
   getNetworks,
   getContractAddress,
@@ -224,10 +226,6 @@ export default {
       }
       this.isSigning = false;
     },
-  },
-
-  components: {
-    MButton,
   },
 };
 </script>

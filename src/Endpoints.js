@@ -1,5 +1,5 @@
 //todo change these vars:
-const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = true; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
   : "https://wrapmeister.peercoin.net";
@@ -64,6 +64,13 @@ export function getSignAccounts() {
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
     // RdedR
     "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407"
+  ];
+}
+
+export function getOwnerAccounts() {
+  return [
+    // Peerchemist
+    "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
   ];
 }
 

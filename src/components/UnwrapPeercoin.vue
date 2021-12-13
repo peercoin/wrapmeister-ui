@@ -78,9 +78,14 @@
 
     <div class="row mb-2" v-if="!callingunwrap">
       <div class="col-xs-12 mt-3">
-        <m-button type="success" @mbclick="unwrap" :disabled="!validForm"
-          >Redeem wrapped Peercoin</m-button
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="unwrap"
+          :disabled="!validForm"
         >
+          Redeem wrapped Peercoin
+        </button>
       </div>
     </div>
   </div>
@@ -89,7 +94,7 @@
 <script>
 import Web3 from "web3";
 import axios from "axios";
-import MButton from "@/components/Button.vue";
+
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
@@ -248,7 +253,6 @@ export default {
   },
 
   components: {
-    MButton,
     Modal,
     LoadingOverlay,
   },

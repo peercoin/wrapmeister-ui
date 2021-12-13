@@ -50,27 +50,33 @@
         class="col py-3 px-3 body-mid"
         v-if="metaMaskEnabled && selectedAccount.length === 0"
       >
-        <m-button class="mx-1" type="success" @mbclick="getAccounts"
-          >Connect with MetaMask</m-button
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="getAccounts"
         >
+          Connect with MetaMask
+        </button>
       </div>
 
       <div class="col py-3 px-3 body-mid" v-if="showMenu">
-        <m-button
-          class="mx-1"
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
+          @click="toggleWrap"
           :disabled="!curNetwork"
-          type="success"
-          @mbclick="toggleWrap"
-          >Wrap Peercoin</m-button
         >
+          Wrap Peercoin
+        </button>
 
-        <m-button
-          class="mx-1"
-          type="success"
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
+          @click="toggleUnwrap"
           :disabled="!curNetwork"
-          @mbclick="toggleUnwrap"
-          >Unwrap Peercoin</m-button
         >
+          Unwrap Peercoin
+        </button>
       </div>
 
       <collapse-transition>
@@ -101,7 +107,7 @@
         </div>
       </collapse-transition>
 
-      <div class="mt-5 g-0" v-if="isSigner && showSessions">
+      <div class="mt-5 g-0" v-if="(isSigner || isOwner) && showSessions">
         <!-- temporary place button here -->
         <button
           class="btn btn-outline-primary btn-sm xxx"
@@ -120,7 +126,6 @@
 <script>
 import Web3 from "web3";
 // @ is an alias to /src
-import MButton from "@/components/Button.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import CollapseTransition from "@/components/CollapseTransition.vue";
@@ -132,7 +137,7 @@ import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
 import NetworkChooser from "@/components/NetworkChooser.vue";
-import { getNetworks, getSignAccounts } from "@/Endpoints.js";
+import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
 
 export default {
   name: "Home",
@@ -295,6 +300,18 @@ export default {
       return false;
     },
 
+    isOwner() {
+      //return true;
+      if (
+        !!this.selectedAccount &&
+        !!this.selectedAccount[0] &&
+        getOwnerAccounts().includes(this.selectedAccount[0])
+      ) {
+        return true;
+      }
+      return false;
+    },
+
     gotoNomination() {
       if (!!this.selectedAccount)
         this.$router.push({
@@ -307,7 +324,6 @@ export default {
   },
 
   components: {
-    MButton,
     CollapseTransition,
     WrapPeercoin,
     UnwrapPeercoin,
