@@ -1,5 +1,5 @@
 //todo change these vars:
-const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = true; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
   : "https://wrapmeister.peercoin.net";
@@ -67,6 +67,13 @@ export function getSignAccounts() {
   ];
 }
 
+export function getOwnerAccounts() {
+  return [
+    // Peerchemist
+    "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
+  ];
+}
+
 //todo change these vars:
 //default is the first active network
 export function getNetworks() {
@@ -115,14 +122,14 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x406B8F65563FD795547934E15906704BE892429f",
+      contract: "0xE21b2F25C25f6a986C4af8629B7041b8Aaa9bD40",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:
-        "https://ropsten.etherscan.io/address/0x406B8F65563FD795547934E15906704BE892429f",
+        "https://ropsten.etherscan.io/address/0xE21b2F25C25f6a986C4af8629B7041b8Aaa9bD40",
       accountTotalUrl:
-        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x406B8F65563FD795547934E15906704BE892429f&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xE21b2F25C25f6a986C4af8629B7041b8Aaa9bD40&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
-        "https://ropsten.etherscan.io/token/0x406B8F65563FD795547934E15906704BE892429f?a={{{id}}}",
+        "https://ropsten.etherscan.io/token/0xE21b2F25C25f6a986C4af8629B7041b8Aaa9bD40?a={{{id}}}",
     },
     {
       key: "ETH_MAINNET",

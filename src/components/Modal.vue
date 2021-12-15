@@ -22,10 +22,22 @@
 
           <div class="d-flex justify-content-center">
             <div class="moditem">
-              <m-button type="success" @mbclick="confirm">Confirm</m-button>
+              <button
+                type="button"
+                :class="{ btn: true, 'btn-success': true }"
+                @click="confirm"
+              >
+                Confirm
+              </button>
             </div>
             <div class="moditem">
-              <m-button type="danger" @mbclick="close">Cancel</m-button>
+              <button
+                type="button"
+                :class="{ btn: true, 'btn-danger': true }"
+                @click="close"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -35,8 +47,6 @@
 </template>
 
 <script>
-import MButton from "@/components/Button.vue";
-
 export default {
   name: "Modal",
   props: {
@@ -53,9 +63,6 @@ export default {
     confirm() {
       this.$emit("modalconfirm");
     },
-  },
-  components: {
-    MButton,
   },
 };
 </script>
@@ -109,7 +116,7 @@ export default {
 }
 
 .modal-body {
-  position: relative; 
+  position: relative;
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 1px;

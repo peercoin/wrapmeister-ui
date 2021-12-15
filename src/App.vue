@@ -99,4 +99,13 @@ body {
     background: #2ea566 !important; 
 }
  
+.btn-success {
+  color: #fff;
+  background-color: #03914f;
+  border-color: #198754;
+  &:hover {
+    background-color: #229b62;
+  }
+}
+
 </style>

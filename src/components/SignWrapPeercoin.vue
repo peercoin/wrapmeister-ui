@@ -45,12 +45,14 @@
 
     <div class="row">
       <div class="col-xs-12 mt-3">
-        <m-button
-          type="success"
-          @mbclick="sign"
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="sign"
           :disabled="!validForm || isSigning"
-          >Sign Wrap Peercoin</m-button
         >
+          Sign Wrap Peercoin
+        </button>
       </div>
     </div>
   </div>
@@ -60,7 +62,7 @@
 import Web3 from "web3";
 import ethereumjsabi from "ethereumjs-abi";
 import axios from "axios";
-import MButton from "@/components/Button.vue";
+
 import {
   getNetworks,
   getContractAddress,
@@ -139,8 +141,14 @@ export default {
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
         }
-      } catch (error) {
-        console.warn(error);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: `Unable to retrieve session ${id}`,
           type: "error",
@@ -193,7 +201,7 @@ export default {
             params: {
               Address: this.destinationETHAddress,
               Signature: signature,
-              Amount: this.confirmAmount
+              Amount: this.confirmAmount,
             },
           }
         );
@@ -218,10 +226,6 @@ export default {
       }
       this.isSigning = false;
     },
-  },
-
-  components: {
-    MButton,
   },
 };
 </script>

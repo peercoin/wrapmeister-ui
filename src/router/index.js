@@ -36,6 +36,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import("../views/SignWrapSession.vue"),
   },
+  {
+    path: "/nominate/:selectedaccount+",
+    name: "NominateAndVote",
+    component: () => import("../views/NominateVote.vue"),
+    props: (route) => ({
+      propsaccounts: route.params.selectedaccount,
+    }),
+  },
 ];
 
 const router = createRouter({

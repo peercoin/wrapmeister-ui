@@ -25,11 +25,14 @@
           >
             <td>{{ item.sessionId }}</td>
             <td>{{ item.amount }}</td>
-            <td><a
-              v-on:click.stop=""
-              :href="item.explorerUrl + item.txId"
-              target="_blank"
-              rel="noopener noreferrer">{{ item.txId }}</a>
+            <td>
+              <a
+                v-on:click.stop=""
+                :href="item.explorerUrl + item.txId"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ item.txId }}</a
+              >
             </td>
             <td>{{ item.signatureA ? "signed" : "..." }}</td>
             <td>{{ item.signatureB ? "signed" : "..." }}</td>
@@ -43,7 +46,11 @@
 
 <script>
 import axios from "axios";
-import { wrapEndpoints, getSignAccounts, getPeercoinExplorerUrl } from "@/Endpoints.js";
+import {
+  wrapEndpoints,
+  getSignAccounts,
+  getPeercoinExplorerUrl,
+} from "@/Endpoints.js";
 
 export default {
   props: {
@@ -81,8 +88,14 @@ export default {
             this.setSessions(sessions);
           }
         }
-      } catch (error) {
-        console.warn(error);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: `Unable to connect to backend with account ${this.propsaccounts[0]}. Please try again later.`,
           type: "error",

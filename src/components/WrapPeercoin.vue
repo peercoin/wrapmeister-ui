@@ -70,16 +70,34 @@
         <p>Peercoin deposit address</p>
       </div>
       <div class="col-xs-12 col-md-6">
-        <div class="row mt-2 pt-2">
-          <vue-q-r-code-component
-            v-if="!!URIencodeWrapPPCAddress"
-            :size="250"
-            :text="URIencodeWrapPPCAddress"
-          />
+        <div class="row justify-content-center mt-2 pt-2">
+          <div class="col-xs-7 col-sm-5 col-md-7 text-center">
+            <vue-q-r-code-component
+              v-if="!!URIencodeWrapPPCAddress"
+              :size="250"
+              :text="URIencodeWrapPPCAddress"
+            />
+          </div>
         </div>
-        <div class="row">
-          <small>{{ session.wrapPPCAddress }}</small>
-          <small v-html="URIencodeWrapPPCAddressLink"></small>
+
+        <div class="row mt-2">
+          <button
+            class="btn btn-outline-primary btn-sm copyaddress my-1 px-3"
+            type="button"
+            @click="copyToClipboard"
+          >
+            <span class="btn-label">
+              <font-awesome-icon
+                :icon="['far', 'copy']"
+                size="1x"
+                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
+            >{{ session.wrapPPCAddress }}
+          </button>
+
+          <div
+            class="uri-wrap-ppc-address"
+            v-html="URIencodeWrapPPCAddressLink"
+          ></div>
         </div>
       </div>
     </div>
@@ -104,9 +122,14 @@
 
     <div class="row" v-if="!session._id">
       <div class="col-xs-12 mt-3">
-        <m-button type="success" @mbclick="wrap" :disabled="!validForm"
-          >Wrap Peercoin</m-button
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="wrap"
+          :disabled="!validForm"
         >
+          Wrap Peercoin
+        </button>
       </div>
     </div>
 
@@ -120,13 +143,14 @@ import axios from "axios";
 import { setIntervalAsync } from "set-interval-async/fixed";
 import { clearIntervalAsync } from "set-interval-async";
 import VueQRCodeComponent from "vue-qrcode-component";
-import MButton from "@/components/Button.vue";
+
 import Countdown from "@/components/Countdown.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
@@ -314,8 +338,14 @@ export default {
             this.popupModal = true;
           }
         }
-      } catch (error) {
-        console.warn(error);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: `Unable to retrieve session ${id}`,
           type: "error",
@@ -367,8 +397,14 @@ export default {
           text: response.data.message,
           type: success ? "success" : "error",
         });
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
+
         this.eventBus.emit("add-toastr", {
           text: "Unable to wrap",
           type: "error",
@@ -427,14 +463,18 @@ export default {
         console.log(e);
       }
     },
+
+    copyToClipboard() {
+      navigator.clipboard.writeText(this.session.wrapPPCAddress);
+    },
   },
 
   components: {
     VueQRCodeComponent,
-    MButton,
     Countdown,
     Modal,
     ExpirationWarning,
+    FontAwesomeIcon,
   },
 };
 </script>
@@ -443,5 +483,18 @@ export default {
 .custprogress {
   background-color: #c7c7c7;
   height: 10px;
+}
+.uri-wrap-ppc-address {
+  font-size: 75%;
+}
+.copyaddress {
+  font-size: 75%;
+  color: #221b17;
+  border-color: #221b17;
+  &:hover {
+    color: #8f3e10;
+    background-color: transparent;
+    border-color: #8f3e10;
+  }
 }
 </style>

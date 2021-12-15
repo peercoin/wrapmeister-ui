@@ -78,9 +78,14 @@
 
     <div class="row mb-2" v-if="!callingunwrap">
       <div class="col-xs-12 mt-3">
-        <m-button type="success" @mbclick="unwrap" :disabled="!validForm"
-          >Redeem wrapped Peercoin</m-button
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="unwrap"
+          :disabled="!validForm"
         >
+          Redeem wrapped Peercoin
+        </button>
       </div>
     </div>
   </div>
@@ -89,7 +94,7 @@
 <script>
 import Web3 from "web3";
 import axios from "axios";
-import MButton from "@/components/Button.vue";
+
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
@@ -186,8 +191,6 @@ export default {
           )
           .send();
 
-        this.unwrapstatus = "One more thing...";
-
         this.unwrapstatus = "";
         this.resetSession();
         this.gotoHome("Successfully burned " + this.amount + " WPPC");
@@ -233,8 +236,13 @@ export default {
           // show popup, then burn tokens:
           this.enableMetaMaskConfirmationModal();
         }
-      } catch (error) {
-        console.log({ ...error });
+      } catch (err) {
+        if (
+          !!err.response &&
+          !!err.response.data &&
+          !!err.response.data.message
+        )
+          console.warn(err.response.data.message);
 
         this.eventBus.emit("add-toastr", {
           text: `Unable to unwrap`,
@@ -245,7 +253,6 @@ export default {
   },
 
   components: {
-    MButton,
     Modal,
     LoadingOverlay,
   },

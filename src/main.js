@@ -7,9 +7,12 @@ import {
   faCheckSquare,
   faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCopy,
+} from "@fortawesome/free-regular-svg-icons";
 import store from "./store";
  
-library.add(faCheckSquare, faExclamationTriangle);
+library.add(faCheckSquare, faExclamationTriangle, faCopy);
 
 const eventBus = mitt();
 const app = createApp(App);
