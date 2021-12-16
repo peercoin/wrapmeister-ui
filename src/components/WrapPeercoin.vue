@@ -1,5 +1,6 @@
 <template>
   <div class="col-xs-12 body-mid py-3">
+    <loading-overlay :loading="!!claimtokenStatus" :text="claimtokenStatus" />
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
@@ -143,7 +144,7 @@ import axios from "axios";
 import { setIntervalAsync } from "set-interval-async/fixed";
 import { clearIntervalAsync } from "set-interval-async";
 import VueQRCodeComponent from "vue-qrcode-component";
-
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
 import Countdown from "@/components/Countdown.vue";
 import { getNetworks, getContractAddress } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
@@ -163,10 +164,12 @@ export default {
     return {
       countDown: 100,
       countDownHandle: null,
+      claimtokenStatus: "",
     };
   },
 
   async mounted() {
+    this.claimtokenStatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks();
 
@@ -433,7 +436,7 @@ export default {
           "No contract address found for network: " + this.session.network
         );
       }
-
+      this.claimtokenStatus = "Waiting for mint...";
       try {
         if (!this.web3) this.web3 = new Web3(ethereum);
 
@@ -443,7 +446,7 @@ export default {
 
         const decimals = await contract.methods.decimals().call();
 
-        const result = await contract.methods
+        const _ = await contract.methods
           .claimTokens(
             this.session.amount * 10 ** decimals,
             this.session.wrapPPCAddress,
@@ -458,9 +461,11 @@ export default {
           .send();
 
         this.resetSession();
+        this.claimtokenStatus = "";
         this.gotoHome("Successfully wrapped " + this.amount + "PPC to WPPC");
       } catch (e) {
         console.log(e);
+        this.claimtokenStatus = "";
       }
     },
 
@@ -475,6 +480,7 @@ export default {
     Modal,
     ExpirationWarning,
     FontAwesomeIcon,
+    LoadingOverlay,
   },
 };
 </script>

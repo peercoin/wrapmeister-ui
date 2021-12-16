@@ -69,8 +69,8 @@ export function getSignAccounts() {
 
 export function getOwnerAccounts() {
   return [
-    // Peerchemist
-    "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
+    // SeverinDK
+    "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
   ];
 }
 

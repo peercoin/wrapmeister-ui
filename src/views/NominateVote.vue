@@ -8,21 +8,35 @@
         <div class="col-md-6 text-end"></div>
       </div>
 
-      <div class="row justify-content-center mb-5">
-        <div class="col-3 text-center">
-          centered text
+      <div class="row mb-2">
+        <div class="col-xs-12 col-md-6">
+          <p>Smart contract platform</p>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <select
+            :class="{ 'row-input-field': true, invalid: !network }"
+            v-model="network"
+          >
+            <option
+              v-for="item in activeNetworks"
+              :value="item.key"
+              :key="item.key"
+            >
+              {{ item.description }}
+            </option>
+          </select>
         </div>
       </div>
 
       <div class="row">
         <div class="col-xs-12 col-md-6">
-          <p>insert something</p>
+          <p>Address</p>
         </div>
         <div class="col-xs-12 col-md-6">
           <input
             type="text"
             :class="{ 'row-input-field': true }"
-            v-model="something"
+            v-model="address"
           />
         </div>
       </div>
@@ -41,6 +55,9 @@
 
 <script>
 import { getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
+import Web3 from "web3";
+import ABI from "@/abi/erc20.json";
+import { getNetworks, getContractAddress } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -49,8 +66,10 @@ export default {
 
   data() {
     return {
-      something: "",
+      address: "",
       account: null,
+      activeNetworks: getNetworks(),
+      network: getNetworks()[0]
     };
   },
 
@@ -81,8 +100,31 @@ export default {
       this.gotoHome();
     },
 
-    doNomination() {
-      console.log("hi there");
+    async doNomination() {
+      console.log(this.account);
+
+      if (!this.web3) this.web3 = new Web3(ethereum);
+
+      const contract = new this.web3.eth.Contract(ABI, getContractAddress(this.network), {
+        from: this.account,
+      });
+
+      let result;
+
+      if (this.isOwner) {
+        result = await contract.methods.addAdmin(
+          this.address
+        ).send();
+      } else if (this.isSigner) {
+        result = await contract.methods.castAdminVote(
+          "add",
+          this.address
+        ).send();
+      } else {
+        console.log("Wtf?");
+      }
+
+      console.log(result);
     },
   },
 
