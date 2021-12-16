@@ -30,7 +30,7 @@
     </div>
 
     <div class="row g-0 mb-2 px-1">
-      <div class="col-md-6 text-start fs-5 ">
+      <div class="col-md-6 text-start fs-5">
         <span
           v-if="metaMaskEnabled && (iswrapping || isUnwrapping)"
           class="gobackdiv"
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="row  mx-1 g-0">
+    <div class="row mx-1 g-0">
       <div
         class="col py-3 px-3 body-mid"
         v-if="metaMaskEnabled && selectedAccount.length === 0"
@@ -108,13 +108,13 @@
       </collapse-transition>
 
       <div class="mt-5 g-0" v-if="(isSigner || isOwner) && showSessions">
-        <!-- temporary place button here -->
+        <!-- temporary place button here, maybe introduce fancy menu button later  -->
         <button
-          class="btn btn-outline-primary btn-sm xxx"
+          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
           type="button"
           @click="gotoNomination"
         >
-          nominate
+          {{ nominateLabel }}
         </button>
       </div>
 
@@ -320,6 +320,10 @@ export default {
             selectedaccount: this.selectedAccount,
           },
         });
+    },
+
+    nominateLabel() {
+      return this.isOwner ? "Nominate" : this.isSigner ? "Vote" : "";
     },
   },
 
