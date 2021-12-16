@@ -63,7 +63,9 @@ export function getSignAccounts() {
     // learnmore
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
     // RdedR
-    "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407"
+    "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407",
+    // Sentinelrv
+    "0x51B7B6EDe967da479b8A51C9554CD5008CcCCc58"
   ];
 }
 
