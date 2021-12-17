@@ -167,7 +167,6 @@ table {
   color: transparent;
 }
 .tbl-content {
-  height: 300px;
   overflow-x: hidden;
   margin-top: 0px;
   border: 1px solid rgba(255, 255, 255, 0.3);
