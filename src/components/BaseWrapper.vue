@@ -1,4 +1,4 @@
-<template> </template>
+<template></template>
 
 <script>
 import { wrapEndpoints, getMinAmount } from "@/Endpoints.js";
@@ -105,13 +105,14 @@ export default {
 
   methods: {
     newId() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-        c
-      ) {
-        const r = (Math.random() * 16) | 0,
-          v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          const r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      );
     },
 
     resetSession() {
@@ -291,6 +292,15 @@ export default {
         this.amount.indexOf(".") > -1 &&
         this.amount.split(".")[1].length > 5
       ) {
+        $event.preventDefault();
+      }
+    },
+
+    onlyForAddress($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+
+      const space = 32;
+      if (keyCode === space) {
         $event.preventDefault();
       }
     },

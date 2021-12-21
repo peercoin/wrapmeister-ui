@@ -40,6 +40,7 @@
           type="text"
           :class="{ 'row-input-field': true, invalid: !validPPCAddress }"
           v-model="destinationPPCAddress"
+          @keypress="onlyForAddress"
         />
       </div>
     </div>
@@ -69,7 +70,7 @@
               <img
                 alt="MetaMask"
                 height="25"
-                src="../assets/metamask-fox.svg"/></span
+                src="../assets/metamask-fox.svg" /></span
             >{{ destinationETHAddress }}
           </button>
         </div>
