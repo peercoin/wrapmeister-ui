@@ -59,7 +59,7 @@
               <img
                 alt="MetaMask"
                 height="25"
-                src="../assets/metamask-fox.svg"/></span
+                src="../assets/metamask-fox.svg" /></span
             >{{ destinationETHAddress }}
           </button>
         </div>
@@ -91,7 +91,7 @@
               <font-awesome-icon
                 :icon="['far', 'copy']"
                 size="1x"
-                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
+                :style="{ color: '#a04612', 'margin-right': '4px' }" /></span
             >{{ session.wrapPPCAddress }}
           </button>
 
@@ -110,7 +110,11 @@
       <div class="col-xs-12 col-md-6">
         <div class="progress mt-2 custprogress">
           <div
-            class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+            class="
+              progress-bar progress-bar-striped
+              bg-success
+              progress-bar-animated
+            "
             role="progressbar"
             :style="styleConfirmations"
             aria-valuenow="confirmationCurrent"
@@ -471,6 +475,10 @@ export default {
 
     copyToClipboard() {
       navigator.clipboard.writeText(this.session.wrapPPCAddress);
+      this.eventBus.emit("add-toastr", {
+        text: this.session.wrapPPCAddress + " copied to clipboard",
+        type: "success",
+      });
     },
   },
 
