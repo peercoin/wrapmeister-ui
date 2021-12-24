@@ -43,6 +43,12 @@
           </div>
         </div>
 
+        <multi-steps-progress
+          v-if="iswrapping"
+          :step="wrapStatus"
+          :iswrapping="iswrapping"
+        />
+
         <div class="row g-0 mb-2 px-1">
           <div class="col-6 text-start fs-5">
             <span
@@ -162,6 +168,7 @@ import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import SessionOverview from "@/components/SessionOverview.vue";
 import SignSessionOverview from "@/components/SignSessionOverview.vue";
+import MultiStepsProgress from "@/components/MultiStepsProgress.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
 import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
@@ -383,6 +390,7 @@ export default {
     NetworkChooser,
     FontAwesomeIcon,
     Steps,
+    MultiStepsProgress,
   },
 };
 </script>

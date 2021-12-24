@@ -6,7 +6,6 @@
       </div>
       <div class="col-10 text-start">
         <p
-          class="explaintx"
           :class="{
             explaintx: true,
             currentstep: step === 1,
@@ -23,7 +22,6 @@
       </div>
       <div class="col-10 text-start">
         <p
-          class="explaintx"
           :class="{
             explaintx: true,
             currentstep: step === 2,
@@ -41,7 +39,6 @@
       </div>
       <div class="col-10 text-start">
         <p
-          class="explaintx"
           :class="{
             explaintx: true,
             currentstep: step === 3,
@@ -59,7 +56,6 @@
       </div>
       <div class="col-10 text-start">
         <p
-          class="explaintx"
           :class="{
             explaintx: true,
             currentstep: step === 4,
