@@ -138,7 +138,7 @@
               progress-bar-animated
             "
             role="progressbar"
-            :style="styleConfirmations"
+            :style="styleVerified"
             aria-valuenow="witnessesVerified"
             aria-valuemin="0"
             aria-valuemax="3"
@@ -274,6 +274,15 @@ export default {
         width:
           Math.ceil(
             100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
+          ) + "%",
+      };
+    },
+
+    styleVerified() {
+      return {
+        width:
+          Math.ceil(
+            100.0 * this.witnessesVerified * (3.0)
           ) + "%",
       };
     },
