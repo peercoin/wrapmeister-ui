@@ -1,5 +1,12 @@
 <template>
-  <div class="container home mt-5">
+  <div
+    :class="{
+      container: true,
+      home: !(iswrapping && showHelp),
+      'home-with-help': iswrapping && showHelp,
+      'mt-5': true,
+    }"
+  >
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
@@ -21,104 +28,127 @@
       </template>
     </modal>
 
-    <wrap-header />
-
-    <div class="row my-3 mx-1">
-      <div v-if="!metaMaskEnabled">
-        <meta-mask-info />
-      </div>
-    </div>
-
-    <div class="row g-0 mb-2 px-1">
-      <div class="col-md-6 text-start fs-5">
-        <span
-          v-if="metaMaskEnabled && (iswrapping || isUnwrapping)"
-          class="gobackdiv"
-          @click="onBackClick"
-          >Back</span
-        >
-      </div>
-      <div class="col-md-6 text-end">
-        <network-chooser
-          v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)"
-        />
-      </div>
-    </div>
-
-    <div class="row mx-1 g-0">
+    <div class="row">
       <div
-        class="col py-3 px-3 body-mid"
-        v-if="metaMaskEnabled && selectedAccount.length === 0"
+        :class="{
+          'col-12': !showHelp && iswrapping,
+          'col-lg-10': showHelp && iswrapping,
+        }"
       >
-        <button
-          type="button"
-          :class="{ btn: true, 'btn-success': true }"
-          @click="getAccounts"
-        >
-          Connect with MetaMask
-        </button>
-      </div>
+        <wrap-header />
 
-      <div class="col py-3 px-3 body-mid" v-if="showMenu">
-        <button
-          type="button"
-          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
-          @click="toggleWrap"
-          :disabled="!curNetwork"
-        >
-          Wrap Peercoin
-        </button>
-
-        <button
-          type="button"
-          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
-          @click="toggleUnwrap"
-          :disabled="!curNetwork"
-        >
-          Unwrap Peercoin
-        </button>
-      </div>
-
-      <collapse-transition>
-        <div v-if="showWrapOrUnwrap">
-          <div v-if="iswrapping">
-            <wrap-peercoin :propsaccounts="selectedAccount" />
-          </div>
-          <div v-if="isUnwrapping">
-            <unwrap-peercoin :propsaccounts="selectedAccount" />
+        <div class="row my-3 mx-1">
+          <div v-if="!metaMaskEnabled">
+            <meta-mask-info />
           </div>
         </div>
-      </collapse-transition>
 
-      <official-total
-        v-if="selectedAccount.length > 0"
-        :propsaccounts="selectedAccount"
-      ></official-total>
-
-      <collapse-transition>
-        <div class="mt-5 g-0" v-if="showSessions">
-          <session-overview :propsaccounts="selectedAccount" />
+        <div class="row g-0 mb-2 px-1">
+          <div class="col-6 text-start fs-5">
+            <span
+              v-if="metaMaskEnabled && (iswrapping || isUnwrapping)"
+              class="gobackdiv"
+              @click="onBackClick"
+              >Back</span
+            >
+          </div>
+          <div class="col-6 text-end">
+            <network-chooser
+              v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)"
+            />
+            <font-awesome-icon
+              v-if="iswrapping"
+              :icon="['far', 'question-circle']"
+              size="1x"
+              class="helpicon"
+              @click="toggleHelp"
+            />
+          </div>
         </div>
-      </collapse-transition>
 
-      <collapse-transition>
-        <div class="mt-5 g-0" v-if="isSigner && showSessions">
-          <sign-session-overview :propsaccounts="selectedAccount" />
+        <div class="row mx-1 g-0">
+          <div
+            class="col py-3 px-3 body-mid"
+            v-if="metaMaskEnabled && selectedAccount.length === 0"
+          >
+            <button
+              type="button"
+              :class="{ btn: true, 'btn-success': true }"
+              @click="getAccounts"
+            >
+              Connect with MetaMask
+            </button>
+          </div>
+
+          <div class="col py-3 px-3 body-mid" v-if="showMenu">
+            <button
+              type="button"
+              :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
+              @click="toggleWrap"
+              :disabled="!curNetwork"
+            >
+              Wrap Peercoin
+            </button>
+
+            <button
+              type="button"
+              :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
+              @click="toggleUnwrap"
+              :disabled="!curNetwork"
+            >
+              Unwrap Peercoin
+            </button>
+          </div>
+
+          <collapse-transition>
+            <div v-if="showWrapOrUnwrap">
+              <div v-if="iswrapping">
+                <wrap-peercoin
+                  :propsaccounts="selectedAccount"
+                  @wrap-step-current="setWrapStatus"
+                />
+              </div>
+              <div v-if="isUnwrapping">
+                <unwrap-peercoin :propsaccounts="selectedAccount" />
+              </div>
+            </div>
+          </collapse-transition>
+
+          <official-total
+            v-if="selectedAccount.length > 0"
+            :propsaccounts="selectedAccount"
+          ></official-total>
+
+          <collapse-transition>
+            <div class="mt-5 g-0" v-if="showSessions">
+              <session-overview :propsaccounts="selectedAccount" />
+            </div>
+          </collapse-transition>
+
+          <collapse-transition>
+            <div class="mt-5 g-0" v-if="isSigner && showSessions">
+              <sign-session-overview :propsaccounts="selectedAccount" />
+            </div>
+          </collapse-transition>
+
+          <div class="mt-5 g-0" v-if="(isSigner || isOwner) && showSessions">
+            <!-- temporary place button here, maybe introduce fancy menu button later  -->
+            <button
+              :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
+              type="button"
+              @click="gotoNomination"
+            >
+              {{ nominateLabel }}
+            </button>
+          </div>
+
+          <account-total />
         </div>
-      </collapse-transition>
-
-      <div class="mt-5 g-0" v-if="(isSigner || isOwner) && showSessions">
-        <!-- temporary place button here, maybe introduce fancy menu button later  -->
-        <button
-          :class="{ btn: true, 'btn-success': true, 'mx-1': true }"
-          type="button"
-          @click="gotoNomination"
-        >
-          {{ nominateLabel }}
-        </button>
       </div>
 
-      <account-total />
+      <div class="col-lg-2 mt-5" v-if="showHelp && iswrapping">
+        <steps :step="wrapStatus" :iswrapping="iswrapping" />
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +168,8 @@ import AccountTotal from "@/components/AccountTotal.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
 import NetworkChooser from "@/components/NetworkChooser.vue";
 import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import Steps from "@/components/Steps.vue";
 
 export default {
   name: "Home",
@@ -155,6 +187,8 @@ export default {
       account: null,
       modalaccount: null,
       popupModal: false,
+      showHelp: false,
+      wrapStatus: 1,
     };
   },
 
@@ -183,6 +217,10 @@ export default {
   },
 
   methods: {
+    toggleHelp() {
+      this.showHelp = !this.showHelp;
+    },
+
     gotoHome() {
       this.sessionId = "";
       this.iswrapping = false;
@@ -195,6 +233,10 @@ export default {
     onBackClick() {
       //for now:
       this.gotoHome();
+    },
+
+    setWrapStatus(status) {
+      this.wrapStatus = status;
     },
 
     async getAccounts() {
@@ -339,6 +381,8 @@ export default {
     AccountTotal,
     WrapHeader,
     NetworkChooser,
+    FontAwesomeIcon,
+    Steps,
   },
 };
 </script>
@@ -348,7 +392,16 @@ export default {
   max-width: 900px;
   min-width: 400px;
 }
-
+.home-with-help {
+  min-width: 400px;
+}
+.helpicon {
+  color: #fefefe;
+  &:hover {
+    cursor: pointer;
+    color: #b8bbb4;
+  }
+}
 .gobackdiv {
   &:hover {
     cursor: pointer;

@@ -24,6 +24,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/v1/wrap", function(req, res, next) {
+  var today = new Date();
+  today.setHours(today.getHours() + 1);
+
   console.log(req.body); // {'amount':"1984.42", 'erc20Address': "", 'destinationAddress': "PJLTZiAYJ4fdQggM4UyVLfxxv33WoQWq4V"}
   res.json({
     //error: false,
@@ -33,7 +36,17 @@ app.post("/api/v1/wrap", function(req, res, next) {
       _id: "70F4E46ABF55E1FF",
       network: "BSC_TESTNET",
       amount: 47.56,
-      wrapSignature: null,
+
+
+      witnessAAddress: null,
+      witnessASignature: null,
+      witnessAToken: null,
+      witnessBAddress: null,
+      witnessBSignature: null,
+      witnessBToken: null,
+      witnessCAddress: null,
+      witnessCSignature: null,
+      witnessCToken: null,
       wrapTxid: null,
       wrapNonce: null,
       wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
@@ -41,7 +54,15 @@ app.post("/api/v1/wrap", function(req, res, next) {
       unwrapTxid: null,
       unwrapNonce: false,
       unwrapPPCAddress: null,
-      ERC20Address: null
+      ERC20Address: null,
+      claimed: false,
+      confirmations: {
+        current: 0,
+        required: 1,
+      },
+      expiresAt: today.getTime(),
+      depositedAmount: 0,
+
     },
   });
 });
@@ -117,8 +138,10 @@ app.get("/api/v1/storage-address",function(req, res, next) {
 
 app.get("/api/v1/sessions", unfinishedSessions);
 
-app.get("/api/v1/session/:sessionId", function(req, res, next) {
-  // Retrieve the tag from our URL path
+app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
+  var today = new Date();
+  today.setHours(today.getHours() + 1);
+
   var id = req.params.sessionId;
   var ret =
     id === "0SeZp78Jg8ZE4C4q"
@@ -145,21 +168,37 @@ app.get("/api/v1/session/:sessionId", function(req, res, next) {
       : {
           success: true,
           message: "wrap request received and is being processed",
+          
           data: {
-            "network": "ETH_TESTNET",
-            "amount": 123.45,
-            "wrapSignature": null,
-            "wrapTxid": null,
-            "wrapNonce": null,
-            "wrapPPCAddress": "msSDctnCauMhKES8ZS4zcap9MuQjC7Uzwi",
-            "unwrapSignature": null,
-            "unwrapTxid": null,
-            "unwrapNonce": null,
-            "unwrapPPCAddress": null,
-            "ERC20Address": "0x93E16885EE732BFF281285efe2f2F46Dc92590C5",//"0x79969B981326C56fE638b176c5D5A6Cc4C6A910F",
-            "_id": "2jNtPy75UIEkRR6G",
-            "txid":"dsbdsfnfj2768376823",
-            claimed: false
+            _id: "70F4E46ABF55E1FF",
+            network: "BSC_TESTNET",
+            amount: 47.56,
+      
+      
+            witnessAAddress: null,
+            witnessASignature: null,
+            witnessAToken: null,
+            witnessBAddress: null,
+            witnessBSignature: null,
+            witnessBToken: null,
+            witnessCAddress: null,
+            witnessCSignature: null,
+            witnessCToken: null,
+            wrapTxid: null,
+            wrapNonce: null,
+            wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
+            unwrapSignature: null,
+            unwrapTxid: null,
+            unwrapNonce: false,
+            unwrapPPCAddress: null,
+            ERC20Address: null,
+            claimed: false,
+            confirmations: {
+              current: 0,
+              required: 1,
+            },
+            expiresAt: today.getTime(),
+            depositedAmount: 0,
           },
         };
 

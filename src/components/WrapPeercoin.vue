@@ -59,7 +59,7 @@
               <img
                 alt="MetaMask"
                 height="25"
-                src="../assets/metamask-fox.svg" /></span
+                src="../assets/metamask-fox.svg"/></span
             >{{ destinationETHAddress }}
           </button>
         </div>
@@ -91,7 +91,7 @@
               <font-awesome-icon
                 :icon="['far', 'copy']"
                 size="1x"
-                :style="{ color: '#a04612', 'margin-right': '4px' }" /></span
+                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
             >{{ session.wrapPPCAddress }}
           </button>
 
@@ -120,6 +120,28 @@
             aria-valuenow="confirmationCurrent"
             aria-valuemin="0"
             aria-valuemax="confirmationMax"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="!!session.wrapPPCAddress">
+      <div class="col-xs-12 col-md-6">
+        <p>Witnesses signed</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="progress mt-2 custprogress">
+          <div
+            class="
+              progress-bar progress-bar-striped
+              bg-success
+              progress-bar-animated
+            "
+            role="progressbar"
+            :style="styleConfirmations"
+            aria-valuenow="witnessesVerified"
+            aria-valuemin="0"
+            aria-valuemax="3"
           ></div>
         </div>
       </div>
@@ -169,6 +191,7 @@ export default {
       countDown: 100,
       countDownHandle: null,
       claimtokenStatus: "",
+      stepStatus: 1,
     };
   },
 
@@ -222,10 +245,10 @@ export default {
 
     confirmationMax() {
       try {
-        if (!this.session || !this.session.confirmations) return 0;
+        if (!this.session || !this.session.confirmations) return 3;
         let max = this.session.confirmations.required;
 
-        if (typeof myVar === "string" || myVar instanceof String)
+        if (typeof max === "string" || max instanceof String)
           return parseInt(max);
         else return max;
       } catch (err) {
@@ -238,7 +261,7 @@ export default {
         if (!this.session || !this.session.confirmations) return 0;
         let cur = this.session.confirmations.current;
 
-        if (typeof myVar === "string" || myVar instanceof String)
+        if (typeof cur === "string" || cur instanceof String)
           return parseInt(cur);
         else return cur;
       } catch (err) {
@@ -259,11 +282,11 @@ export default {
       return (
         !!this.session &&
         !!this.session._id &&
-        this.session.wrapPPCAddress &&
+        !!this.session.wrapPPCAddress &&
         !this.session.witnessASignature &&
         !this.session.witnessBSignature &&
         !this.session.witnessCSignature &&
-        this.session.amount < this.session.depositedAmount &&
+        this.session.amount > this.session.depositedAmount &&
         !this.comfirmedProceedMetaMask
       );
     },
@@ -315,6 +338,16 @@ export default {
         !this.minAmountNotExceeded
       );
     },
+
+    witnessesVerified() {
+      let verified = 0;
+      if (!!this.session && !!this.session.wrapPPCAddress) {
+        if (!!this.session.witnessASignature) verified++;
+        if (!!this.session.witnessBSignature) verified++;
+        if (!!this.session.witnessCSignature) verified++;
+      }
+      return verified;
+    },
   },
 
   methods: {
@@ -333,9 +366,11 @@ export default {
 
       try {
         const res = await axios.get(this.endpoints(id).session);
+
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
-
+          this.stepStatus = this.getWrapStatus();
+          this.$emit("wrap-step-current", this.stepStatus);
           if (
             !!this.session.wrapTxid &&
             !!this.session.witnessASignature &&
@@ -358,6 +393,34 @@ export default {
           type: "error",
         });
       }
+    },
+
+    getWrapStatus() {
+      let status = 1;
+      if (!!this.session && !!this.session._id) {
+        if (!!this.session.wrapPPCAddress) {
+          status = 2;
+        }
+
+        if (this.session.amount < this.session.depositedAmount) {
+          status = 3;
+        }
+
+        if (status === 3 && this.onfirmationCurrent >= this.confirmationMax) {
+          status = 4;
+        }
+
+        if (
+          status === 4 &&
+          !!this.session.wrapTxid &&
+          !!this.session.witnessASignature &&
+          !!this.session.witnessBSignature &&
+          !!this.session.witnessCSignature
+        ) {
+          status = 5;
+        }
+      }
+      return status;
     },
 
     async onModalConfirm() {
