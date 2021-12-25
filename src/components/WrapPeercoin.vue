@@ -280,10 +280,7 @@ export default {
 
     styleVerified() {
       return {
-        width:
-          Math.ceil(
-            100.0 * this.witnessesVerified * (3.0)
-          ) + "%",
+        width: Math.ceil(100.0 * this.witnessesVerified * 3.0) + "%",
       };
     },
 
@@ -428,6 +425,7 @@ export default {
         ) {
           status = 5;
         }
+        if (this.session.claimed) status = 6;
       }
       return status;
     },

@@ -7,6 +7,7 @@
         <li :class="{ active: step >= 3 }">Wait for confirmations</li>
         <li :class="{ active: step >= 4 }">Wait for witnesses</li>
         <li :class="{ active: step >= 5 }">Proceed to MetaMask</li>
+        <li :class="{ active: step >= 6 }">Completed</li>
       </ul>
     </div>
   </div>
@@ -33,7 +34,7 @@ export default {
   color: white;
   text-transform: uppercase;
   font-size: 9px;
-  width: 20%;
+  width: 16.66666%;
   float: left;
   position: relative;
 }

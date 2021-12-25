@@ -152,7 +152,7 @@
         </div>
       </div>
 
-      <div class="col-lg-2 mt-5" v-if="showHelp && iswrapping">
+      <div class="col-lg-2 my-5" v-if="showHelp && iswrapping">
         <steps :step="wrapStatus" :iswrapping="iswrapping" />
       </div>
     </div>

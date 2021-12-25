@@ -76,6 +76,15 @@
         <p class="explaintx">Proceed to MetaMask to mint your tokens.</p>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-2">
+        <p class="bullet">6.</p>
+      </div>
+      <div class="col-10 text-start">
+        <p class="explaintx">Wrappping is completed. Find your tokens in the MetaMask wallet. This session will soon be deleted.</p>
+      </div>
+    </div>
   </div>
 </template>
 
