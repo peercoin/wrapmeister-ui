@@ -27,7 +27,7 @@
             currentstep: step === 2,
           }"
         >
-          Send the amount of peercoins to the deposit Peercoin address within 1
+          Send the said amount of peercoins to the deposit Peercoin address within 1
           hour.
         </p>
       </div>
@@ -44,8 +44,7 @@
             currentstep: step === 3,
           }"
         >
-          Wait for the transaction to be confirmed on the blockchain at least 3
-          blocks.
+          Wait for the transaction to be confirmed.
         </p>
       </div>
     </div>
@@ -61,8 +60,8 @@
             currentstep: step === 4,
           }"
         >
-          Wait till 3 witnesses have verified and signed this transaction. This
-          process may take a while as this step involves people. You can come
+          Wait for witnesses to verify your deposit transaction. This
+          process may take a while as some witnesses may wait for six confirmations or more. You can come
           back to this session any time to see how the progress.
         </p>
       </div>
@@ -73,7 +72,7 @@
         <p class="bullet">5.</p>
       </div>
       <div class="col-10 text-start">
-        <p class="explaintx">Proceed to MetaMask to mint your tokens.</p>
+        <p class="explaintx">Proceed to MetaMask extension to mint your wPPC tokens.</p>
       </div>
     </div>
 
