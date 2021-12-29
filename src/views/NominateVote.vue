@@ -1,31 +1,12 @@
 <template>
   <div class="container home mt-5">
+    <loading-overlay :loading="!!voteStatus" :text="voteStatus" />
     <div class="col-xs-12 body-mid py-3">
       <div class="row g-0 mb-2 px-1">
-        <div class="col-md-6 text-start fs-5 ">
+        <div class="col-md-6 text-start fs-5">
           <span class="gobackdiv" @click="onBackClick">Back</span>
         </div>
         <div class="col-md-6 text-end"></div>
-      </div>
-
-      <div class="row mb-2">
-        <div class="col-xs-12 col-md-6">
-          <p>Smart contract platform</p>
-        </div>
-        <div class="col-xs-12 col-md-6">
-          <select
-            :class="{ 'row-input-field': true, invalid: !network }"
-            v-model="network"
-          >
-            <option
-              v-for="item in activeNetworks"
-              :value="item.key"
-              :key="item.key"
-            >
-              {{ item.description }}
-            </option>
-          </select>
-        </div>
       </div>
 
       <div class="row">
@@ -40,13 +21,14 @@
           />
         </div>
       </div>
+
       <div class="row">
         <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
           @click="doNomination"
         >
-          nominate
+          {{ nominateLabel }}
         </button>
       </div>
     </div>
@@ -55,9 +37,10 @@
 
 <script>
 import { getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
 import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
-import { getNetworks, getContractAddress } from "@/Endpoints.js";
+import { getContractAddress } from "@/Endpoints.js";
 
 export default {
   props: {
@@ -68,8 +51,8 @@ export default {
     return {
       address: "",
       account: null,
-      activeNetworks: getNetworks(),
-      network: getNetworks()[0]
+      voteStatus: "",
+      network: "",
     };
   },
 
@@ -78,52 +61,56 @@ export default {
       this.account = this.propsaccounts[0];
     }
 
+    if (!!this.$store.state.network) {
+      this.network = this.$store.state.network;
+    }
+
     this.$nextTick(() => {
       if (!this.isSigner && !this.isOwner) {
         console.warn("not allowed");
+
+        this.gotoHome();
       }
     });
   },
 
   methods: {
     gotoHome() {
-      this.sessionId = "";
-      this.iswrapping = false;
-      this.isUnwrapping = false;
       this.$router.push({
         name: "Home",
       });
     },
 
     onBackClick() {
-      //for now:
       this.gotoHome();
     },
 
     async doNomination() {
       console.log(this.account);
-
+      this.voteStatus = "Hold on...";
       if (!this.web3) this.web3 = new Web3(ethereum);
 
-      const contract = new this.web3.eth.Contract(ABI, getContractAddress(this.network), {
-        from: this.account,
-      });
+      const contract = new this.web3.eth.Contract(
+        ABI,
+        getContractAddress(this.network),
+        {
+          from: this.account,
+        }
+      );
 
       let result;
 
       if (this.isOwner) {
-        result = await contract.methods.addAdmin(
-          this.address
-        ).send();
+        result = await contract.methods.addAdmin(this.address).send();
       } else if (this.isSigner) {
-        result = await contract.methods.castAdminVote(
-          "add",
-          this.address
-        ).send();
+        result = await contract.methods
+          .castAdminVote("add", this.address)
+          .send();
       } else {
         console.log("Wtf?");
       }
-
+      this.voteStatus = "";
+      //show toastr?
       console.log(result);
     },
   },
@@ -158,6 +145,14 @@ export default {
       }
       return false;
     },
+
+    nominateLabel() {
+      return this.isOwner ? "Nominate" : this.isSigner ? "Vote" : "";
+    },
+  },
+
+  components: {
+    LoadingOverlay,
   },
 };
 </script>
