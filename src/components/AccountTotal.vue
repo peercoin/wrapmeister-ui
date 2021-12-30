@@ -36,7 +36,7 @@ export default {
   watch: {
     "$store.state.network": {
       handler: function(nv, oldValue) {
-        console.log("inititialise account total", nv);
+        //console.log("inititialise account total", nv);
         this.inititialise();
       },
       immediate: true,

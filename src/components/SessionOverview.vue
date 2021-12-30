@@ -94,15 +94,23 @@ export default {
         //   return false;
         // };
 
-        this.mysessions = sessions.map((session) => {
-          return {
-            status: "open", //always open?
-            txid: "", //figure out UI columns later when we add completed txids too
-            direction: "wrap",
-            amount: session.amount,
-            sessionId: session._id,
-          };
-        });
+        this.mysessions = sessions
+          .sort((a, b) =>
+            (a.expiresAt || 0) > (b.expiresAt || 0)
+              ? 1
+              : (b.expiresAt || 0) > (a.expiresAt || 0)
+              ? -1
+              : 0
+          )
+          .map((session) => {
+            return {
+              status: "open", //always open?
+              txid: "", //figure out UI columns later when we add completed txids too
+              direction: "wrap",
+              amount: session.amount,
+              sessionId: session._id,
+            };
+          });
       }
     },
 
