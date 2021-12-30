@@ -2,7 +2,8 @@
   <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">
     <div class="col-md-10 offset-md-1">
       <div class="totalofficialppc" @click="onClick">
-        official wrapped peercoin token: <strong>{{ token }}</strong>
+        <span class="allcaps">official wrapped peercoin token: </span
+        ><strong>{{ token }}</strong>
       </div>
     </div>
   </div>
@@ -66,7 +67,7 @@ export default {
 .totalofficialppc {
   padding-bottom: 7px;
   padding-top: 7px;
-  text-transform: uppercase;
+
   border: 1px solid white;
   background-color: #3cb054;
   text-align: center;
@@ -78,5 +79,8 @@ export default {
     color: #3cb054;
     background-color: white;
   }
+}
+.allcaps {
+  text-transform: uppercase;
 }
 </style>
