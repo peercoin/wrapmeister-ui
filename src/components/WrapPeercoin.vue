@@ -280,21 +280,23 @@ export default {
 
     styleVerified() {
       return {
-        width: Math.ceil(100.0 * this.witnessesVerified * 3.0) + "%",
+        width: Math.ceil(100.0 * this.witnessesVerified * (1.0 / 3.0)) + "%",
       };
     },
 
     showProgressbar() {
-      return (
+      const ready2Proceed =
         !!this.session &&
         !!this.session._id &&
         !!this.session.wrapPPCAddress &&
-        !this.session.witnessASignature &&
-        !this.session.witnessBSignature &&
-        !this.session.witnessCSignature &&
-        this.session.amount > this.session.depositedAmount &&
-        !this.comfirmedProceedMetaMask
-      );
+        !!this.session.witnessASignature &&
+        !!this.session.witnessBSignature &&
+        !!this.session.witnessCSignature &&
+        this.session.depositedAmount > this.session.amount;
+
+      if (!!this.session && this.session.claimed) return false;
+
+      return !ready2Proceed && !this.comfirmedProceedMetaMask;
     },
 
     URIencodeWrapPPCAddress() {
