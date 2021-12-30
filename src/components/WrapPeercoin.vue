@@ -292,7 +292,7 @@ export default {
         !!this.session.witnessASignature &&
         !!this.session.witnessBSignature &&
         !!this.session.witnessCSignature &&
-        this.session.depositedAmount > this.session.amount;
+        this.session.depositedAmount >= this.session.amount;
 
       if (!!this.session && this.session.claimed) return false;
 
