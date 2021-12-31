@@ -103,7 +103,14 @@
       </div>
     </div>
 
-    <div class="row" v-if="!!session.wrapPPCAddress">
+    <div
+      class="row"
+      v-if="
+        !!session.wrapPPCAddress &&
+          !!session.confirmations &&
+          session.confirmations.required > 0
+      "
+    >
       <div class="col-xs-12 col-md-6">
         <p>Confirmations</p>
       </div>
@@ -378,7 +385,7 @@ export default {
 
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
-          console.log(this.session);
+          //console.log(this.session);
           this.stepStatus = this.getWrapStatus();
           this.$emit("wrap-step-current", this.stepStatus);
           if (
@@ -419,12 +426,17 @@ export default {
           status = 3;
         }
 
-        if (status === 3 && this.onfirmationCurrent >= this.confirmationMax) {
+        if (
+          status === 3 &&
+          !!this.session.confirmations &&
+          this.session.confirmations.required > 0 &&
+          this.confirmationCurrent >= this.confirmationMax
+        ) {
           status = 4;
         }
 
         if (
-          status === 4 &&
+          status < 5 &&
           !!this.session.wrapTxid &&
           !!this.session.witnessASignature &&
           !!this.session.witnessBSignature &&
@@ -432,6 +444,7 @@ export default {
         ) {
           status = 5;
         }
+
         if (this.session.claimed) status = 6;
       }
       return status;
