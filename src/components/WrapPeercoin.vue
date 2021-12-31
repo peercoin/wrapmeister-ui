@@ -410,7 +410,10 @@ export default {
           status = 2;
         }
 
-        if (this.session.amount < this.session.depositedAmount) {
+        if (
+          this.session.amount > 0 &&
+          this.session.depositedAmount >= this.session.amount
+        ) {
           status = 3;
         }
 

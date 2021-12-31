@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row g-0">
     <div class="col-12">
       <ul id="progressbar">
         <li :class="{ active: step >= 1 }">Enter amount</li>
@@ -28,6 +28,8 @@ export default {
   overflow: hidden;
   /*CSS counters to number the steps*/
   counter-reset: step;
+    position: relative;
+  left: -20px;
 }
 #progressbar li {
   list-style-type: none;
@@ -45,7 +47,7 @@ export default {
   line-height: 54px;
   display: block;
   font-size: 28px;
-  color: #03914F;
+  color: #03914f;
   background: white;
   border-radius: 9px;
   margin: 0 auto 5px auto;
