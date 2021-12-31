@@ -285,6 +285,9 @@ export default {
     },
 
     showProgressbar() {
+      if (!this.session || !this.session._id) return false;
+      if (!!this.session && this.session.claimed) return false;
+
       const ready2Proceed =
         !!this.session &&
         !!this.session._id &&
@@ -293,8 +296,6 @@ export default {
         !!this.session.witnessBSignature &&
         !!this.session.witnessCSignature &&
         this.session.depositedAmount >= this.session.amount;
-
-      if (!!this.session && this.session.claimed) return false;
 
       return !ready2Proceed && !this.comfirmedProceedMetaMask;
     },
@@ -377,6 +378,7 @@ export default {
 
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
+          console.log(this.session);
           this.stepStatus = this.getWrapStatus();
           this.$emit("wrap-step-current", this.stepStatus);
           if (
