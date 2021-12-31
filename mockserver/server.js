@@ -224,7 +224,7 @@ app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
             ERC20Address: null,
             claimed: false,
             confirmations: {
-              current: 0,
+              current: 1,
               required: 1,
             },
             expiresAt: today.getTime(),
