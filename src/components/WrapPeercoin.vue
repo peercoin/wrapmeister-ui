@@ -385,7 +385,16 @@ export default {
 
         if (!!res && !!res.data && !!res.data.data) {
           this.session = res.data.data;
-          //console.log(this.session);
+
+          //temporary hack fix:
+          if (
+            !!this.session &&
+            !!this.session.confirmations &&
+            this.session.confirmations.required === 0
+          ) {
+            this.session.confirmations.required = 1;
+          }
+
           this.stepStatus = this.getWrapStatus();
           this.$emit("wrap-step-current", this.stepStatus);
           if (
