@@ -17,7 +17,7 @@
           :style="{ color: '#a04612' }"
         />
       </div>
-      <div class="col-xs-12 col-lg-9">
+      <div class="col-xs-12 col-lg-9 pt-2">
         <div id="clock">
           <p class="date">{{ missingCoins }}</p>
           <p class="time">{{ time }}</p>
@@ -100,12 +100,12 @@ export default {
         return "";
       let pluralremain =
         this.session.amount - this.session.depositedAmount > 1
-          ? "Peercoins"
-          : "Peercoin";
+          ? "peercoins"
+          : "peercoin";
 
       if (this.session.depositedAmount > 0) {
         let plural =
-          this.session.depositedAmount > 1 ? "Peercoins" : "Peercoin";
+          this.session.depositedAmount > 1 ? "peercoins" : "peercoin";
 
         return `${
           this.session.depositedAmount
