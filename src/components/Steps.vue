@@ -11,7 +11,7 @@
             currentstep: step === 1,
           }"
         >
-          Enter amount of peercoins you want wrapped
+          Enter amount of peercoins you want wrapped. You must deposit the full amount!
         </p>
       </div>
     </div>
