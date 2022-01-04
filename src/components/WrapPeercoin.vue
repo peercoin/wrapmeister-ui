@@ -333,13 +333,25 @@ export default {
       return "";
     },
 
+    URIencodeWrapPPCAddressShort() {
+      const scheme = "peercoin";
+      const amount = this.session.amount;
+      const address = this.session.wrapPPCAddress;
+
+      if (!!amount && !!address) {
+        return scheme + ":" + address;
+      }
+
+      return "";
+    },
+
     URIencodeWrapPPCAddressLink() {
       if (!!this.URIencodeWrapPPCAddress) {
         return (
           "<a href='" +
           this.URIencodeWrapPPCAddress +
           '\' target="_blank" rel="nofollow" >' +
-          this.URIencodeWrapPPCAddress +
+          this.URIencodeWrapPPCAddressShort +
           "</a>"
         );
       }
