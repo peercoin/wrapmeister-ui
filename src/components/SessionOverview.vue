@@ -1,33 +1,69 @@
 <template>
   <div v-if="showTable" class="table-overview">
-    <div class="tbl-header">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <thead>
-          <tr>
-            <th>Wrap session</th>
-            <th>Direction</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+    <div class="d-sm-none">
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        v-for="item in mysessions"
+        class="tbl-content mb-3"
+        :class="{ clickable: item.status === 'open' }"
+        @click="onRowClick(item)"
+        :key="item.sessionId"
+      >
+        <tr>
+          <td class="tbl-header">
+            <span class="headertext">Wrap session</span>
+          </td>
+          <td>{{ item.sessionId }}</td>
+        </tr>
+
+        <tr>
+          <td class="tbl-header"><span class="headertext">Direction</span></td>
+          <td class="to-upper">{{ item.direction }}</td>
+        </tr>
+
+        <tr>
+          <td class="tbl-header"><span class="headertext">Amount</span></td>
+          <td>{{ item.amount }}</td>
+        </tr>
+
+        <tr>
+          <td class="tbl-header"><span class="headertext">Status</span></td>
+          <td class="to-upper">{{ item.status }}</td>
+        </tr>
       </table>
     </div>
-    <div class="tbl-content">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tbody>
-          <tr
-            v-for="item in mysessions"
-            :class="{ clickable: item.status === 'open' }"
-            @click="onRowClick(item)"
-            :key="item.sessionId"
-          >
-            <td>{{ item.sessionId }}</td>
-            <td class="to-upper">{{ item.direction }}</td>
-            <td>{{ item.amount }}</td>
-            <td class="to-upper">{{ item.status }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="d-none d-sm-block">
+      <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr>
+              <th>Wrap session</th>
+              <th>Direction</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tbody>
+            <tr
+              v-for="item in mysessions"
+              :class="{ clickable: item.status === 'open' }"
+              @click="onRowClick(item)"
+              :key="item.sessionId"
+            >
+              <td>{{ item.sessionId }}</td>
+              <td class="to-upper">{{ item.direction }}</td>
+              <td>{{ item.amount }}</td>
+              <td class="to-upper">{{ item.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -185,7 +221,13 @@ td {
 .to-upper {
   text-transform: uppercase;
 }
-
+.headertext {
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #29881d;
+  text-transform: uppercase;
+}
 /* for custom scrollbar for webkit browser*/
 
 ::-webkit-scrollbar {
