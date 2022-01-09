@@ -35,7 +35,7 @@ app.post("/api/v1/wrap", function(req, res, next) {
     data: {
       _id: "70F4E46ABF55E1FF",
       network: "ETH_TESTNET",
-      amount: 47.56,
+      amount: 47.220229,
 
       witnessAAddress: null,
       witnessASignature: null,
@@ -97,7 +97,7 @@ function unfinishedSessions(req, res, next) {
       {
         _id: "70F4E46ABF55E1FF",
         network: "ETH_TESTNET",
-        amount: 47.56,
+        amount: 47.220229,
 
         witnessAAddress: null,
         witnessASignature: null,
@@ -122,7 +122,7 @@ function unfinishedSessions(req, res, next) {
           required: 1,
         },
         expiresAt: today2.getTime(),
-        depositedAmount: 0,
+        depositedAmount: 0.500168,
       },
       {
         _id: "0SeZp78Jg8ZE4C4q",
@@ -204,7 +204,7 @@ app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
           data: {
             _id: "70F4E46ABF55E1FF",
             network: "ETH_TESTNET",
-            amount: 47.56,
+            amount: 47.220229,
 
             witnessAAddress: null,
             witnessASignature: "somesignature",
@@ -229,7 +229,7 @@ app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
               required: 1,
             },
             expiresAt: today.getTime(),
-            depositedAmount: 0,
+            depositedAmount: 0.500168,
           },
         };
 
