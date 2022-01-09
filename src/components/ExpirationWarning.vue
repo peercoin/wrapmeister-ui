@@ -3,10 +3,10 @@
     class="incompleteAlert incompleteAlert-warning"
     v-if="
       !!session &&
-      !!session._id &&
-      !!session.amount &&
-      !!session.expiresAt &&
-      session.depositedAmount < session.amount
+        !!session._id &&
+        !!session.amount &&
+        !!session.expiresAt &&
+        session.depositedAmount < session.amount
     "
   >
     <div class="row">
@@ -98,25 +98,20 @@ export default {
         this.session.depositedAmount === null
       )
         return "";
-      let pluralremain =
-        this.session.amount - this.session.depositedAmount > 1
-          ? "peercoins"
-          : "peercoin";
+
+      const remain = this.session.amount - this.session.depositedAmount;
+      const remaining =
+        Math.round((remain + Number.EPSILON) * 1000000) / 1000000;
+      let pluralremain = remaining > 1 ? "peercoins" : "peercoin";
 
       if (this.session.depositedAmount > 0) {
         let plural =
           this.session.depositedAmount > 1 ? "peercoins" : "peercoin";
 
-        return `${
-          this.session.depositedAmount
-        } ${plural} received, please deposit remaining ${
-          this.session.amount - this.session.depositedAmount
-        } ${pluralremain}.`;
+        return `${this.session.depositedAmount} ${plural} received, please deposit remaining ${remaining} ${pluralremain}.`;
       }
 
-      return `Kindly deposit ${
-        this.session.amount - this.session.depositedAmount
-      } ${pluralremain} within`;
+      return `Kindly deposit ${remaining} ${pluralremain} within`;
     },
   },
 
