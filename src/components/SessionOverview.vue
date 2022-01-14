@@ -74,7 +74,7 @@ import { wrapEndpoints } from "@/Endpoints.js";
 
 export default {
   props: {
-    propsaccounts: Array, // will use first account only
+    propsaccounts: Array, // will use first account only, which is always 1 as selectedAccount contains 1
   },
 
   data() {
