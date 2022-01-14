@@ -13,7 +13,7 @@
       @modalclose="onModalClose"
     >
       <template v-slot:header>
-        <p>Please select MetaMask account</p>
+        <p>Multiple accounts detected, please select an account to continue.</p>
       </template>
 
       <template v-slot:body>
