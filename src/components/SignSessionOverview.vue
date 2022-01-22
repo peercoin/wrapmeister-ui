@@ -23,17 +23,17 @@
           <td>{{ item.amount }}</td>
         </tr>
 
-        <tr>
+        <tr v-for="txId in item.txIds" :key="txId">
           <td class="tbl-header">
             <span class="headertext">Transaction</span>
           </td>
           <td class="to-upper">
             <a
-              v-on:click.stop=""
-              :href="item.explorerUrl + item.txId"
+              @click.stop=""
+              :href="item.explorerUrl + txId"
               target="_blank"
               rel="noopener noreferrer"
-              >{{ item.txId || "..." }}</a
+              >{{ txId || "..." }}</a
             >
           </td>
         </tr>
@@ -62,10 +62,8 @@
             <tr>
               <th>Sign Wrap session</th>
               <th>Amount</th>
-              <th>Transaction</th>
-              <th>Witness A</th>
-              <th>Witness B</th>
-              <th>Witness C</th>
+              <th>Transactions</th>
+              <th>Witnesses</th>
             </tr>
           </thead>
         </table>
@@ -82,10 +80,10 @@
               <td>{{ item.sessionId }}</td>
               <td>{{ item.amount }}</td>
               <td>
-                <ul style="list-style: none; padding: 0;">
-                  <li v-for="txId in item.txIds">
+                <ul style="list-style-type:none;padding-left:0px;">
+                  <li v-for="txId in item.txIds" :key="txId">
                     <a
-                      v-on:click.stop=""
+                      @click.stop=""
                       :href="item.explorerUrl + txId"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -94,9 +92,13 @@
                   </li>
                 </ul>
               </td>
-              <td>{{ item.signatureA ? "signed" : "..." }}</td>
-              <td>{{ item.signatureB ? "signed" : "..." }}</td>
-              <td>{{ item.signatureC ? "signed" : "..." }}</td>
+              <td>
+                <ul style="list-style-type:none;padding-left:0px;">
+                  <li>{{ item.signatureA ? "signed" : "..." }}</li>
+                  <li>{{ item.signatureB ? "signed" : "..." }}</li>
+                  <li>{{ item.signatureC ? "signed" : "..." }}</li>
+                </ul>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -141,7 +143,7 @@ export default {
 
       try {
         const id = this.propsaccounts[0];
-        //test:if (!!id) {
+        //test: if (!!id) {
         if (!!id && getSignAccounts().includes(id)) {
           const res = await axios.get(this.endpoints(id).signwrapsessions);
 
