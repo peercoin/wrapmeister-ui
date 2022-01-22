@@ -82,14 +82,17 @@
               <td>{{ item.sessionId }}</td>
               <td>{{ item.amount }}</td>
               <td>
-                <a
-                  v-if="!!item.txId"
-                  v-on:click.stop=""
-                  :href="item.explorerUrl + item.txId"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >{{ item.txId || "..." }}</a
-                >
+                <ul style="list-style: none; padding: 0;">
+                  <li v-for="txId in item.txIds">
+                    <a
+                      v-on:click.stop=""
+                      :href="item.explorerUrl + txId"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >{{ txId || "..." }}</a
+                    >
+                  </li>
+                </ul>
               </td>
               <td>{{ item.signatureA ? "signed" : "..." }}</td>
               <td>{{ item.signatureB ? "signed" : "..." }}</td>
@@ -186,7 +189,7 @@ export default {
               direction: "wrap",
               amount: session.amount,
               sessionId: session._id,
-              txId: session.wrapTxid,
+              txIds: session.wrapTxids,
               explorerUrl: getPeercoinExplorerUrl(session.network),
               signatureA: !!session.witnessASignature,
               signatureB: !!session.witnessBSignature,
