@@ -410,7 +410,6 @@ export default {
           this.stepStatus = this.getWrapStatus();
           this.$emit("wrap-step-current", this.stepStatus);
           if (
-            !!this.session.wrapTxid &&
             !!this.session.witnessASignature &&
             !!this.session.witnessBSignature &&
             !!this.session.witnessCSignature
@@ -458,7 +457,6 @@ export default {
 
         if (
           status < 5 &&
-          !!this.session.wrapTxid &&
           !!this.session.witnessASignature &&
           !!this.session.witnessBSignature &&
           !!this.session.witnessCSignature
