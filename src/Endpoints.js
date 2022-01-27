@@ -124,14 +124,14 @@ export function getNetworks() {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
       active: true,
-      contract: "0x8e6e0a1faf294E83569FbF9F47AE04A2Ed7084dc",
+      contract: "0xd6F6e95c99C8DD57e18D5F9d0e17Fa539fb82162",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl:
-        "https://ropsten.etherscan.io/address/0x8e6e0a1faf294E83569FbF9F47AE04A2Ed7084dc",
+        "https://ropsten.etherscan.io/address/0xd6F6e95c99C8DD57e18D5F9d0e17Fa539fb82162",
       accountTotalUrl:
-        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x8e6e0a1faf294E83569FbF9F47AE04A2Ed7084dc&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+        "https://api-ropsten.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0xd6F6e95c99C8DD57e18D5F9d0e17Fa539fb82162&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
-        "https://ropsten.etherscan.io/token/0x8e6e0a1faf294E83569FbF9F47AE04A2Ed7084dc?a={{{id}}}",
+        "https://ropsten.etherscan.io/token/0xd6F6e95c99C8DD57e18D5F9d0e17Fa539fb82162?a={{{id}}}",
     },
     {
       key: "ETH_MAINNET",
