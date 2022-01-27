@@ -26,9 +26,16 @@
         <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
-          @click="doNomination"
+          @click="nominate"
         >
-          {{ nominateLabel }}
+          Nominate
+        </button>
+                <button
+          class="btn btn-outline-primary btn-sm xxx"
+          type="button"
+          @click="vote"
+        >
+          Vote
         </button>
       </div>
     </div>
@@ -85,9 +92,8 @@ export default {
       this.gotoHome();
     },
 
-    async doNomination() {
-      console.log(this.account);
-      this.voteStatus = "Hold on...";
+    async nominate() {
+      this.voteStatus = "Nominating " + $this.address + "! Hold on...";
       if (!this.web3) this.web3 = new Web3(ethereum);
 
       const contract = new this.web3.eth.Contract(
@@ -98,20 +104,24 @@ export default {
         }
       );
 
-      let result;
-
-      if (this.isOwner) {
-        result = await contract.methods.addAdmin(this.address).send();
-      } else if (this.isSigner) {
-        result = await contract.methods
-          .castAdminVote("add", this.address)
-          .send();
-      } else {
-        console.log("Wtf?");
-      }
+      await contract.methods.addAdmin(this.address).send();
       this.voteStatus = "";
-      //show toastr?
-      console.log(result);
+    },
+
+    async vote() {
+      this.voteStatus = "Voting to add " + $this.address + "! Hold on...";
+      if (!this.web3) this.web3 = new Web3(ethereum);
+
+      const contract = new this.web3.eth.Contract(
+        ABI,
+        getContractAddress(this.network),
+        {
+          from: this.account,
+        }
+      );
+
+      await contract.methods.castAdminVote("add", this.address).send();
+      this.voteStatus = "";
     },
   },
 
