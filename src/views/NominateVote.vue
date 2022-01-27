@@ -26,11 +26,18 @@
         <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
-          @click="nominate"
+          @click="nominateAdd"
         >
-          Nominate
+          Nominate for Adding
         </button>
-                <button
+        <button
+          class="btn btn-outline-primary btn-sm xxx"
+          type="button"
+          @click="nominateRemove"
+        >
+          Nominate for Removal
+        </button>
+        <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
           @click="vote"
@@ -92,8 +99,8 @@ export default {
       this.gotoHome();
     },
 
-    async nominate() {
-      this.voteStatus = "Nominating " + this.address + "! Hold on...";
+    async nominateAdd() {
+      this.voteStatus = "Nominating " + this.address + " for adding! Hold on...";
 
       if (!this.web3) this.web3 = new Web3(ethereum);
 
@@ -106,6 +113,23 @@ export default {
       );
 
       await contract.methods.addAdmin(this.address).send();
+      this.voteStatus = "";
+    },
+
+    async nominateRemove() {
+      this.voteStatus = "Nominating " + this.address + " for removal! Hold on...";
+
+      if (!this.web3) this.web3 = new Web3(ethereum);
+
+      const contract = new this.web3.eth.Contract(
+        ABI,
+        getContractAddress(this.network),
+        {
+          from: this.account,
+        }
+      );
+
+      await contract.methods.removeAdmin(this.address).send();
       this.voteStatus = "";
     },
 
