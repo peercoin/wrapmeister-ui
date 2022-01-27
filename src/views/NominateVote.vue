@@ -94,6 +94,7 @@ export default {
 
     async nominate() {
       this.voteStatus = "Nominating " + $this.address + "! Hold on...";
+
       if (!this.web3) this.web3 = new Web3(ethereum);
 
       const contract = new this.web3.eth.Contract(
@@ -110,6 +111,7 @@ export default {
 
     async vote() {
       this.voteStatus = "Voting to add " + $this.address + "! Hold on...";
+
       if (!this.web3) this.web3 = new Web3(ethereum);
 
       const contract = new this.web3.eth.Contract(
