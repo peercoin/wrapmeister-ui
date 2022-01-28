@@ -2,7 +2,7 @@
 const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
-  : "http://95.217.15.242:3000";
+  : "https://wrapmeister.peercoin.net";
 
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; //not yet used anywhere
 
