@@ -40,9 +40,16 @@
         <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
-          @click="vote"
+          @click="voteAdd"
         >
-          Vote
+          Vote for Adding
+        </button>
+        <button
+          class="btn btn-outline-primary btn-sm xxx"
+          type="button"
+          @click="voteRemove"
+        >
+          Vote for Removal
         </button>
       </div>
     </div>
@@ -99,54 +106,43 @@ export default {
       this.gotoHome();
     },
 
-    async nominateAdd() {
-      this.voteStatus = "Nominating " + this.address + " for adding! Hold on...";
-
+    getContract() {
       if (!this.web3) this.web3 = new Web3(ethereum);
 
-      const contract = new this.web3.eth.Contract(
+      return new this.web3.eth.Contract(
         ABI,
         getContractAddress(this.network),
         {
           from: this.account,
         }
       );
+    },
 
-      await contract.methods.addAdmin(this.address).send();
+    async nominateAdd() {
+      this.voteStatus = "Nominating " + this.address + " for adding! Hold on...";
+
+      await this.getContract().methods.nominateAddressForAdmin(this.address).send();
       this.voteStatus = "";
     },
 
     async nominateRemove() {
       this.voteStatus = "Nominating " + this.address + " for removal! Hold on...";
 
-      if (!this.web3) this.web3 = new Web3(ethereum);
-
-      const contract = new this.web3.eth.Contract(
-        ABI,
-        getContractAddress(this.network),
-        {
-          from: this.account,
-        }
-      );
-
-      await contract.methods.removeAdmin(this.address).send();
+      await this.getContract().methods.nominateAddressForRemoval(this.address).send();
       this.voteStatus = "";
     },
 
-    async vote() {
+    async voteAdd() {
       this.voteStatus = "Voting to add " + this.address + "! Hold on...";
 
-      if (!this.web3) this.web3 = new Web3(ethereum);
+      await this.getContract().methods.castAdminVote("add", this.address).send();
+      this.voteStatus = "";
+    },
 
-      const contract = new this.web3.eth.Contract(
-        ABI,
-        getContractAddress(this.network),
-        {
-          from: this.account,
-        }
-      );
+    async voteRemove() {
+      this.voteStatus = "Voting to remove " + this.address + "! Hold on...";
 
-      await contract.methods.castAdminVote("add", this.address).send();
+      await this.getContract().methods.castAdminVote("remove", this.address).send();
       this.voteStatus = "";
     },
   },
