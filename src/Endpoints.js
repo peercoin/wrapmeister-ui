@@ -52,6 +52,8 @@ export function getSignAccounts() {
   return [
     // Peerchemist
     "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
+    // Peerchemist B
+    "0x71eb10a6566cCA81Dd2892d36c55359AfedD3CFA",
     // SeverinDK
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
     // Witness B
