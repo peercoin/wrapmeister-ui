@@ -26,20 +26,6 @@
         <button
           class="btn btn-outline-primary btn-sm xxx"
           type="button"
-          @click="nominateAdd"
-        >
-          Nominate for Adding
-        </button>
-        <button
-          class="btn btn-outline-primary btn-sm xxx"
-          type="button"
-          @click="nominateRemove"
-        >
-          Nominate for Removal
-        </button>
-        <button
-          class="btn btn-outline-primary btn-sm xxx"
-          type="button"
           @click="voteAdd"
         >
           Vote for Adding
@@ -49,7 +35,7 @@
           type="button"
           @click="voteRemove"
         >
-          Vote for Removal
+          Vote for Removing
         </button>
       </div>
     </div>
@@ -116,20 +102,6 @@ export default {
           from: this.account,
         }
       );
-    },
-
-    async nominateAdd() {
-      this.voteStatus = "Nominating " + this.address + " for adding! Hold on...";
-
-      await this.getContract().methods.nominateAddressForAdmin(this.address).send();
-      this.voteStatus = "";
-    },
-
-    async nominateRemove() {
-      this.voteStatus = "Nominating " + this.address + " for removal! Hold on...";
-
-      await this.getContract().methods.nominateAddressForRemoval(this.address).send();
-      this.voteStatus = "";
     },
 
     async voteAdd() {

@@ -62,6 +62,12 @@
         "internalType": "address",
         "name": "nominatedAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "nominatingAddress",
+        "type": "address"
       }
     ],
     "name": "AdminVoteStarted",
@@ -421,32 +427,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "nominateAddressForAdmin",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "nominateAddressForRemoval",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
