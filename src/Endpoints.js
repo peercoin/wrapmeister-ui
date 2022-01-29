@@ -50,7 +50,7 @@ export function wrapEndpoints(id) {
 //todo: returns a list of special accounts who may sign sessions
 export function getSignAccounts() {
   return [
-    // Peerchemist
+    // Peerchemist A
     "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
     // Peerchemist B
     "0x71eb10a6566cCA81Dd2892d36c55359AfedD3CFA",
