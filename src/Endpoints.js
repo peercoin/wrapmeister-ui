@@ -50,24 +50,16 @@ export function wrapEndpoints(id) {
 //todo: returns a list of special accounts who may sign sessions
 export function getSignAccounts() {
   return [
-    // Peerchemist A
     "0xD208Aefea9bA9c29F2E290Bfae2bB2e4687BB11b",
-    // Peerchemist B
     "0x71eb10a6566cCA81Dd2892d36c55359AfedD3CFA",
-    // SeverinDK
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
-    // Witness B
     "0xfCab1090e039D4B44c3862F46b7d55bC256AB041",
-    // Witness C
     "0x2313D59CbEfd6c6eB5A72Ad439c0e3D0CB03d536",
-    // Mihai
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
-    // learnmore
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
-    // RdedR
     "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407",
-    // Sentinelrv
-    "0x51B7B6EDe967da479b8A51C9554CD5008CcCCc58"
+    "0x51B7B6EDe967da479b8A51C9554CD5008CcCCc58",
+    "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df"
   ];
 }
 
