@@ -6,7 +6,7 @@ const APP_WRAPPERHOST = isDeveloping
 
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; //not yet used anywhere
 
-const isNullOrEmpty = function(value) {
+const isNullOrEmpty = function (value) {
   return !(typeof value === "string" && value.length > 0);
 };
 
@@ -20,7 +20,9 @@ export function getContractAddress(network) {
 }
 
 export function getPeercoinExplorerUrl(network) {
-  return network.includes("TEST") ? 'https://tblockbook.peercoin.net/tx/' : 'https://blockbook.peercoin.net/tx/';
+  return network.includes("TEST")
+    ? "https://tblockbook.peercoin.net/tx/"
+    : "https://blockbook.peercoin.net/tx/";
 }
 
 export function wrapEndpoints(id) {
@@ -53,14 +55,12 @@ export function getSignAccounts() {
     "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df",
     "0x25c1cA465E71A5C9c162ce3030E48b546f867617",
     "0x1953382ea3Cf65A07853c45De5e55fE540b599cC",
-    "0xddFbc2dd1692e16Fd60e442a7251461903393A69"
+    "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
   ];
 }
 
 export function getOwnerAccounts() {
-  return [
-    "0xF02594A6335E7340109d75E771D7716c395bd995",
-  ];
+  return ["0xF02594A6335E7340109d75E771D7716c395bd995"];
 }
 
 //todo change these vars:
@@ -119,6 +119,11 @@ export function getNetworks() {
         "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x044d078F1c86508e13328842Cc75AC021B272958&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
       officialTotalUrl:
         "https://etherscan.io/token/0x044d078F1c86508e13328842Cc75AC021B272958?a={{{id}}}",
+
+      tokenSymbol: "wPPC",
+      tokenDecimals: 6,
+      tokenImage:
+        "https://raw.githubusercontent.com/peercoin/media/master/Peercoin%202020%20Logo%20Files/01.%20Icon%20Only/Inside%20Circle/Transparent/Green%20Icon/peercoin-icon-green-transparent.svg",
     },
     {
       key: "ETH_TESTNET",
