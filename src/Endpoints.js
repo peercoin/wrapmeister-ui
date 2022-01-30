@@ -112,7 +112,7 @@ export function getNetworks() {
       description: "Ethereum (ETH)",
       active: true,
       contract: "0x044d078F1c86508e13328842Cc75AC021B272958",
-      pagetitle: "Peercoin ↔ Ethereum Bridge",
+      pagetitle: "Peercoin - Ethereum Bridge",
       viewContractUrl:
         "https://etherscan.io/address/0x044d078F1c86508e13328842Cc75AC021B272958",
       accountTotalUrl:
@@ -125,7 +125,7 @@ export function getNetworks() {
       description: "Ethereum (ETH) - Testnet",
       active: false,
       contract: "0xd7B1d7fE3Bea75DCC87562BD76184e230b8117dC",
-      pagetitle: "Peercoin ↔ Ethereum Bridge",
+      pagetitle: "Peercoin - Ethereum Bridge",
       viewContractUrl:
         "https://ropsten.etherscan.io/address/0xd7B1d7fE3Bea75DCC87562BD76184e230b8117dC",
       accountTotalUrl:
