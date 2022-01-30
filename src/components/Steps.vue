@@ -81,7 +81,7 @@
         <p class="bullet">6.</p>
       </div>
       <div class="col-10 text-start">
-        <p class="explaintx">Wrappping is completed. Find your tokens in the MetaMask wallet. This session will soon be deleted.</p>
+        <p class="explaintx">Wrapping is completed. Find your tokens in the MetaMask wallet. This session will soon be deleted.</p>
       </div>
     </div>
   </div>
