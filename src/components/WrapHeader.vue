@@ -3,8 +3,14 @@
     <div class="d-sm-none">
       <div class="text-center">
         <div class="row my-2">
-          <div class="col">
-            <img alt="Peercoin" height="55" src="../assets/logo-topleft.svg" />
+          <div class="col ">
+            <img
+              alt="Peercoin"
+              height="55"
+              src="../assets/logo-topleft.svg"
+              class="iconleaf"
+              @click.stop="gotoHome"
+            />
           </div>
         </div>
 
@@ -19,7 +25,13 @@
     <div class="d-none d-sm-block">
       <div class="row px-3 my-2">
         <div class="col-1 text-start">
-          <img alt="Peercoin" height="75" src="../assets/logo-topleft.svg" />
+          <img
+            alt="Peercoin"
+            height="75"
+            src="../assets/logo-topleft.svg"
+            class="iconleaf"
+            @click.stop="gotoHome"
+          />
         </div>
 
         <div class="col-11">
@@ -46,6 +58,14 @@ export default {
       return "";
     },
   },
+
+  methods: {
+    gotoHome() {
+      this.$router.push({
+        name: "Home",
+      });
+    },
+  },
 };
 </script>
 
@@ -56,6 +76,11 @@ export default {
   font-weight: 400;
   &.smaller {
     font-size: 1.4rem;
+  }
+}
+.iconleaf {
+  &:hover {
+    cursor: pointer;
   }
 }
 </style>

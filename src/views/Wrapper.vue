@@ -1,6 +1,6 @@
 <template>
   <div class="container my-3">
-    <div class="row g-0 mb-2 px-1">
+    <div class="row mb-2 px-1">
       <div class="col-md-6 text-start fs-5">
         <network-chooser
           v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)"
@@ -11,7 +11,9 @@
 
   <div class="container mb-3" v-if="!metaMaskEnabled">
     <div class="row my-3 mx-1">
-      <meta-mask-info />
+      <div class="col-md-12">
+        <meta-mask-info />
+      </div>
     </div>
   </div>
 
@@ -19,35 +21,56 @@
     class="container mb-3"
     v-if="metaMaskEnabled && selectedAccount.length === 0"
   >
-    <div class="row my-3 mx-1">
-      <meta-mask-connect
-        :propsaccounts="propsaccounts"
-        @account-current="setCurrentAccount"
-      />
+    <div class="row my-3">
+      <div class="col-md-12">
+        <meta-mask-connect
+          :propsaccounts="propsaccounts"
+          @account-current="setCurrentAccount"
+        />
+      </div>
     </div>
   </div>
 
-  <div class="container mb-3" v-if="iswrapping">
+  <div class="container mb-3" v-if="1 == 2 && iswrapping">
     <div class="row my-3 mx-1">
+      move to wrap page :
       <multi-steps-progress :step="wrapStatus" :iswrapping="iswrapping" />
     </div>
   </div>
 
-
   <div class="container mb-3" v-if="showMenu">
-    <div class="row my-3 mx-1">
-      <wrap-menu />
+    <div class="col-md-12 ">
+      <wrap-menu
+        :isOwner="isOwner"
+        :isSigner="isSigner"
+        :showSessions="showSessions"
+        :propsaccounts="selectedAccount"
+        @wrapaction-current="setCurrentAction"
+      />
     </div>
   </div>
 
+  <div class="container mb-3" v-if="showMenu">
+    <div class="row my-3 g-0">
+      <official-total
+        v-if="selectedAccount.length > 0"
+        :propsaccounts="selectedAccount"
+      ></official-total>
+    </div>
+  </div>
+
+  <div class="container mb-3">
+    <div class="row my-3 g-0">
+      <account-total />
+    </div>
+  </div>
 
   <div class="container mb-5">
     <div class="row my-3 mx-1">
-      <div class="col-md-2 ">1212</div>
-      <div class="col-md-8 ">343</div>
       <div class="col-md-2 ">
+        move this to wrap page
         <font-awesome-icon
-          v-if="iswrapping"
+          v-if="1 == 1 || iswrapping"
           :icon="['far', 'question-circle']"
           size="1x"
           class="helpicon"
@@ -55,10 +78,6 @@
         />
       </div>
     </div>
-  </div>
-
-  <div class="container mb-5">
-    aaaaa
   </div>
 
   <div>
@@ -74,18 +93,12 @@
 </template>
 
 <script>
-//import Web3 from "web3"; //todo slots!!!!!!
-// @ is an alias to /src
-import WrapPeercoin from "@/components/WrapPeercoin.vue";
-import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
-import CollapseTransition from "@/components/CollapseTransition.vue";
+//import Web3 from "web3";
+import CollapseTransition from "@/components/CollapseTransition.vue"; //todo
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import MetaMaskConnect from "@/components/MetaMaskConnect.vue";
-import SessionOverview from "@/components/SessionOverview.vue";
-import SignSessionOverview from "@/components/SignSessionOverview.vue";
-import MultiStepsProgress from "@/components/MultiStepsProgress.vue";
+import MultiStepsProgress from "@/components/MultiStepsProgress.vue"; //to
 import OfficialTotal from "@/components/OfficialTotal.vue";
-import Modal from "@/components/Modal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
 import WrapMenu from "@/components/WrapMenu.vue";
@@ -161,47 +174,12 @@ export default {
     },
 
     onBackClick() {
-      //for now:
       this.gotoHome();
     },
 
     setWrapStatus(status) {
       this.wrapStatus = status;
     },
-
-    //     async getAccounts() {
-    //       if (!window.ethereum) return;
-    // debugger;
-    //       try {
-    //         if (!(!!this.accounts && this.accounts.length > 0)) {
-    //           await ethereum.request({
-    //             method: "eth_requestAccounts",
-    //           });
-
-    //           const web3 = new Web3(ethereum);
-    //           this.accounts = await web3.eth.getAccounts();
-    //         }
-
-    //         if (this.accounts.length > 1) {
-    //           this.popupModal = true;
-    //         } else if (this.accounts.length == 1) {
-    //           this.account = this.accounts[0];
-    //         }
-    //       } catch (error) {
-    //         console.log(error);
-    //       }
-    //     },
-
-    // onModalConfirm() {
-    //   if (!!this.modalaccount) {
-    //     this.account = this.modalaccount;
-    //     this.popupModal = false;
-    //   }
-    // },
-
-    // onModalClose() {
-    //   this.popupModal = false;
-    // },
 
     gotoSession(id) {
       this.$router.push({
@@ -225,13 +203,24 @@ export default {
     setCurrentAccount(curAccount) {
       this.account = curAccount;
     },
+
+    setCurrentAction(curAction) {
+      if (curAction === 1) {
+        alert("todo goto wrap form");
+        this.toggleWrap();
+      } else if (curAction === 2) {
+        this.toggleUnwrap();
+        alert("todo goto unwrap form");
+      }
+    },
   },
-  ////////////////////////////////////////////////
+  ///////////////COMPUTED/////////////////////////////////
   computed: {
     curNetwork() {
       return this.$store.state.network;
     },
 
+    //returns a array with selected account
     selectedAccount() {
       if (!!this.account) {
         return [this.account];
@@ -291,41 +280,36 @@ export default {
       }
       return false;
     },
-
-    // gotoNomination() {
-    //   if (!!this.selectedAccount)
-    //     this.$router.push({
-    //       name: "NominateAndVote",
-    //       params: {
-    //         selectedaccount: this.selectedAccount,
-    //       },
-    //     });
-    // },
-
-    nominateLabel() {
-      return this.isOwner ? "Nominate" : this.isSigner ? "Vote" : "";
-    },
   },
 
   components: {
     CollapseTransition,
-    WrapPeercoin,
-    UnwrapPeercoin,
+    // WrapPeercoin,
+    // UnwrapPeercoin,
     MetaMaskInfo,
-    SessionOverview,
-    SignSessionOverview,
-    Modal,
+    // SessionOverview,
+    // SignSessionOverview,
+    //  Modal, //todo
     OfficialTotal,
     AccountTotal,
     WrapHeader,
     NetworkChooser,
     FontAwesomeIcon,
-    Steps,
-    MultiStepsProgress,
+    Steps, //todo
+    MultiStepsProgress, //todo
     SlideoutPanel,
-    MetaMaskConnect,WrapMenu
+    MetaMaskConnect,
+    WrapMenu,
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.helpicon {
+  color: #8f0c0c;
+  &:hover {
+    cursor: pointer;
+    color: #b8bbb4;
+  }
+}
+</style>

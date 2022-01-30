@@ -5,7 +5,7 @@
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
-      body="Proceed with MetaMask?"
+      body="Proceed to MetaMask extension to mint your wPPC tokens."
     ></modal>
     <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
 

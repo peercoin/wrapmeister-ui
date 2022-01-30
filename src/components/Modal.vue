@@ -22,7 +22,7 @@
 
           <div class="d-grid gap-2 mt-2">
             <button
-              class="btn outline-success btn-lg"
+              class="btn btn-outline-success btn-lg"
               type="button"
               @click="confirm"
             >
@@ -48,7 +48,7 @@ export default {
   props: {
     body: {
       type: String,
-      default: "Proceed with MetaMask?",
+      default: "Mint wPPC",
     },
   },
 

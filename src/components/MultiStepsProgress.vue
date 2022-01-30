@@ -51,7 +51,7 @@ export default {
         case 6:
           return "Completed";
         case 5:
-          return "Proceed to MetaMask";
+          return "Mint wPPC";
         case 4:
           return "Wait for witnesses";
         case 3:

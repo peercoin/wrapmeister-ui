@@ -1,13 +1,13 @@
 <template>
-  <div class="row justify-content-between mt-2 mx-1 g-0">
+  <div class="row justify-content-between mt-2 g-0">
     <div class="col-md-6 pe-md-2 mt-3">
       <div class="totalppc" @click="gotoExternalWrappedTotal">
-        total peercoin wrapped: <strong>{{ amount }}</strong>
+        TOTAL PEERCOIN WRAPPED: <strong>{{ amount }}</strong>
       </div>
     </div>
     <div class="col-md-6 ps-md-2 mt-3">
       <div class="totalstorageppc" @click="gotoExternalCustodianBalance">
-        custodian balance: <strong>{{ amountStorage }}</strong>
+        CUSTODIAN BALANCE: <strong>{{ amountStorage }}</strong>
       </div>
     </div>
   </div>
@@ -124,33 +124,35 @@ export default {
 .totalppc {
   padding-bottom: 7px;
   padding-top: 7px;
-  text-transform: uppercase;
-  border: 1px solid white;
-  background-color: #3cb054;
+
+  border: 1px solid #3cb054;
+  background-color: #fff;
   text-align: center;
   opacity: 1;
   font-size: 14px;
-  color: white;
+  color: #3cb054;
+  border-radius: 8px;
   &:hover {
     cursor: pointer;
-    color: #3cb054;
-    background-color: white;
+    background-color: #3cb054;
+    color: white;
   }
 }
 .totalstorageppc {
   padding-bottom: 7px;
   padding-top: 7px;
-  text-transform: uppercase;
-  border: 1px solid white;
-  background-color: #3cb054;
+
+  border: 1px solid #3cb054;
+  background-color: #fff;
   text-align: center;
   opacity: 1;
   font-size: 14px;
-  color: white;
+  color: #3cb054;
+  border-radius: 8px;
   &:hover {
     cursor: pointer;
-    color: #3cb054;
-    background-color: white;
+    background-color: #3cb054;
+    color: white;
   }
 }
 </style>

@@ -8,8 +8,8 @@
             currentstep: step === 1,
           }"
         >
-          1. Enter amount of peercoins you want wrapped. You must deposit the
-          full amount!
+          1. Enter the amount of peercoins you want to wrap. You must deposit
+          the full amount!
         </p>
       </div>
     </div>
@@ -51,7 +51,7 @@
         >
           4. Wait for witnesses to verify your deposit transaction. This process
           may take a while as some witnesses may wait for six confirmations or
-          more.
+          more. You can return to this session any time to view your progress.
         </p>
       </div>
     </div>

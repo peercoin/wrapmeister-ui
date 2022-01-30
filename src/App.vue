@@ -1,21 +1,54 @@
 <template>
-  <div class="Site-content">
+  <div class="Site-content" ref="sitecontent">
     <notifications />
     <wrap-header />
     <router-view />
+    <wrap-footer :fixed="this.clientHeight > this.heightApp" />
   </div>
-  <wrap-footer />
 </template>
 
 <script>
 import Notifications from "@/components/Notifications.vue";
 import WrapFooter from "@/components/WrapFooter.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
+import { debounce } from "@/helpers.js";
+
 export default {
   components: {
     Notifications,
     WrapHeader,
     WrapFooter,
+  },
+
+  data() {
+    return {
+      clientHeight: 0,
+      heightApp: 0,
+      deboucedGetDimension: null,
+      resizeObserver: null,
+    };
+  },
+
+  mounted() {
+    this.getDimensions();
+
+    this.deboucedGetDimension = debounce(this.getDimensions, 500);
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.getDimensions();
+    });
+    this.resizeObserver.observe(this.$refs.sitecontent);
+  },
+
+  unmounted() {
+    resizeObserver = null;
+  },
+
+  methods: {
+    getDimensions() {
+      this.clientHeight = document.documentElement.clientHeight;
+      this.heightApp = this.$refs.sitecontent.offsetHeight;
+    },
   },
 };
 </script>
@@ -60,11 +93,11 @@ html {
   color: #ffffff;
   background-color: #ffffff;
   height: 100%;
+  min-height: 100%;
   background-color: #ffffff !important;
 }
 
 body {
-  height: 100%;
   font-family: "Roboto", sans-serif;
   font-size: 1rem;
   background-color: #ffffff !important;
@@ -117,8 +150,11 @@ body {
   background-color: #3cb054;
   border-color: #fff;
   &:hover {
-    background-color: #40b658;
-    border-color: #222;
+    position: relative;
+    top: -2px;
+    color: #ffffff;
+    background-color: #3cb054;
+    border-color: #fff;
   }
 }
 
@@ -128,8 +164,10 @@ body {
   border-radius: 8px;
   border-color: #3cb054;
   &:hover {
-    background-color: #efefef;
-    border-color: #222;
+    position: relative;
+    top: -2px;
+    background-color: #ffffff;
+    color: #3cb054;
   }
 }
 </style>

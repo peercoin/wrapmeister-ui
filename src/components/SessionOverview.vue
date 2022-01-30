@@ -47,7 +47,7 @@
           </thead>
         </table>
       </div>
-      <div class="tbl-content">
+      <div class="tbl-content ">
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
             <tr
@@ -56,7 +56,7 @@
               @click="onRowClick(item)"
               :key="item.sessionId"
             >
-              <td>{{ item.sessionId }}</td>
+              <td>{{ item.shortsessionId }}</td>
               <td class="to-upper">{{ item.direction }}</td>
               <td>{{ item.amount }}</td>
               <td class="to-upper">{{ item.status }}</td>
@@ -65,6 +65,7 @@
         </table>
       </div>
     </div>
+    <div class="filler"></div>
   </div>
 </template>
 
@@ -145,6 +146,7 @@ export default {
               direction: "wrap",
               amount: session.amount,
               sessionId: session._id,
+              shortsessionId: this.shortenedSessionId(session._id),
             };
           });
       }
@@ -161,12 +163,23 @@ export default {
         });
       }
     },
+
+    shortenedSessionId(id) {
+      if (!!id && id.length > 10) {
+        return id.substring(0, 4) + "..." + id.substr(id.length - 5);
+      }
+      return id;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 $table-bg: tranparent;
+
+.filler {
+  min-height: 11px;
+}
 
 .table-overview {
   opacity: 0.9;

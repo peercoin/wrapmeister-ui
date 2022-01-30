@@ -5,13 +5,13 @@ import Wrapper from "../views/Wrapper.vue";
 const routes = [
   {
     path: "/",
-    name: "Wrapper",
+    name: "Home",
     component: Wrapper,
   },  
   {
     path: "/home",
-    name: "Home",
-    component: Home,
+    name: "Wrapper",
+    component: Wrapper,
   },
   {
     path: "/account/:selectedaccount+",

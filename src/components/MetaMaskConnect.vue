@@ -10,7 +10,7 @@
 
     <template v-slot:body>
       <select
-        :class="{ 'row-input-field': true, invalid: !modalaccount }"
+        :class="{ rowdorpdown: true, invalid: !modalaccount }"
         v-model="modalaccount"
       >
         <option v-for="item in accounts" :value="item" :key="item">
@@ -19,16 +19,22 @@
       </select>
     </template>
   </modal>
-  <div class="ftralert ftralert-warning">
-    <div class="row  my-5">
-      <div class="col-12 my-2">
-        <button
-          type="button"
-          :class="{ btn: true, 'btn-success': true }"
-          @click="getAccounts"
-        >
-          Connect with MetaMask
-        </button>
+  <div class="connectinfobox">
+    <div class="container">
+      <div class="row my-1">
+        <div class="col-md-2 my-2 "></div>
+
+        <div class="col-md-8 my-2 text-center">
+          <button
+            type="button"
+            class="btn btn-success mt-4 mb-3"
+            @click="getAccounts"
+          >
+            Connect with MetaMask
+          </button>
+        </div>
+
+        <div class="col-md-2 my-2 "></div>
       </div>
     </div>
   </div>
@@ -82,7 +88,7 @@ export default {
           const web3 = new Web3(ethereum);
           this.accounts = await web3.eth.getAccounts();
         }
-        //hack: set to 0 to see modal:
+        //to test: set to 0 to see modal:
         if (this.accounts.length > 1) {
           this.popupModal = true;
         } else if (this.accounts.length == 1) {
@@ -98,13 +104,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ftralert {
+.connectinfobox {
   padding: 15px;
   margin-bottom: 20px;
   border: 0x solid transparent;
   border-radius: 10px;
-}
-.ftralert-warning {
+
   color: #fff;
   background-color: #3cb054;
   border-color: #faebcc;
@@ -118,5 +123,19 @@ export default {
 }
 .outer {
   width: 100%;
+}
+
+.rowdorpdown.invalid {
+  border: 1px solid #df6262;
+}
+
+.rowdorpdown {
+  width: 90%;
+
+  border: 1px solid #c2c2c2;
+
+  padding: 7px;
+  outline: none;
+  font-size: 11px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="propsaccounts" class="row mt-5 mx-1 g-0">
-    <div class="col-md-10 offset-md-1">
+  <div v-if="propsaccounts" class="row g-0">
+    <div class="col-md-12">
       <div class="totalofficialppc" @click="onClick">
         <span class="allcaps">official wrapped peercoin token: </span
         ><strong>{{ token }}</strong>
@@ -31,7 +31,6 @@ export default {
   watch: {
     "$store.state.network": {
       handler: function(nv, oldValue) {
-        console.log("inititialise official total", nv);
         this.inititialise();
       },
       immediate: true,
@@ -68,16 +67,17 @@ export default {
   padding-bottom: 7px;
   padding-top: 7px;
 
-  border: 1px solid white;
-  background-color: #3cb054;
+  border: 1px solid #3cb054;
+  background-color: #fff;
   text-align: center;
   opacity: 1;
   font-size: 14px;
-  color: white;
+  color: #3cb054;
+  border-radius: 8px;
   &:hover {
     cursor: pointer;
-    color: #3cb054;
-    background-color: white;
+    background-color: #3cb054;
+    color: white;
   }
 }
 .allcaps {

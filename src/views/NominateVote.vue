@@ -1,15 +1,8 @@
 <template>
-  <div class="container home mt-5">
+  <div class="container mt-5">
     <loading-overlay :loading="!!voteStatus" :text="voteStatus" />
-    <div class="col-xs-12 body-mid py-3">
-      <div class="row g-0 mb-2 px-1">
-        <div class="col-md-6 text-start fs-5">
-          <span class="gobackdiv" @click="onBackClick">Back</span>
-        </div>
-        <div class="col-md-6 text-end"></div>
-      </div>
-
-      <div class="row">
+    <div class="body-vote py-3">
+      <div class="row mt-1">
         <div class="col-xs-12 col-md-6">
           <p>Address</p>
         </div>
@@ -22,21 +15,17 @@
         </div>
       </div>
 
-      <div class="row">
-        <button
-          class="btn btn-outline-primary btn-sm xxx"
-          type="button"
-          @click="voteAdd"
-        >
-          Vote for Adding
-        </button>
-        <button
-          class="btn btn-outline-primary btn-sm xxx"
-          type="button"
-          @click="voteRemove"
-        >
-          Vote for Removing
-        </button>
+      <div class="row mt-3">
+        <div class="col">
+          <button class="btn btn-success" type="button" @click="voteAdd">
+            Vote for Adding
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-success" type="button" @click="voteRemove">
+            Vote for Removing
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -56,6 +45,7 @@ export default {
 
   data() {
     return {
+      testing: false, // restore this before commit
       address: "",
       account: null,
       voteStatus: "",
@@ -73,7 +63,7 @@ export default {
     }
 
     this.$nextTick(() => {
-      if (!this.isSigner && !this.isOwner) {
+      if (!this.testing && !this.isSigner && !this.isOwner) {
         console.warn("not allowed");
 
         this.gotoHome();
@@ -95,26 +85,26 @@ export default {
     getContract() {
       if (!this.web3) this.web3 = new Web3(ethereum);
 
-      return new this.web3.eth.Contract(
-        ABI,
-        getContractAddress(this.network),
-        {
-          from: this.account,
-        }
-      );
+      return new this.web3.eth.Contract(ABI, getContractAddress(this.network), {
+        from: this.account,
+      });
     },
 
     async voteAdd() {
       this.voteStatus = "Voting to add " + this.address + "! Hold on...";
 
-      await this.getContract().methods.castAdminVote("add", this.address).send();
+      await this.getContract()
+        .methods.castAdminVote("add", this.address)
+        .send();
       this.voteStatus = "";
     },
 
     async voteRemove() {
       this.voteStatus = "Voting to remove " + this.address + "! Hold on...";
 
-      await this.getContract().methods.castAdminVote("remove", this.address).send();
+      await this.getContract()
+        .methods.castAdminVote("remove", this.address)
+        .send();
       this.voteStatus = "";
     },
   },
@@ -162,13 +152,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home {
-  max-width: 900px;
-  min-width: 400px;
-}
-.gobackdiv {
-  &:hover {
-    cursor: pointer;
-  }
+.body-vote {
+  min-height: 500px;
 }
 </style>

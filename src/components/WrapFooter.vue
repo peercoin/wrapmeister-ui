@@ -26,26 +26,41 @@
     </div>
   </div>
   <div class="d-none d-sm-block">
-    <div class="Site-footer FixBottom">
+    <div
+      class="Site-footer "
+      :class="{
+        FixBottom: fixed,
+      }"
+    >
       <div class="container text-center">
         <div class="row my-2">
           <div class="col col-sm-6 text-start">
-            <span>Peercoin.net</span>
+            <span
+              ><a class="footerlink" href="https://peercoin.net"
+                >Peercoin.big</a
+              ></span
+            >
 
-            <span class="ms-5">Forum</span>
+            <span class="ms-5">
+              <a class="footerlink" href="https://talk.peercoin.net"
+                >Forum</a
+              ></span
+            >
           </div>
 
           <div class="col col-sm-6 text-end">
-            <font-awesome-icon
-              :icon="['fab', 'github']"
-              size="1x"
-              :style="{ color: '#ffffff' }"
-            />
-            <font-awesome-icon
-              :icon="['fab', 'telegram-plane']"
-              size="1x"
-              :style="{ 'margin-left': '10px', color: '#ffffff' }"
-            />
+            <a href="https://github.com/peercoin"
+              ><font-awesome-icon
+                :icon="['fab', 'github']"
+                size="1x"
+                :style="{ color: '#ffffff' }"
+            /></a>
+            <a href="https://t.me/peercoin">
+              <font-awesome-icon
+                :icon="['fab', 'telegram-plane']"
+                size="1x"
+                :style="{ 'margin-left': '10px', color: '#ffffff' }"
+            /></a>
           </div>
         </div>
       </div>
@@ -60,6 +75,10 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  
+  props: {
+    fixed: Boolean,
+  },
 };
 </script>
 
@@ -72,5 +91,9 @@ export default {
     position: absolute;
     bottom: 0px;
   }
+}
+.footerlink {
+  color: white;
+  text-decoration: none;
 }
 </style>
