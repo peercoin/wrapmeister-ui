@@ -1,28 +1,33 @@
 <template>
-  <notifications />
-  <div class="maincontainer">
+  <div class="Site-content">
+    <notifications />
+    <wrap-header />
     <router-view />
   </div>
+  <wrap-footer />
 </template>
 
 <script>
 import Notifications from "@/components/Notifications.vue";
-
+import WrapFooter from "@/components/WrapFooter.vue";
+import WrapHeader from "@/components/WrapHeader.vue";
 export default {
   components: {
     Notifications,
+    WrapHeader,
+    WrapFooter,
   },
 };
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Text&display=swap");
+@import "../node_modules/typeface-roboto/index.css";
 
 @import "@/variables.scss";
 
 //@import "../node_modules/bootstrap/scss/bootstrap";
 
-// see node_modules/bootstrap/scss/bootstrap.scss  
+// see node_modules/bootstrap/scss/bootstrap.scss
 @import "../node_modules/bootstrap/scss/root";
 @import "../node_modules/bootstrap/scss/reboot";
 @import "../node_modules/bootstrap/scss/type";
@@ -35,31 +40,38 @@ export default {
 @import "../node_modules/bootstrap/scss/list-group";
 @import "../node_modules/bootstrap/scss/progress";
 @import "../node_modules/bootstrap/scss/utilities/api";
-  
-@import "~vue-multiselect/dist/vue-multiselect.css";
 
+@import "~vue-multiselect/dist/vue-multiselect.css";
 #app {
-  font-family: "Red Hat Text", sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
 }
 
 html {
-  font-family: "Red Hat Text", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.7;
   -webkit-text-size-adjust: 100%;
-  color: #4d4d4d;
-  background-color: #3cb054;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 100%;
+  background-color: #ffffff !important;
 }
 
 body {
-  font-family: "Red Hat Text", sans-serif;
-  font-size: 1.5rem;
-  background: url("./assets/pixel.png") bottom left no-repeat;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  background-color: #ffffff !important;
+}
+
+.Site-content {
+  min-height: 85%;
 }
 
 .body-mid {
@@ -95,17 +107,29 @@ body {
   }
 }
 
-.multiselect__option--selected.multiselect__option--highlight {
-    background: #2ea566 !important; 
-}
- 
+// .multiselect__option--selected.multiselect__option--highlight {
+//   background: #3cb054 !important;
+// }
+
 .btn-success {
   color: #fff;
-  background-color: #03914f;
-  border-color: #198754;
+  border-radius: 8px;
+  background-color: #3cb054;
+  border-color: #fff;
   &:hover {
-    background-color: #229b62;
+    background-color: #40b658;
+    border-color: #222;
   }
 }
 
+.btn-outline-success {
+  border-width: 1;
+  color: #3cb054;
+  border-radius: 8px;
+  border-color: #3cb054;
+  &:hover {
+    background-color: #efefef;
+    border-color: #222;
+  }
+}
 </style>

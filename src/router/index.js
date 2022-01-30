@@ -1,9 +1,15 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import Wrapper from "../views/Wrapper.vue";
 
 const routes = [
   {
     path: "/",
+    name: "Wrapper",
+    component: Wrapper,
+  },  
+  {
+    path: "/home",
     name: "Home",
     component: Home,
   },

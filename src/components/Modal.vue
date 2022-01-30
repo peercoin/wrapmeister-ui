@@ -7,7 +7,7 @@
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
       >
-        <div class="modal-header" id="modalTitle">
+        <div class="modal-header pt-4" id="modalTitle">
           <slot name="header"> </slot>
         </div>
 
@@ -20,25 +20,21 @@
         <div class="modal-footer">
           <slot name="footer"> </slot>
 
-          <div class="d-flex justify-content-center">
-            <div class="moditem">
-              <button
-                type="button"
-                :class="{ btn: true, 'btn-success': true }"
-                @click="confirm"
-              >
-                Confirm
-              </button>
-            </div>
-            <div class="moditem">
-              <button
-                type="button"
-                :class="{ btn: true, 'btn-danger': true }"
-                @click="close"
-              >
-                Cancel
-              </button>
-            </div>
+          <div class="d-grid gap-2 mt-2">
+            <button
+              class="btn outline-success btn-lg"
+              type="button"
+              @click="confirm"
+            >
+              SELECT
+            </button>
+            <button
+              class="btn btn-success btn-lg mb-4 mt-2"
+              type="button"
+              @click="close"
+            >
+              CANCEL
+            </button>
           </div>
         </div>
       </div>
@@ -68,13 +64,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ 
 .modal-backdrop {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(19, 37, 11, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,14 +79,16 @@ export default {
 }
 
 .modal {
-  background: #3cb054;
+  background: #fff;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: #3cb054;
   padding-left: 20px;
   padding-right: 20px;
-  border: 5px outset #36a04b;
+  border-radius: 8px;
+  max-width: 350px;
+  //border: 5px outset #36a04b;
   -webkit-box-shadow: 0px 10px 13px -7px #000000,
     8px 0px 22px -3px rgba(0, 0, 0, 0.55);
   box-shadow: 0px 10px 13px -7px #000000, 8px 0px 22px -3px rgba(0, 0, 0, 0.55);
@@ -105,9 +104,11 @@ export default {
 .modal-header {
   position: relative;
   //border-bottom: 1px solid #eeeeee;
-  color: #fff;
+  color: #3cb054;
   justify-content: space-between;
-  background-color: #3cb054;
+  background-color: #fff;
+  font-weight: 500;
+  font-size: 110%;
 }
 
 .modal-footer {
@@ -123,11 +124,11 @@ export default {
   padding-right: 1px;
 }
 
-.moditem {
-  flex-basis: 100px;
-  height: 50px;
-  margin: 5px;
-}
+// .moditem {
+//   flex-basis: 100px;
+//   height: 50px;
+//   margin: 5px;
+// }
 
 .modal-fade-enter,
 .modal-fade-leave-to {
