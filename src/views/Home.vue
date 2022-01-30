@@ -77,6 +77,17 @@
             class="col py-3 px-3 body-mid"
             v-if="metaMaskEnabled && selectedAccount.length === 0"
           >
+            <span
+              >The software is provided "as is", without warranty of any kind,
+              express or implied, including but not limited to the warranties of
+              merchantability, fitness for a particular purpose and
+              noninfringement. In no event shall the authors or copyright
+              holders be liable for any claim, damages or other liability,
+              whether in an action of contract, tort or otherwise, arising from,
+              out of or in connection with the software or the use or other
+              dealings in the software. Click Connect when you have read and
+              understood these conditions.</span
+            >
             <button
               type="button"
               :class="{ btn: true, 'btn-success': true }"
@@ -294,6 +305,16 @@ export default {
     toggleUnwrap() {
       this.isUnwrapping = !this.isUnwrapping;
     },
+
+    gotoNomination() {
+      if (!!this.selectedAccount)
+        this.$router.push({
+          name: "NominateAndVote",
+          params: {
+            selectedaccount: this.selectedAccount,
+          },
+        });
+    },
   },
 
   computed: {
@@ -359,16 +380,6 @@ export default {
         return true;
       }
       return false;
-    },
-
-    gotoNomination() {
-      if (!!this.selectedAccount)
-        this.$router.push({
-          name: "NominateAndVote",
-          params: {
-            selectedaccount: this.selectedAccount,
-          },
-        });
     },
 
     nominateLabel() {
