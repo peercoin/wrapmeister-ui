@@ -76,7 +76,7 @@
             currentstep: step === 6,
           }"
         >
-          6. Wrappping is completed. Find your tokens in the MetaMask wallet.
+          6. Wrapping is completed. Find your tokens in the MetaMask wallet.
           This session will soon be deleted.
         </p>
       </div>

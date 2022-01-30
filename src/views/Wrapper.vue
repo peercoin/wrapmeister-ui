@@ -3,7 +3,7 @@
     <div class="row mb-2 px-1">
       <div class="col-md-6 text-start fs-5">
         <network-chooser
-          v-if="metaMaskEnabled && !(iswrapping || isUnwrapping)"
+          v-if="!(iswrapping || isUnwrapping)"
         />
       </div>
     </div>

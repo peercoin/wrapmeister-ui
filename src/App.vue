@@ -140,10 +140,6 @@ body {
   }
 }
 
-// .multiselect__option--selected.multiselect__option--highlight {
-//   background: #3cb054 !important;
-// }
-
 .btn-success {
   color: #fff;
   border-radius: 8px;
@@ -158,6 +154,10 @@ body {
   }
 }
 
+.btn-success:not(:disabled):not(.disabled) {
+  background-color: #3cb054;
+}
+
 .btn-outline-success {
   border-width: 1;
   color: #3cb054;
@@ -169,5 +169,9 @@ body {
     background-color: #ffffff;
     color: #3cb054;
   }
+}
+
+.btn-outline-success:not(:disabled):not(.disabled) {
+  background-color: #ffffff;
 }
 </style>
