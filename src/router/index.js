@@ -1,22 +1,21 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Wrapper from "../views/Wrapper.vue";
+import WrapperView from "../views/WrapperView.vue";
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: Wrapper,
+    component: WrapperView,
   },  
-  {
-    path: "/home",
-    name: "Wrapper",
-    component: Wrapper,
-  },
+  // {
+  //   path: "/home",
+  //   name: "Wrapper",
+  //   component: WrapperView,
+  // },
   {
     path: "/account/:selectedaccount+",
     name: "HomeAccount",
-    component: Home,
+    component: WrapperView,
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
     }),
@@ -24,7 +23,7 @@ const routes = [
   {
     path: "/continuewith/account/:selectedaccount+/session/:sessionid",
     name: "ContinueWith",
-    component: () => import("../views/WrapSession.vue"),
+    component: () => import("../views/WrapSessionView.vue"),
     props: (route) => ({
       propsessionid: route.params.sessionid,
       propsaccounts: route.params.selectedaccount,

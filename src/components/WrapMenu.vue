@@ -3,7 +3,10 @@
     <div class="container">
       <div class="row  ">
         <div class="col ">
-          <div class="warranty mt-4 mx-2 me-3">
+          <div
+            class="warranty mt-4 mx-2 me-3  "
+            v-if="!isOwner && !isSigner && nrofsessions === 0"
+          >
             The software is provided "as is", without warranty of any kind,
             express or implied, including but not limited to the warranties of
             merchantability, fitness for a particular purpose and
@@ -67,7 +70,10 @@
       </div>
 
       <div class="my-3 g-0" v-if="showSessions">
-        <session-overview :propsaccounts="propsaccounts" />
+        <session-overview
+          :propsaccounts="propsaccounts"
+          @nrofsessions="setNumberOfSessions"
+        />
       </div>
 
       <div class="my-3 g-0" v-if="(isSigner || isOwner) && showSessions">
@@ -75,10 +81,7 @@
         <sign-session-overview :propsaccounts="propsaccounts" />
       </div>
 
-      <div
-        class="container mb-3"
-        v-if="((isSigner || isOwner) && showSessions)"
-      >
+      <div class="container mb-3" v-if="(isSigner || isOwner) && showSessions">
         <div class="row my-3">
           <button
             class="btn btn-success mx-1 my-1"
@@ -114,6 +117,7 @@ export default {
 
   data() {
     return {
+      nrofsessions: -1,
       nominateLabel: "???",
     };
   },
@@ -127,6 +131,10 @@ export default {
   },
 
   methods: {
+    setNumberOfSessions(nr) {
+      this.nrofsessions = nr;
+    },
+
     onWrapClick() {
       this.$emit("wrapaction-current", 1);
     },

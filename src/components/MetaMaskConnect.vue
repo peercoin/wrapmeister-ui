@@ -80,6 +80,7 @@ export default {
       if (!window.ethereum) return;
 
       try {
+        //log in when account is unknown:
         if (!(!!this.propsaccounts && this.propsaccounts.length > 0)) {
           await ethereum.request({
             method: "eth_requestAccounts",

@@ -49,7 +49,7 @@ export default {
   computed: {
     curSelectedTitle() {
       let network = this.$store.state.network;
-      console.log(network);
+
       if (!!network) {
         const networkdetail = getNetworks().find((nw) => nw.key === network);
 
@@ -61,9 +61,18 @@ export default {
 
   methods: {
     gotoHome() {
-      this.$router.push({
-        name: "Home",
-      });
+      if (!!this.$store.state.account) {
+        this.$router.push({
+          name: "HomeAccount",
+          params: {
+            selectedaccount: [this.$store.state.account],
+          },
+        });
+      } else {
+        this.$router.push({
+          name: "Home",
+        });
+      }
     },
   },
 };

@@ -8,18 +8,25 @@ import {
   faExclamationTriangle,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { faCopy, faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-import { faGithub, faTelegramPlane } from "@fortawesome/free-brands-svg-icons";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
+import { faQuestionCircle , faArrowCircleLeft} from "@fortawesome/free-solid-svg-icons";
+import {
+  faGithub,
+  faTelegramPlane,
+  faDiscord,
+} from "@fortawesome/free-brands-svg-icons";
 import store from "./store";
 
 library.add(
   faCheckSquare,
   faExclamationTriangle,
   faCopy,
+  faDiscord,
   faQuestionCircle,
   faGithub,
   faTelegramPlane,
-  faTimes
+  faTimes,
+  faArrowCircleLeft
 );
 
 const eventBus = mitt();

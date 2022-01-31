@@ -74,6 +74,8 @@ import axios from "axios";
 import { wrapEndpoints } from "@/Endpoints.js";
 
 export default {
+  emits: ["nrofsessions"],
+
   props: {
     propsaccounts: Array, // will use first account only, which is always 1 as selectedAccount contains 1
   },
@@ -149,6 +151,9 @@ export default {
               shortsessionId: this.shortenedSessionId(session._id),
             };
           });
+        this.$emit("nrofsessions", sessions.length);
+      } else {
+        this.$emit("nrofsessions", 0);
       }
     },
 
