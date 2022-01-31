@@ -15,6 +15,7 @@
 
 <script>
 import axios from "axios";
+import { roundTo } from "@/helpers.js";
 import { getContractAddress, wrapEndpoints, getNetworks } from "@/Endpoints.js";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 
@@ -23,7 +24,7 @@ export default {
     return {
       endpoints: wrapEndpoints,
       token: "",
-      amount: 0,
+      amount: "",
       amountStorage: "",
       peercoinAddressStorage: "",
     };
@@ -57,9 +58,15 @@ export default {
         const url = ne.accountTotalUrl;
 
         let query = await axios.get(url);
+ 
         if (!!query && !!query.data && !!query.data.result) {
           //todo might not work for all urls:
-          this.amount = parseInt(query.data.result, 10) * (1.0 / 10 ** 6);
+          const digits = 6;
+          const amountnumber = roundTo(
+            parseInt(query.data.result, 10) * (1.0 / 10 ** digits),
+            digits
+          );
+          this.amount = "" + !!amountnumber ? amountnumber : "";
         }
 
         const storagedata = await axios.get(this.endpoints().storageAddress);
