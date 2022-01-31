@@ -58,6 +58,7 @@ export default {
         const url = ne.accountTotalUrl;
 
         let query = await axios.get(url);
+ 
         if (!!query && !!query.data && !!query.data.result) {
           //todo might not work for all urls:
           const digits = 6;
