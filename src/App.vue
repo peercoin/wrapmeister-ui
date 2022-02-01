@@ -174,4 +174,29 @@ body {
 .btn-outline-success:not(:disabled):not(.disabled) {
   background-color: #ffffff;
 }
+
+.wrapinput {
+  color: #fff;
+  background-color: transparent !important;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-radius: 0px;
+  border-bottom: 1px solid #fff;
+  padding: 5px 5px 0px 5px;
+  &:focus {
+    box-shadow: none;
+    border-color: #fff;
+    color:#fff;
+  }
+}
+
+.wrapinput-label-container{
+  width: 100%;
+}
+
+.wrapinput-label{
+  font-size: 70%;
+  font-weight: 600;
+}
 </style>

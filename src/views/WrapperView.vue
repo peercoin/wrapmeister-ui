@@ -22,7 +22,7 @@
     <div class="row my-3">
       <div class="col-md-12">
         <meta-mask-connect
-          :propsaccounts="propsaccounts"
+          :propsaccounts="selectedAccount"
           @account-current="setCurrentAccount"
         />
       </div>
@@ -66,9 +66,10 @@ import WrapMenu from "@/components/WrapMenu.vue";
 import NetworkChooser from "@/components/NetworkChooser.vue"; //todo
 import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
 
+//this view is the entry point. It asks to Connect to MetaMask when propsaacount is not prefilled
 export default {
   props: {
-    propsaccounts: Array,
+    propsaccounts: Array, //fallback
   },
 
   // data() {
@@ -81,8 +82,8 @@ export default {
   },
 
   mounted() {
-
-    //set a default network:
+    console.warn("wrapperview mounted");
+    //set a default network if empty:
     if (!this.$store.state.network) {
       const networks = getNetworks().filter((nw) => nw.active);
 
@@ -92,6 +93,14 @@ export default {
         this.$store.commit("setNetwork", network);
       }
     }
+    //set vuex account if empty:
+    if (
+      !this.$store.state.account &&
+      Array.isArray(this.propsaccounts) &&
+      this.propsaccounts.length > 0
+    ) {
+      this.$store.commit("setAccount", this.propsaccounts[0]);
+    }
   },
 
   beforeUnmount() {
@@ -100,22 +109,25 @@ export default {
 
   methods: {
     gotoHome() {
-      if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-        this.setCurrentAccount(this.propsaccounts[0]);
-        this.$router.push({
-          name: "HomeAccount",
-          params: {
-            selectedaccount: this.propsaccounts,
-          },
-        });
-      } else if (this.selectedAccount.length > 0) {
+      if (this.selectedAccount.length > 0) {
         this.$router.push({
           name: "HomeAccount",
           params: {
             selectedaccount: this.selectedAccount,
           },
         });
-      } else {
+      }
+
+      // if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+      //   this.setCurrentAccount(this.propsaccounts[0]);
+      //   this.$router.push({
+      //     name: "HomeAccount",
+      //     params: {
+      //       selectedaccount: this.propsaccounts,
+      //     },
+      //   });
+      // } else
+      else {
         this.$router.push({
           name: "Home",
         });
@@ -161,15 +173,17 @@ export default {
       if (!!this.$store.state.account) {
         return [this.$store.state.account];
       }
+
+      if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+        console.warn("account from props");
+        return this.propsaccounts;
+      }
+
       return [];
     },
 
     showSessions() {
-      return (
-        !!this.metaMaskEnabled &&
-  
-        this.selectedAccount.length > 0
-      );
+      return !!this.metaMaskEnabled && this.selectedAccount.length > 0;
     },
 
     isSigner() {

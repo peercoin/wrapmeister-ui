@@ -33,12 +33,13 @@
             </div>
 
             <div class="container">
-              <div class="row my-1">
-                <div class="col-md-2 my-2 "></div>
+              <div class="row gx-5 my-1">
+                <div class="col-12"></div>
 
-                123
-
-                <div class="col-md-2 my-2 "></div>
+                <wrap-peercoin
+                  :propsaccounts="selectedAccount"
+                  @wrap-step-current="setWrapStatus"
+                />
               </div>
             </div>
           </div>
@@ -63,11 +64,14 @@
 import MultiStepsProgress from "@/components/MultiStepsProgress.vue";
 import Steps from "@/components/Steps.vue";
 import SlideoutPanel from "@/components/SlideoutPanel.vue";
-//import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
+import WrapPeercoin from "@/components/WrapPeercoin.vue";
+import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+//this view is to continue a existing wrapsession. todo Also to create a new one.
 export default {
   components: {
-    // WrapPeercoin,
+    WrapPeercoin,
     // WrapHeader,
     MultiStepsProgress,
     FontAwesomeIcon,
@@ -85,9 +89,9 @@ export default {
       //  sessionId: "",
       //   iswrapping: false,
       //   isUnwrapping: false,
-      accounts: [],
-      account: null,
-      showHelp: false, //?
+      // accounts: [],
+      //account: null,
+      // showHelp: false, //?
       wrapStatus: 1,
       currentPanelId: "",
     };
@@ -98,23 +102,55 @@ export default {
     this.eventBus.on("goto-home", this.gotoHome);
   },
 
+  mounted() {
+    console.warn("wrappersessionview mounted");
+    //set a default network if empty,  aka user refreshes page:
+    if (!this.$store.state.network) {
+      const networks = getNetworks().filter((nw) => nw.active);
+
+      if (!!networks && networks.length > 0) {
+        const network = networks[0].key;
+
+        this.$store.commit("setNetwork", network);
+      }
+    }
+    //set vuex account if empty, aka user refreshes page:
+    if (
+      !this.$store.state.account &&
+      Array.isArray(this.propsaccounts) &&
+      this.propsaccounts.length > 0
+    ) {
+      this.$store.commit("setAccount", this.propsaccounts[0]);
+    }
+  },
+
   beforeUnmount() {
     this.eventBus.off("goto-home", this.gotoHome);
   },
 
   methods: {
     gotoHome() {
-      this.$router.push({
-        name: "HomeAccount",
-        params: {
-          selectedaccount: this.propsaccounts,
-        },
-      });
+      if (!!this.$store.state.account) {
+        this.$router.push({
+          name: "HomeAccount",
+          params: {
+            selectedaccount: [this.$store.state.account],
+          },
+        });
+      } else {
+        this.$router.push({
+          name: "Home",
+        });
+      }
+    },
+
+    setWrapStatus(status) {
+      this.wrapStatus = status;
     },
 
     toggleHelp() {
       //this.showHelp = !this.showHelp;
-      this.showHelp = true;
+      //this.showHelp = true;
 
       this.currentPanelId = "panelId" + Date.now();
       const options = {
@@ -127,7 +163,7 @@ export default {
     },
 
     onHideSlideOutPanel(panelresult) {
-      this.showHelp = false;
+      //this.showHelp = false;
     },
 
     onBackClick() {
@@ -136,6 +172,21 @@ export default {
 
     setWrapStatus(status) {
       this.wrapStatus = status;
+    },
+  },
+
+  ///////////////COMPUTED/////////////////////////////////
+  computed: {
+    curNetwork() {
+      return this.$store.state.network;
+    },
+
+    //returns a array with selected account
+    selectedAccount() {
+      if (!!this.$store.state.account) {
+        return [this.$store.state.account];
+      }
+      return [];
     },
   },
 };

@@ -26,14 +26,14 @@
               type="button"
               @click="confirm"
             >
-              SELECT
+              {{ confirmtext }}
             </button>
             <button
               class="btn btn-success btn-lg mb-4 mt-2"
               type="button"
               @click="close"
             >
-              CANCEL
+              {{ canceltext }}
             </button>
           </div>
         </div>
@@ -50,6 +50,14 @@ export default {
       type: String,
       default: "Mint wPPC",
     },
+    confirmtext: {
+      type: String,
+      default: "SELECT",
+    },
+    canceltext: {
+      type: String,
+      default: "CANCEL",
+    },
   },
 
   methods: {
@@ -64,14 +72,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- 
 .modal-backdrop {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(19, 37, 11, 0.7);
+  background-color: rgba(39, 97, 11, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;

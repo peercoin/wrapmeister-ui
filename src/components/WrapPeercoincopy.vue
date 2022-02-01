@@ -1,29 +1,173 @@
 <template>
-  <div class="col-xs-12 py-3 mb-3">
-    <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
+  <div class="col-xs-12 body-mid py-3 mb-3">
     <loading-overlay :loading="!!claimtokenStatus" :text="claimtokenStatus" />
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
-      confirmtext="CONTINUE"
       body="Proceed to MetaMask extension to mint your wPPC tokens."
     ></modal>
+    <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
+
+    <div class="wrap-container-heading">{{ header }}</div>
+
+    <div class="row mb-2">
+      <div class="col-xs-12 col-md-6">
+        <p>Smart contract platform</p>
+      </div>
+
+      <div class="col-xs-12 col-md-6">
+        <select
+          :class="{ 'row-input-field': true, invalid: !network }"
+          v-model="network"
+          :disabled="true"
+        >
+          <option
+            v-for="item in activeNetworks"
+            :value="item.key"
+            :key="item.key"
+          >
+            {{ item.description }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <p>Amount</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <input
+          :disabled="!!session._id"
+          type="text"
+          :class="{ 'row-input-field': true, invalid: !validAmount }"
+          v-model="amount"
+          @keypress="onlyForCurrency"
+        />
+        <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
+          Minimum amount is set at {{ minAmount }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <div class="col-xs-12 col-md-8 offset-md-4">
+        <div class="d-grid gap-2 d-md-block text-end">
+          <button class="btn btn-outline-primary btn-sm foxy" type="button">
+            <span class="btn-label">
+              <img
+                alt="MetaMask"
+                height="25"
+                src="../assets/metamask-fox.svg"/></span
+            >{{ destinationETHAddress }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="!!session.wrapPPCAddress">
+      <div class="col-xs-12 col-md-6 py-3">
+        <p>Peercoin deposit address</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="row justify-content-center mt-2 pt-2">
+          <div class="col-xs-7 col-sm-5 col-md-7 text-center">
+            <vue-q-r-code-component
+              v-if="!!URIencodeWrapPPCAddress"
+              :size="250"
+              :text="URIencodeWrapPPCAddress"
+            />
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <button
+            class="btn btn-outline-primary btn-sm copyaddress my-1 px-3"
+            type="button"
+            @click="copyToClipboard"
+          >
+            <span class="btn-label">
+              <font-awesome-icon
+                :icon="['far', 'copy']"
+                size="1x"
+                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
+            >{{ session.wrapPPCAddress }}
+          </button>
+
+          <div
+            class="uri-wrap-ppc-address"
+            v-html="URIencodeWrapPPCAddressLink"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="row"
+      v-if="
+        !!session.wrapPPCAddress &&
+          !!session.confirmations &&
+          session.confirmations.required > 0
+      "
+    >
+      <div class="col-xs-12 col-md-6">
+        <p>Confirmations</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="progress mt-2 custprogress">
+          <div
+            class="
+              progress-bar progress-bar-striped
+              bg-success
+              progress-bar-animated
+            "
+            role="progressbar"
+            :style="styleConfirmations"
+            aria-valuenow="confirmationCurrent"
+            aria-valuemin="0"
+            aria-valuemax="confirmationMax"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="!!session.wrapPPCAddress">
+      <div class="col-xs-12 col-md-6">
+        <p>Witnesses signed</p>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="progress mt-2 custprogress">
+          <div
+            class="
+              progress-bar progress-bar-striped
+              bg-success
+              progress-bar-animated
+            "
+            role="progressbar"
+            :style="styleVerified"
+            aria-valuenow="witnessesVerified"
+            aria-valuemin="0"
+            aria-valuemax="3"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="!session._id">
+      <div class="col-xs-12 mt-3">
+        <button
+          type="button"
+          :class="{ btn: true, 'btn-success': true }"
+          @click="wrap"
+          :disabled="!validForm"
+        >
+          Wrap Peercoin
+        </button>
+      </div>
+    </div>
 
     <expiration-warning :session="session" />
-
-    <input
-      id="sessionnetwork"
-      class="form-control wrapinput"
-      type="text"
-      :value="selectedNetworkDescription"
-      readonly
-    />
-    <div class="wrapinput-label-container text-start">
-      <label for="sessionnetwork" class="form-label wrapinput-label "
-        >SMART CONTRACT PLATFORM</label
-      >
-    </div>
   </div>
 </template>
 
@@ -59,7 +203,6 @@ export default {
   },
 
   async mounted() {
-    //  debugger;
     this.claimtokenStatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks();
@@ -69,18 +212,14 @@ export default {
     }
 
     this.resetSession();
-    // console.warn(this.propsaccounts)
-    //     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-    //       this.accounts = this.propsaccounts;
-    //     } else {
-    //       this.accounts = await this.getAccounts();
-    //     }
 
-    this.accounts = this.selectedAccount;
-
+    if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+      this.accounts = this.propsaccounts;
+    } else {
+      this.accounts = await this.getAccounts();
+    }
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
-      console.log("ationETHAddress" + this.destinationETHAddress);
     }
 
     if (!!this.propsessionid) {
@@ -109,25 +248,6 @@ export default {
   computed: {
     header() {
       return "Wrap Peercoin";
-    },
-
-    selectedNetworkDescription() {
-      const nw = this.$store.state.network;
-      if (!!nw && this.networks.length > 0) {
-        const ne = this.networks.find((n) => n.key === nw);
-        if (!!ne) {
-          return ne.description;
-        }
-      }
-      return "";
-    },
-
-    //returns a array with selected account
-    selectedAccount() {
-      if (!!this.$store.state.account) {
-        return [this.$store.state.account];
-      }
-      return [];
     },
 
     confirmationMax() {
