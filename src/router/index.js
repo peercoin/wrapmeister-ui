@@ -6,18 +6,23 @@ const routes = [
     path: "/",
     name: "Home",
     component: WrapperView,
-  },  
-  // {
-  //   path: "/home",
-  //   name: "Wrapper",
-  //   component: WrapperView,
-  // },
+  },
   {
     path: "/account/:selectedaccount+",
     name: "HomeAccount",
     component: WrapperView,
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
+    }),
+  },
+  {
+    path: "/account/:selectedaccount+/network/:network/wrap",
+    name: "StartWrap",
+    component: () => import("../views/WrapSessionView.vue"),
+    props: (route) => ({
+      propsessionid: "",
+      propsaccounts: route.params.selectedaccount,
+      propnetwork: route.params.network,
     }),
   },
   {
@@ -44,7 +49,7 @@ const routes = [
   {
     path: "/nominate/:selectedaccount+",
     name: "NominateAndVote",
-    component: () => import("../views/NominateVote.vue"),
+    component: () => import("../views/NominateVoteView.vue"),
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
     }),

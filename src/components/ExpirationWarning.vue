@@ -10,17 +10,34 @@
     "
   >
     <div class="row">
-      <div class="col-xs-4 col-md-3">
+      <div class="col-xs-3 col-md-2">
         <font-awesome-icon
           icon="exclamation-triangle"
           size="3x"
           :style="{ color: '#3cb054' }"
         />
       </div>
-      <div class="col-xs-8 col-md-9 mt-2">
+      <div class="col-xs-9 col-md-10 mt-2">
         <div class="row">
-          <div class="col-lg-8">{{ missingCoins }}</div>
-          <div class="col-lg-4">{{ time }}</div>
+          <div
+            :class="{
+              'col-lg-8': time.length <= 6,
+              'col-12': time.length > 6,
+   'fs-6':true
+            }"
+          >
+            {{ missingCoins }}
+          </div>
+
+          <div
+            :class="{
+              'col-lg-4': time.length <= 6,
+              'col-12': time.length > 6,
+            'fw-bolder':true
+            }"
+          >
+            {{ time }}
+          </div>
         </div>
       </div>
     </div>
@@ -28,7 +45,8 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"; //todo
+import { roundTo } from "@/helpers.js";
 
 export default {
   props: {
@@ -98,8 +116,9 @@ export default {
         return "";
 
       const remain = this.session.amount - this.session.depositedAmount;
-      const remaining =
-        Math.round((remain + Number.EPSILON) * 1000000) / 1000000;
+      const digits = 6;
+      const remaining = roundTo(remain, digits);
+
       let pluralremain = remaining > 1 ? "peercoins" : "peercoin";
 
       if (this.session.depositedAmount > 0) {

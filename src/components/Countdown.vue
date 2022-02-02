@@ -4,11 +4,11 @@
 
 <script>
 export default {
-props: {
+  props: {
     status: {
       type: Number,
       default: 1,
-    }, 
+    },
   },
 
   data: () => {
@@ -26,7 +26,15 @@ progress {
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 4px;
 }
- 
+progress::-moz-progress-bar {
+  background: #3cb054;
+}
+progress::-webkit-progress-value {
+  background: #3cb054;
+}
+progress {
+  color: #3cb054;
+}
 </style>

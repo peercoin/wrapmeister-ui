@@ -37,7 +37,10 @@
                 <div class="col-12"></div>
 
                 <wrap-peercoin
+                  v-if="showWrapForm"
                   :propsaccounts="selectedAccount"
+                  :propsessionid="propsessionid"
+                  :propnetwork="propnetwork"
                   @wrap-step-current="setWrapStatus"
                 />
               </div>
@@ -82,6 +85,7 @@ export default {
   props: {
     propsessionid: String,
     propsaccounts: Array,
+    propnetwork: String, //fallback
   },
 
   data() {
@@ -102,25 +106,50 @@ export default {
     this.eventBus.on("goto-home", this.gotoHome);
   },
 
-  mounted() {
+  async mounted() {
     console.warn("wrappersessionview mounted");
-    //set a default network if empty,  aka user refreshes page:
+    //set a default network if empty, aka user refreshes page:
     if (!this.$store.state.network) {
       const networks = getNetworks().filter((nw) => nw.active);
 
       if (!!networks && networks.length > 0) {
-        const network = networks[0].key;
+        if (!!this.propnetwork) {
+          // fallback 1: querystring
+          let nw = this.propnetwork || "";
+          const ne = networks.find((n) => n.key === nw);
 
-        this.$store.commit("setNetwork", network);
+          if (!!ne) {
+            this.$store.commit("setNetwork", ne.key);
+          }
+        } else {
+          // fallback 2: pick first
+          const network = networks[0].key;
+
+          this.$store.commit("setNetwork", network);
+        }
       }
     }
+
     //set vuex account if empty, aka user refreshes page:
-    if (
-      !this.$store.state.account &&
-      Array.isArray(this.propsaccounts) &&
-      this.propsaccounts.length > 0
-    ) {
-      this.$store.commit("setAccount", this.propsaccounts[0]);
+    if (!this.$store.state.account) {
+      //fallback 1: querystring
+      if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
+        this.$store.commit("setAccount", this.propsaccounts[0]);
+      }
+      //fallback 2: ask metamask again and take first:
+      else if (!!window.ethereum) {
+        await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        try {
+          const web3 = new Web3(ethereum);
+          const accounts = await web3.eth.getAccounts();
+
+          this.$store.commit("setAccount", accounts[0]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   },
 
@@ -187,6 +216,10 @@ export default {
         return [this.$store.state.account];
       }
       return [];
+    },
+
+    showWrapForm() {
+      return this.selectedAccount.length > 0;
     },
   },
 };

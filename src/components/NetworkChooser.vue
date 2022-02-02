@@ -86,7 +86,7 @@ export default {
   computed: {
     curSelected: {
       get() {
-        let network = this.$store.state.network;
+        const network = this.$store.state.network;
         if (!!network) {
           const ne = this.options.find((nw) => nw.network === network);
 

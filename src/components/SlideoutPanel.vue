@@ -22,8 +22,9 @@
             <div class="slideout-panel-close-right">
               <font-awesome-icon
                 icon="times"
-                size="3x"
+                size="2x"
                 :style="{ color: '#222' }"
+                class="closeicon"
                 @click.stop="closeCurrentPanel(null)"
               />
             </div>
@@ -189,6 +190,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.closeicon:hover {
+  position: relative;
+  top: -2px;
+}
+</style>
 
 <style lang="scss" scoped>
 .slideout-panel-open {

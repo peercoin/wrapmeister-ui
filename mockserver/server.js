@@ -122,7 +122,7 @@ function unfinishedSessions(req, res, next) {
           required: 1,
         },
         expiresAt: today2.getTime(),
-        depositedAmount: 0.500168,
+        depositedAmount: 0,
       },
       {
         _id: "0SeZp78Jg8ZE4C4q",
@@ -229,7 +229,7 @@ app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
               required: 1,
             },
             expiresAt: today.getTime(),
-            depositedAmount: 0.500168,
+            depositedAmount: 0.0,
           },
         };
 

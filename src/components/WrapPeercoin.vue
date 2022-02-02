@@ -24,6 +24,60 @@
         >SMART CONTRACT PLATFORM</label
       >
     </div>
+
+    <input
+      id="sessionamount"
+      class="form-control wrapinput"
+      type="text"
+      v-model="amount"
+      :readonly="!!session && !!session._id"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionamount" class="form-label wrapinput-label "
+        >AMOUNT</label
+      >
+    </div>
+
+    <div class="d-sm-none text-start moveup">
+      <img
+        class="foxy-down"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
+      </div>
+    </div>
+    <div class="d-none d-sm-block text-start moveup">
+      <img
+        class="foxy-down-lg"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext-lg moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container  text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,7 +100,9 @@ export default {
   extends: BaseWrapper,
 
   props: {
+    //    propsaccounts: Array,
     propsessionid: String,
+    propnetwork: String,
   },
 
   data() {
@@ -499,5 +555,27 @@ export default {
     background-color: transparent;
     border-color: #8f3e10;
   }
+}
+.accounttext {
+  font-size: 63%;
+}
+.accounttext-lg {
+  font-size: 100%;
+}
+.moverightpadding {
+  padding-left: 20px;
+}
+.foxy-down {
+  position: relative;
+  top: 23px;
+}
+.foxy-down-lg {
+  position: relative;
+
+  top: 28px;
+}
+.moveup {
+  position: relative;
+  top: -19px;
 }
 </style>

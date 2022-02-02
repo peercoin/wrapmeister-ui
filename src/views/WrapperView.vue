@@ -88,8 +88,8 @@ export default {
       const networks = getNetworks().filter((nw) => nw.active);
 
       if (!!networks && networks.length > 0) {
+        //pick first
         const network = networks[0].key;
-
         this.$store.commit("setNetwork", network);
       }
     }
@@ -146,8 +146,15 @@ export default {
 
     setCurrentAction(curAction) {
       if (curAction === 1) {
-        alert("todo goto wrap form");
-        //this.toggleWrap();
+        if (this.selectedAccount.length > 0 && !!this.$store.state.network) {
+          this.$router.push({
+            name: "StartWrap",
+            params: {
+              selectedaccount: this.selectedAccount,
+              network: this.$store.state.network,
+            },
+          });
+        }
       } else if (curAction === 2) {
         //this.toggleUnwrap();
         alert("todo goto unwrap form");
