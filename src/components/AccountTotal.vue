@@ -60,7 +60,7 @@ export default {
         }, 1200);
       }
     },
-    
+
     async inititialise() {
       try {
         const nw = this.$store.state.network;
@@ -153,7 +153,7 @@ export default {
   padding-top: 7px;
 
   border: 1px solid #3cb054;
- // background-color: #fff;
+  // background-color: #fff;
   text-align: center;
   opacity: 1;
   font-size: 14px;
@@ -170,7 +170,7 @@ export default {
   padding-top: 7px;
 
   border: 1px solid #3cb054;
-  background-color: #fff;
+  // background-color: #fff;
   text-align: center;
   opacity: 1;
   font-size: 14px;

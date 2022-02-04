@@ -91,10 +91,9 @@ html {
   line-height: 1.7;
   -webkit-text-size-adjust: 100%;
   color: #ffffff;
-  background-color: #ffffff;
   height: 100%;
   min-height: 100%;
-  background-color: #ffffff !important;
+  background-color: #efefef !important;
 }
 
 body {
