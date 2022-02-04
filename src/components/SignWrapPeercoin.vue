@@ -1,57 +1,81 @@
 <template>
   <div class="col-xs-12 body-mid py-3">
-    <div class="wrap-container-heading">{{ header }}</div>
-
-    <div class="row my-3">
-      <div class="col-xs-12 col-md-8 offset-md-4">
-        <div class="d-grid gap-2 d-md-block text-end">
-          <button class="btn btn-outline-primary btn-sm foxy" type="button">
-            <span class="btn-label">
-              <img
-                alt="MetaMask"
-                height="25"
-                src="../assets/metamask-fox.svg"/></span
-            >{{ destinationETHAddress }}
-          </button>
-        </div>
+    <div class="d-sm-none text-start moveup">
+      <img
+        class="foxy-down"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
+      </div>
+    </div>
+    <div class="d-none d-sm-block text-start moveup">
+      <img
+        class="foxy-down-lg"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext-lg moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container  text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
       </div>
     </div>
 
-    <div class="row my-3">
-      <div class="col-xs-12 col-md-6">
-        <p>Witness token</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          type="text"
-          :class="{ 'row-input-field': true }"
-          v-model="witnessToken"
-        />
-      </div>
+    <input
+      id="witnesstoken"
+      class="form-control wrapinput"
+      type="text"
+      v-model="witnessToken"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="witnesstoken" class="form-label wrapinput-label "
+        >WITNESS TOKEN</label
+      >
     </div>
 
-    <div class="row my-3">
-      <div class="col-xs-12 col-md-6">
-        <p>Confirm amount</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          type="text"
-          :class="{ 'row-input-field': true }"
-          v-model="confirmAmount"
-        />
-      </div>
+    <input
+      id="sessionamount"
+      class="form-control wrapinput"
+      :class="{ invalid: !validAmount }"
+      type="text"
+      v-model="confirmAmount"
+      @keypress="onlyForCurrency"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionamount" class="form-label wrapinput-label "
+        >CONFIRM AMOUNT</label
+      >
     </div>
 
     <div class="row">
-      <div class="col-xs-12 mt-3">
+      <div class="col-xs-12 mt-3" v-show="validForm">
         <button
           type="button"
-          :class="{ btn: true, 'btn-success': true }"
+          class="btn btn-outline-success"
           @click="sign"
           :disabled="!validForm || isSigning"
         >
-          Sign Wrap Peercoin
+          SIGN WRAP PEERCOIN
         </button>
       </div>
     </div>
@@ -80,6 +104,7 @@ export default {
 
   data() {
     return {
+      testing: false, // restore this before commit
       witnessToken: "",
       confirmAmount: null,
       isSigning: false,
@@ -106,7 +131,10 @@ export default {
     }
 
     if (!getSignAccounts().includes(this.destinationETHAddress)) {
-      this.gotoHome("Not available for account " + this.destinationETHAddress);
+      if (!this.testing)
+        this.gotoHome(
+          "Not available for account " + this.destinationETHAddress
+        );
     }
 
     if (!!this.propsessionid) {
@@ -117,7 +145,19 @@ export default {
 
   computed: {
     header() {
-      return "Sign Wrap Peercoin";
+      return "Sign Wrap Peercoin13555";
+    },
+
+    validAmount() {
+      if (!this.confirmAmount) return false;
+
+      const regex = /^\d{0,9}(\.\d{0,6})?$/gm;
+
+      if (!regex.test(this.confirmAmount)) return false;
+
+      let n = parseFloat(this.confirmAmount);
+
+      return typeof n == "number" && !isNaN(n) && isFinite(n) && n > 0;
     },
 
     validForm() {
@@ -229,3 +269,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.moverightpadding {
+  padding-left: 20px;
+}
+.foxy-down {
+  position: relative;
+  top: 23px;
+}
+.foxy-down-lg {
+  position: relative;
+
+  top: 28px;
+}
+.moveup {
+  position: relative;
+  top: -19px;
+}
+</style>

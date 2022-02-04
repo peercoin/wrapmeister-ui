@@ -32,6 +32,16 @@ const routes = [
     props: (route) => ({
       propsessionid: route.params.sessionid,
       propsaccounts: route.params.selectedaccount,
+      //network is obtained by getsession
+    }),
+  },
+  {
+    path: "/account/:selectedaccount+/network/:network/unwrap",
+    name: "StartUnwrap",
+    component: () => import("../views/UnwrapView.vue"),
+    props: (route) => ({
+      propsaccounts: route.params.selectedaccount,
+      propnetwork: route.params.network,
     }),
   },
   {
@@ -44,7 +54,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (xxx.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import("../views/SignWrapSession.vue"),
+    component: () => import("../views/SignWrapSessionView.vue"),
   },
   {
     path: "/nominate/:selectedaccount+",

@@ -122,7 +122,7 @@ export default {
 
   data() {
     return {
-      testing: false, // to test, please undo when commit:
+      testing: false, // restore this before commit
       endpoints: wrapEndpoints,
       mysessions: [],
     };

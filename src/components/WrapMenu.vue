@@ -1,25 +1,6 @@
 <template>
   <div class="banner">
     <div class="container">
-      <div class="row  ">
-        <div class="col ">
-          <div
-            class="warranty mt-4 mx-2 me-3  "
-            v-if="!isOwner && !isSigner && nrofsessions === 0"
-          >
-            The software is provided "as is", without warranty of any kind,
-            express or implied, including but not limited to the warranties of
-            merchantability, fitness for a particular purpose and
-            noninfringement. In no event shall the authors or copyright holders
-            be liable for any claim, damages or other liability, whether in an
-            action of contract, tort or otherwise, arising from, out of or in
-            connection with the software or the use or other dealings in the
-            software. By continuing you have read and understood these
-            conditions.
-          </div>
-        </div>
-      </div>
-
       <div class="d-sm-none">
         <div class="row justify-content-md-center mt-3">
           <div class="d-grid gap-2 mt-2">
@@ -94,11 +75,36 @@
       </div>
     </div>
   </div>
+  <slideout-panel
+    ref="slideoutpanel"
+    color-icon="#fff"
+    @hideSlideOutPanel="onHideSlideOutPanel"
+  >
+    <template v-slot:panelslot>
+      <div class="container">
+        <div class="row g-0 py-0">
+          <div class="col py-0">
+            <div class="warranty mx-2 my-0" v-if="showWarranty">
+              The software is provided "as is", without warranty of any kind,
+              express or implied, including but not limited to the warranties of
+              merchantability, fitness for a particular purpose and
+              noninfringement. In no event shall the authors or copyright
+              holders be liable for any claim, damages or other liability,
+              whether in an action of contract, tort or otherwise, arising from,
+              out of or in connection with the software or the use or other
+              dealings in the software.
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </slideout-panel>
 </template>
 
 <script>
 import SignSessionOverview from "@/components/SignSessionOverview.vue";
 import SessionOverview from "@/components/SessionOverview.vue";
+import SlideoutPanel from "@/components/SlideoutPanel.vue";
 
 export default {
   emits: ["wrapaction-current"],
@@ -106,6 +112,7 @@ export default {
   components: {
     SessionOverview,
     SignSessionOverview,
+    SlideoutPanel,
   },
 
   props: {
@@ -119,6 +126,7 @@ export default {
     return {
       nrofsessions: -1,
       nominateLabel: "???",
+      currentPanelId: "",
     };
   },
 
@@ -130,9 +138,45 @@ export default {
       : "Nope";
   },
 
+  watch: {
+    nrofsessions() {
+      this.$nextTick(() => {
+        if (this.showWarranty) {
+          this.popupWarranty();
+        }
+      });
+    },
+  },
+
+  computed: {
+    showWarranty() {
+      return (
+        !this.$store.state.warrantyhide &&
+        !this.isOwner &&
+        !this.isSigner &&
+        this.nrofsessions === 0
+      );
+    },
+  },
+
   methods: {
     setNumberOfSessions(nr) {
       this.nrofsessions = nr;
+    },
+
+    popupWarranty() {
+      if (this.showWarranty) {
+        this.currentPanelId = "panelId" + Date.now();
+        const options = {
+          id: this.currentPanelId,
+          height: "20%",
+          width: "100%",
+          openOn: "bottom",
+          background: "#3cb054",
+        };
+
+        this.$refs.slideoutpanel.showSlideOutPanel(options);
+      }
     },
 
     onWrapClick() {
@@ -152,6 +196,10 @@ export default {
           },
         });
     },
+
+    onHideSlideOutPanel(panelresult) {
+      this.$store.commit("setWarrantySeen", true);
+    },
   },
 };
 </script>
@@ -168,6 +216,10 @@ export default {
 }
 .maxwidthexplain {
   max-width: 295px;
+}
+.warranty {
+  font-size: 70%;
+  color: #fff;
 }
 // .inner {
 //   display: table;

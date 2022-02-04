@@ -21,9 +21,9 @@
             <div></div>
             <div class="slideout-panel-close-right">
               <font-awesome-icon
-                icon="times"
-                size="2x"
-                :style="{ color: '#222' }"
+                icon="times-circle"
+                size="1x"
+                :style="{ color: colorIcon }"
                 class="closeicon"
                 @click.stop="closeCurrentPanel(null)"
               />
@@ -44,6 +44,10 @@ export default {
     FontAwesomeIcon,
   },
 
+  props: {
+    colorIcon: String,
+  },
+
   data() {
     return {
       visible: false,
@@ -62,8 +66,13 @@ export default {
   methods: {
     getPanelClasses(panel) {
       let panelClasses = {};
+
       if (panel.openOn === "left") {
         panelClasses["open-on-left"] = true;
+      } else if (panel.openOn === "bottom") {
+        panelClasses["open-on-bottom"] = true;
+      } else if (panel.openOn === "top") {
+        panelClasses["open-on-top"] = true;
       } else {
         panelClasses["open-on-right"] = true;
       }
@@ -100,17 +109,28 @@ export default {
       if (!panel) {
         panel = {};
       }
+  
       if (!panel.id) {
         panel.id = "panelnr" + Math.floor(Math.random() * 10000000);
       }
       panel.styles = {
         "z-index": this.panels.length + 100,
       };
+     // console.log(panel)
       if (!panel.width)
         panel.styles.width = Math.floor(window.innerWidth * 0.9) + "px";
       else if (!panel.width.endsWith || !panel.width.endsWith("px"))
         panel.styles.width = `${panel.width}px`;
       else panel.styles.width = panel.width;
+
+      if (!!panel.height) {
+        panel.styles.height = `${panel.height}`;
+      }
+
+      if (!!panel.background) {
+        panel.styles["background-color"] = `${panel.background}`;
+      }
+
       panel.cssId = `slide-out-panel-${panel.id}`;
       panel.stylesheetId = `slide-out-panel-styles-${panel.id}`;
       this.createPanelStylesheet(panel);
@@ -193,8 +213,25 @@ export default {
 
 <style lang="scss">
 .closeicon:hover {
-  position: relative;
-  top: -2px;
+  //top: -4px;
+  &:hover {
+    position: relative;
+    top: -2px;
+  }
+}
+
+$iconHeight: 2em;
+.slideout-panel-close {
+  display: flex;
+  justify-content: space-between;
+  z-index: 1000;
+  .slideout-panel-close-right {
+    padding-top: 2px;
+    padding-right: 10px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 </style>
 
@@ -297,32 +334,61 @@ export default {
           transform: translateX(100%);
         }
       }
+
+      &.open-on-top {
+        right: 0;
+        left: 0;
+        bottom: auto;
+        top: 0;
+
+        &.slideIn-enter {
+          transform: translateY(-100%);
+        }
+
+        &.slideIn-enter-to {
+          transform: translateY(0);
+        }
+
+        &.slideIn-leave {
+          transform: translateY(0);
+        }
+
+        &.slideIn-leave-to {
+          transform: translateY(-100%);
+        }
+
+        &.slideIn-leave-active {
+          transition-delay: 0;
+        }
+      }
+
+      &.open-on-bottom {
+        right: 0;
+        left: 0;
+        bottom: 0;
+        top: auto;
+
+        &.slideIn-enter {
+          transform: translateY(100%);
+        }
+
+        &.slideIn-enter-to {
+          transform: translateY(0);
+        }
+
+        &.slideIn-leave {
+          transform: translateY(0);
+        }
+
+        &.slideIn-leave-to {
+          transform: translateY(100%);
+        }
+
+        &.slideIn-leave-active {
+          transition-delay: 0;
+        }
+      }
     }
   }
 } // end slideout-panel
-</style>
-
-<style lang="scss">
-$iconHeight: 2em;
-.slideout-panel-close {
-  display: flex;
-  justify-content: space-between;
-  z-index: 1000;
-  .slideout-panel-close-right {
-    padding-right: 10px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  .material-design-icon {
-    height: $iconHeight;
-    width: $iconHeight;
-  }
-
-  .material-design-icon > .material-design-icon__svg {
-    height: $iconHeight;
-    width: $iconHeight;
-    bottom: -0.125 * $iconHeight;
-  }
-}
 </style>

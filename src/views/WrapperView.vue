@@ -72,17 +72,11 @@ export default {
     propsaccounts: Array, //fallback
   },
 
-  // data() {
-  //   return {
-  //   };
-  // },
-
   created() {
     this.eventBus.on("goto-home", this.gotoHome);
   },
 
   mounted() {
-    console.warn("wrapperview mounted");
     //set a default network if empty:
     if (!this.$store.state.network) {
       const networks = getNetworks().filter((nw) => nw.active);
@@ -117,16 +111,6 @@ export default {
           },
         });
       }
-
-      // if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-      //   this.setCurrentAccount(this.propsaccounts[0]);
-      //   this.$router.push({
-      //     name: "HomeAccount",
-      //     params: {
-      //       selectedaccount: this.propsaccounts,
-      //     },
-      //   });
-      // } else
       else {
         this.$router.push({
           name: "Home",
@@ -156,8 +140,15 @@ export default {
           });
         }
       } else if (curAction === 2) {
-        //this.toggleUnwrap();
-        alert("todo goto unwrap form");
+        if (this.selectedAccount.length > 0 && !!this.$store.state.network) {
+          this.$router.push({
+            name: "StartUnwrap",
+            params: {
+              selectedaccount: this.selectedAccount,
+              network: this.$store.state.network,
+            },
+          });
+        }
       }
     },
   },

@@ -9,7 +9,11 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
-import { faQuestionCircle , faArrowCircleLeft} from "@fortawesome/free-solid-svg-icons";
+import {
+  faQuestionCircle,
+  faArrowCircleLeft,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
   faTelegramPlane,
@@ -26,7 +30,8 @@ library.add(
   faGithub,
   faTelegramPlane,
   faTimes,
-  faArrowCircleLeft
+  faArrowCircleLeft,
+  faTimesCircle
 );
 
 const eventBus = mitt();

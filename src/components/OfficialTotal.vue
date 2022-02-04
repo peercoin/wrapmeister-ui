@@ -1,5 +1,6 @@
-<template>
-  <div v-if="propsaccounts" class="row g-0">
+<template> 
+ <collapse-transition>
+  <div v-if="propsaccounts && !!token" class="row g-0">
     <div class="col-md-12">
       <div class="totalofficialppc" @click="onClick">
         <span class="allcaps">official wrapped peercoin token: </span
@@ -7,9 +8,11 @@
       </div>
     </div>
   </div>
+    </collapse-transition>
 </template>
 
 <script>
+import CollapseTransition from "@/components/CollapseTransition.vue";
 import { getContractAddress, wrapEndpoints, getNetworks } from "@/Endpoints.js";
 
 export default {
@@ -25,8 +28,9 @@ export default {
   },
 
   mounted() {
-    this.inititialise();
+    this.retryInit();
   },
+
 
   watch: {
     "$store.state.network": {
@@ -38,6 +42,16 @@ export default {
   },
 
   methods: {
+    retryInit() {
+      this.inititialise();
+
+      if (!this.token) {
+        window.setTimeout(() => {
+          this.retryInit();
+        }, 1200);
+      }
+    },
+
     inititialise() {
       const nw = this.$store.state.network;
       if (!nw) return;
@@ -58,6 +72,10 @@ export default {
         window.open(url, "_blank");
       }
     },
+  },
+
+    components: {
+    CollapseTransition,
   },
 };
 </script>

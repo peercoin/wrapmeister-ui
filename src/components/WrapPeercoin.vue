@@ -28,9 +28,11 @@
     <input
       id="sessionamount"
       class="form-control wrapinput"
+      :class="{ invalid: !validAmount }"
       type="text"
       v-model="amount"
       :readonly="!!session && !!session._id"
+       @keypress="onlyForCurrency"
     />
     <div class="wrapinput-label-container text-start">
       <label for="sessionamount" class="form-label wrapinput-label "
@@ -78,6 +80,130 @@
         >
       </div>
     </div>
+
+    <div v-if="!!session.wrapPPCAddress" class="mb-5">
+      <vue-q-r-code-component
+        v-if="!!URIencodeWrapPPCAddress"
+        :size="250"
+        :text="URIencodeWrapPPCAddress"
+      />
+    </div>
+
+    <div v-if="!!session.wrapPPCAddress" class="d-sm-none text-start moveup">
+      <input
+        id="sessiondepositaddress"
+        class="form-control wrapinput accounttext moveleftpadding"
+        type="text"
+        v-model="session.wrapPPCAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <table width="100%">
+          <tr>
+            <td witdh="90%">
+              <label
+                for="sessiondepositaddress"
+                class="form-label wrapinput-label "
+                >PEERCOIN DEPOSIT ADDRESS
+              </label>
+            </td>
+            <td align="right">
+              <span class="copyaddress">
+                <font-awesome-icon
+                  :icon="['far', 'copy']"
+                  size="2x"
+                  :style="{ color: '#fff' }"
+                  @click="copyToClipboard"
+                />
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div
+      v-if="!!session.wrapPPCAddress"
+      class="d-none d-sm-block text-start moveup mt-2"
+    >
+      <input
+        id="sessiondepositaddress"
+        class="form-control wrapinput accounttext-lg moveleftpadding"
+        type="text"
+        v-model="session.wrapPPCAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <table width="100%">
+          <tr>
+            <td witdh="90%">
+              <label
+                for="sessiondepositaddress"
+                class="form-label wrapinput-label "
+                >PEERCOIN DEPOSIT ADDRESS
+              </label>
+            </td>
+            <td align="right">
+              <span class="copyaddress">
+                <font-awesome-icon
+                  :icon="['far', 'copy']"
+                  size="2x"
+                  :style="{ color: '#fff' }"
+                  @click="copyToClipboard"
+                />
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div
+      v-if="
+        !!session.wrapPPCAddress &&
+          !!session.confirmations &&
+          session.confirmations.required > 0
+      "
+    >
+      <kprogress
+        status="success"
+        type="line"
+        :show-text="false"
+        line-height="4"
+        color="#fff"
+        bg-color="#393E46"
+        :percent="percentConfirmations"
+      >
+      </kprogress>
+      <div class="text-start wrapinput-label">CONFIRMATIONS</div>
+    </div>
+
+    <div class="mt-4" v-if="!!session.wrapPPCAddress">
+      <kprogress
+        status="success"
+        type="line"
+        :show-text="false"
+        line-height="4"
+        color="#fff"
+        bg-color="#393E46"
+        :percent="percentVerified"
+      >
+      </kprogress>
+      <div class="text-start wrapinput-label">WITNESSES SIGNED</div>
+    </div>
+
+    <div class="row" v-if="!session._id">
+      <div class="col-xs-12 mt-3">
+        <button
+          v-show="validForm"
+          type="button"
+          class="btn btn-outline-success"
+          @click="wrap"
+          :disabled="!validForm"
+        >
+          WRAP PEERCOIN
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -94,13 +220,15 @@ import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
+import kprogress from "@/components/kprogress.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
 
+  emits: ["wrap-step-current"],
+
   props: {
-    //    propsaccounts: Array,
     propsessionid: String,
     propnetwork: String,
   },
@@ -125,12 +253,6 @@ export default {
     }
 
     this.resetSession();
-    // console.warn(this.propsaccounts)
-    //     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-    //       this.accounts = this.propsaccounts;
-    //     } else {
-    //       this.accounts = await this.getAccounts();
-    //     }
 
     this.accounts = this.selectedAccount;
 
@@ -143,6 +265,8 @@ export default {
       this.session._id = this.propsessionid;
       await this.getSession(this.session._id);
       this.network = this.session.network;
+
+      this.$store.commit("setNetwork", this.network);
       this.amount = this.session.amount;
     }
 
@@ -205,26 +329,23 @@ export default {
         let cur = this.session.confirmations.current;
 
         if (typeof cur === "string" || cur instanceof String)
-          return parseInt(cur);
-        else return cur;
+          return Math.min(100.0, parseInt(cur));
+        else return Math.min(100.0, cur);
       } catch (err) {
         return 0;
       }
     },
 
-    styleConfirmations() {
-      return {
-        width:
-          Math.ceil(
-            100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
-          ) + "%",
-      };
+    percentConfirmations() {
+      const cur = Math.ceil(
+        100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
+      );
+      return Math.min(100.0, cur);
     },
 
-    styleVerified() {
-      return {
-        width: Math.ceil(100.0 * this.witnessesVerified * (1.0 / 3.0)) + "%",
-      };
+    percentVerified() {
+      const cur = Math.ceil(100.0 * this.witnessesVerified * (1.0 / 3.0));
+      return Math.min(100.0, cur);
     },
 
     showProgressbar() {
@@ -534,6 +655,7 @@ export default {
     ExpirationWarning,
     FontAwesomeIcon,
     LoadingOverlay,
+    kprogress,
   },
 };
 </script>
@@ -565,6 +687,9 @@ export default {
 .moverightpadding {
   padding-left: 20px;
 }
+.moveleftpadding {
+  padding-right: 20px;
+}
 .foxy-down {
   position: relative;
   top: 23px;
@@ -577,5 +702,15 @@ export default {
 .moveup {
   position: relative;
   top: -19px;
+}
+
+.copyaddress {
+  position: relative;
+  top: -32px;
+
+  &:hover {
+    cursor: pointer;
+    top: -34px;
+  }
 }
 </style>
