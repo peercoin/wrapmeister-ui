@@ -10,7 +10,7 @@
                   :icon="['fas', 'arrow-circle-left']"
                   size="1x"
                   class="headericon"
-                  @click="onBackClick"
+                  @click="gotoHome"
                 />
               </div>
               <div class="col-6">
