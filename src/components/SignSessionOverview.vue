@@ -77,7 +77,7 @@
               @click="onRowClick(item)"
               :key="item.sessionId"
             >
-              <td>{{ item.sessionId }}</td>
+              <td>{{ item.shortsessionId }}</td>
               <td>{{ item.amount }}</td>
               <td>
                 <ul style="list-style-type:none;padding-left:0px;">
@@ -122,6 +122,7 @@ export default {
 
   data() {
     return {
+      testing: false, // restore this before commit
       endpoints: wrapEndpoints,
       mysessions: [],
     };
@@ -143,8 +144,8 @@ export default {
 
       try {
         const id = this.propsaccounts[0];
-        //test: if (!!id) {
-        if (!!id && getSignAccounts().includes(id)) {
+
+        if (!!id && (this.testing || getSignAccounts().includes(id))) {
           const res = await axios.get(this.endpoints(id).signwrapsessions);
 
           if (!!res && !!res.data && !!res.data.data) {
@@ -191,6 +192,7 @@ export default {
               direction: "wrap",
               amount: session.amount,
               sessionId: session._id,
+              shortsessionId: this.shortenedSessionId(session._id),
               txIds: session.wrapTxids,
               explorerUrl: getPeercoinExplorerUrl(session.network),
               signatureA: !!session.witnessASignature,
@@ -199,6 +201,13 @@ export default {
             };
           });
       }
+    },
+
+    shortenedSessionId(id) {
+      if (!!id && id.length > 10) {
+        return id.substring(0, 4) + "..." + id.substr(id.length - 5);
+      }
+      return id;
     },
 
     onRowClick(item) {
@@ -241,6 +250,7 @@ table {
 .tbl-content {
   overflow-x: hidden;
   margin-top: 0px;
+  margin-bottom: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: $table-bg;
 }

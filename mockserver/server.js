@@ -88,6 +88,8 @@ app.post("/api/v1/unwrap", function(req, res, next) {
 });
 
 function unfinishedSessions(req, res, next) {
+  res.json({ data: [] });
+/*
   var today = new Date();
   today.setHours(today.getHours() + 1);
   var today2 = new Date();
@@ -108,7 +110,10 @@ function unfinishedSessions(req, res, next) {
         witnessCAddress: null,
         witnessCSignature: null,
         witnessCToken: null,
-        wrapTxids: ["4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4","4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4"],
+        wrapTxids: [
+          "4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4",
+          "4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4",
+        ],
         wrapNonce: null,
         wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
         unwrapSignature: null,
@@ -122,7 +127,7 @@ function unfinishedSessions(req, res, next) {
           required: 1,
         },
         expiresAt: today2.getTime(),
-        depositedAmount: 0.500168,
+        depositedAmount: 0,
       },
       {
         _id: "0SeZp78Jg8ZE4C4q",
@@ -138,7 +143,8 @@ function unfinishedSessions(req, res, next) {
         witnessCAddress: null,
         witnessCSignature: null,
         witnessCToken: null,
-        wrapTxid: "4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4",
+        wrapTxid:
+          "4e234b551e9eea031c4f7338d8ae1e68b193f76082a19d85629b61ee62f707d4",
         wrapNonce: null,
         wrapPPCAddress: "PQvkFUNfdNfx9TMmC2NDUo418s8vxXaQMz",
         unwrapSignature: null,
@@ -157,6 +163,7 @@ function unfinishedSessions(req, res, next) {
     ],
   };
   res.json(mockResponse);
+  */
 }
 
 app.get("/api/v1/storage-address", function(req, res, next) {
@@ -229,7 +236,7 @@ app.get("/api/v1/sessions/:sessionId", function(req, res, next) {
               required: 1,
             },
             expiresAt: today.getTime(),
-            depositedAmount: 0.500168,
+            depositedAmount: 0.0,
           },
         };
 

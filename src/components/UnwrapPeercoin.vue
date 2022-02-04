@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xs-12 body-mid py-3">
+  <div class="col-xs-12 py-3">
     <loading-overlay :loading="!!unwrapstatus" :text="unwrapstatus" />
     <modal
       v-if="popupModal"
@@ -8,84 +8,97 @@
       body="Proceed with MetaMask?"
     ></modal>
 
-    <div class="wrap-container-heading">{{ header }}</div>
+    <input
+      id="sessionnetwork"
+      class="form-control wrapinput"
+      type="text"
+      :value="selectedNetworkDescription"
+      readonly
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionnetwork" class="form-label wrapinput-label "
+        >SMART CONTRACT PLATFORM</label
+      >
+    </div>
 
-    <div class="row mb-2">
-      <div class="col-xs-12 col-md-6">
-        <p>Smart contract platform</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <select
-          :class="{ 'row-input-field': true, invalid: !network }"
-          v-model="network"
-          :disabled="true"
+    <input
+      id="sessionamount"
+      class="form-control wrapinput"
+      :class="{ invalid: !validAmount }"
+      type="text"
+      v-model="amount"
+      @keypress="onlyForCurrency"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionamount" class="form-label wrapinput-label "
+        >AMOUNT</label
+      >
+    </div>
+
+    <input
+      id="sessionpeercoinaddress"
+      class="form-control wrapinput"
+      :class="{ invalid: !validPPCAddress }"
+      type="text"
+      v-model="destinationPPCAddress"
+      @keypress="onlyForAddress"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionpeercoinaddress" class="form-label wrapinput-label "
+        >PEERCOIN ADDRESS</label
+      >
+    </div>
+
+    <div class="d-sm-none text-start moveup">
+      <img
+        class="foxy-down"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
         >
-          <option
-            v-for="item in activeNetworks"
-            :value="item.key"
-            :key="item.key"
-          >
-            {{ item.description }}
-          </option>
-        </select>
+      </div>
+    </div>
+    <div class="d-none d-sm-block text-start moveup">
+      <img
+        class="foxy-down-lg"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext-lg moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container  text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
       </div>
     </div>
 
-    <div class="row mb-2">
-      <div class="col-xs-12 col-md-6">
-        <p>Peercoin Address</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          type="text"
-          :class="{ 'row-input-field': true, invalid: !validPPCAddress }"
-          v-model="destinationPPCAddress"
-          @keypress="onlyForAddress"
-        />
-      </div>
-    </div>
-
-    <div class="row mb-2">
-      <div class="col-xs-12 col-md-6">
-        <p>Amount</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          type="text"
-          :class="{ 'row-input-field': true, invalid: !validAmount }"
-          v-model="amount"
-          @keypress="onlyForCurrency"
-        />
-        <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
-          Minimum amount is set at {{ minAmount }}
-        </p>
-      </div>
-    </div>
-
-    <div class="row my-3">
-      <div class="col-xs-12 col-md-8 offset-md-4">
-        <div class="d-grid gap-2 d-md-block text-end">
-          <button class="btn btn-outline-primary btn-sm foxy" type="button">
-            <span class="btn-label">
-              <img
-                alt="MetaMask"
-                height="25"
-                src="../assets/metamask-fox.svg" /></span
-            >{{ destinationETHAddress }}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mb-2" v-if="!callingunwrap">
+    <div class="row mb-2" v-show="validForm && !callingunwrap">
       <div class="col-xs-12 mt-3">
         <button
           type="button"
-          :class="{ btn: true, 'btn-success': true }"
+          :class="{ btn: true, 'btn-outline-success': true }"
           @click="unwrap"
           :disabled="!validForm"
         >
-          Redeem wrapped Peercoin
+          REDEEM WRAPPED PEERCOIN
         </button>
       </div>
     </div>
@@ -136,6 +149,17 @@ export default {
   computed: {
     header() {
       return "Unwrap Peercoin";
+    },
+
+    selectedNetworkDescription() {
+      const nw = this.$store.state.network;
+      if (!!nw && this.networks.length > 0) {
+        const ne = this.networks.find((n) => n.key === nw);
+        if (!!ne) {
+          return ne.description;
+        }
+      }
+      return "";
     },
 
     validForm() {
@@ -194,7 +218,11 @@ export default {
 
         this.unwrapstatus = "";
         this.resetSession();
-        this.gotoHome("Successfully burned " + this.amount + " WPPC");
+        this.gotoHome(
+          "Successfully burned " +
+            this.amount +
+            " wPPC. Please be patient as your Peercoins are unwrapped. This process can take up to 12 hours."
+        );
       } catch (error) {
         this.unwrapstatus = "";
       }
@@ -259,3 +287,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.moverightpadding {
+  padding-left: 20px;
+}
+.foxy-down {
+  position: relative;
+  top: 23px;
+}
+.foxy-down-lg {
+  position: relative;
+
+  top: 28px;
+}
+.moveup {
+  position: relative;
+  top: -19px;
+}
+</style>

@@ -21,6 +21,7 @@
     "mitt": "^2.1.0",
     "set-interval-async": "^2.0.3",
     "sha.js": "^2.4.11",
+    "typeface-roboto": "^1.1.13",
     "vue": "^3.0.0",
     "vue-multiselect": "^3.0.0-alpha.2",
     "vue-qrcode-component": "^2.1.1",
