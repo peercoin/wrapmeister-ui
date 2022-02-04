@@ -100,7 +100,7 @@ html {
 body {
   font-family: "Roboto", sans-serif;
   font-size: 1rem;
-  background-color: #ffffff !important;
+  background-color: #efefef !important;
 }
 
 .Site-content {
