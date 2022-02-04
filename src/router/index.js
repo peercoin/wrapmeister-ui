@@ -1,27 +1,47 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../views/Home.vue";
+import WrapperView from "../views/WrapperView.vue";
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: WrapperView,
   },
   {
     path: "/account/:selectedaccount+",
     name: "HomeAccount",
-    component: Home,
+    component: WrapperView,
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
     }),
   },
   {
+    path: "/account/:selectedaccount+/network/:network/wrap",
+    name: "StartWrap",
+    component: () => import("../views/WrapSessionView.vue"),
+    props: (route) => ({
+      propsessionid: "",
+      propsaccounts: route.params.selectedaccount,
+      propnetwork: route.params.network,
+    }),
+  },
+  {
     path: "/continuewith/account/:selectedaccount+/session/:sessionid",
     name: "ContinueWith",
-    component: () => import("../views/WrapSession.vue"),
+    component: () => import("../views/WrapSessionView.vue"),
     props: (route) => ({
       propsessionid: route.params.sessionid,
       propsaccounts: route.params.selectedaccount,
+      //network is obtained by getsession
+    }),
+  },
+  {
+    path: "/account/:selectedaccount+/network/:network/unwrap",
+    name: "StartUnwrap",
+    component: () => import("../views/UnwrapView.vue"),
+    props: (route) => ({
+      propsaccounts: route.params.selectedaccount,
+      propnetwork: route.params.network,
     }),
   },
   {
@@ -34,12 +54,12 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (xxx.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import("../views/SignWrapSession.vue"),
+    component: () => import("../views/SignWrapSessionView.vue"),
   },
   {
     path: "/nominate/:selectedaccount+",
     name: "NominateAndVote",
-    component: () => import("../views/NominateVote.vue"),
+    component: () => import("../views/NominateVoteView.vue"),
     props: (route) => ({
       propsaccounts: route.params.selectedaccount,
     }),

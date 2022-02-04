@@ -1,173 +1,209 @@
 <template>
-  <div class="col-xs-12 body-mid py-3 mb-3">
+  <div class="col-xs-12 py-3 mb-3">
+    <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
     <loading-overlay :loading="!!claimtokenStatus" :text="claimtokenStatus" />
     <modal
       v-if="popupModal"
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
-      body="Proceed with MetaMask?"
+      confirmtext="CONTINUE"
+      body="Proceed to MetaMask extension to mint your wPPC tokens."
     ></modal>
-    <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
 
-    <div class="wrap-container-heading">{{ header }}</div>
+    <expiration-warning :session="session" />
 
-    <div class="row mb-2">
-      <div class="col-xs-12 col-md-6">
-        <p>Smart contract platform</p>
-      </div>
+    <input
+      id="sessionnetwork"
+      class="form-control wrapinput"
+      type="text"
+      :value="selectedNetworkDescription"
+      readonly
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionnetwork" class="form-label wrapinput-label "
+        >SMART CONTRACT PLATFORM</label
+      >
+    </div>
 
-      <div class="col-xs-12 col-md-6">
-        <select
-          :class="{ 'row-input-field': true, invalid: !network }"
-          v-model="network"
-          :disabled="true"
+    <input
+      id="sessionamount"
+      class="form-control wrapinput"
+      :class="{ invalid: !validAmount }"
+      type="text"
+      v-model="amount"
+      :readonly="!!session && !!session._id"
+       @keypress="onlyForCurrency"
+    />
+    <div class="wrapinput-label-container text-start">
+      <label for="sessionamount" class="form-label wrapinput-label "
+        >AMOUNT</label
+      >
+    </div>
+
+    <div class="d-sm-none text-start moveup">
+      <img
+        class="foxy-down"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
         >
-          <option
-            v-for="item in activeNetworks"
-            :value="item.key"
-            :key="item.key"
-          >
-            {{ item.description }}
-          </option>
-        </select>
+      </div>
+    </div>
+    <div class="d-none d-sm-block text-start moveup">
+      <img
+        class="foxy-down-lg"
+        alt="MetaMask"
+        height="15"
+        src="../assets/metamask-fox.svg"
+      />
+      <input
+        id="sessionaccount"
+        class="form-control wrapinput accounttext-lg moverightpadding"
+        type="text"
+        :value="destinationETHAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container  text-start">
+        <label for="sessionaccount" class="form-label wrapinput-label "
+          >CONNECTED ACCOUNT</label
+        >
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <p>Amount</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <input
-          :disabled="!!session._id"
-          type="text"
-          :class="{ 'row-input-field': true, invalid: !validAmount }"
-          v-model="amount"
-          @keypress="onlyForCurrency"
-        />
-        <p v-if="minAmountNotExceeded" class="text-danger text-end fs-6">
-          Minimum amount is set at {{ minAmount }}
-        </p>
-      </div>
+    <div v-if="!!session.wrapPPCAddress" class="mb-5">
+      <vue-q-r-code-component
+        v-if="!!URIencodeWrapPPCAddress"
+        :size="250"
+        :text="URIencodeWrapPPCAddress"
+      />
     </div>
 
-    <div class="row my-3">
-      <div class="col-xs-12 col-md-8 offset-md-4">
-        <div class="d-grid gap-2 d-md-block text-end">
-          <button class="btn btn-outline-primary btn-sm foxy" type="button">
-            <span class="btn-label">
-              <img
-                alt="MetaMask"
-                height="25"
-                src="../assets/metamask-fox.svg"/></span
-            >{{ destinationETHAddress }}
-          </button>
-        </div>
+    <div v-if="!!session.wrapPPCAddress" class="d-sm-none text-start moveup">
+      <input
+        id="sessiondepositaddress"
+        class="form-control wrapinput accounttext moveleftpadding"
+        type="text"
+        v-model="session.wrapPPCAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <table width="100%">
+          <tr>
+            <td witdh="90%">
+              <label
+                for="sessiondepositaddress"
+                class="form-label wrapinput-label "
+                >PEERCOIN DEPOSIT ADDRESS
+              </label>
+            </td>
+            <td align="right">
+              <span class="copyaddress">
+                <font-awesome-icon
+                  :icon="['far', 'copy']"
+                  size="2x"
+                  :style="{ color: '#fff' }"
+                  @click="copyToClipboard"
+                />
+              </span>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
-
-    <div class="row" v-if="!!session.wrapPPCAddress">
-      <div class="col-xs-12 col-md-6 py-3">
-        <p>Peercoin deposit address</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div class="row justify-content-center mt-2 pt-2">
-          <div class="col-xs-7 col-sm-5 col-md-7 text-center">
-            <vue-q-r-code-component
-              v-if="!!URIencodeWrapPPCAddress"
-              :size="250"
-              :text="URIencodeWrapPPCAddress"
-            />
-          </div>
-        </div>
-
-        <div class="row mt-2">
-          <button
-            class="btn btn-outline-primary btn-sm copyaddress my-1 px-3"
-            type="button"
-            @click="copyToClipboard"
-          >
-            <span class="btn-label">
-              <font-awesome-icon
-                :icon="['far', 'copy']"
-                size="1x"
-                :style="{ color: '#a04612', 'margin-right': '4px' }"/></span
-            >{{ session.wrapPPCAddress }}
-          </button>
-
-          <div
-            class="uri-wrap-ppc-address"
-            v-html="URIencodeWrapPPCAddressLink"
-          ></div>
-        </div>
+    <div
+      v-if="!!session.wrapPPCAddress"
+      class="d-none d-sm-block text-start moveup mt-2"
+    >
+      <input
+        id="sessiondepositaddress"
+        class="form-control wrapinput accounttext-lg moveleftpadding"
+        type="text"
+        v-model="session.wrapPPCAddress"
+        readonly
+      />
+      <div class="wrapinput-label-container text-start">
+        <table width="100%">
+          <tr>
+            <td witdh="90%">
+              <label
+                for="sessiondepositaddress"
+                class="form-label wrapinput-label "
+                >PEERCOIN DEPOSIT ADDRESS
+              </label>
+            </td>
+            <td align="right">
+              <span class="copyaddress">
+                <font-awesome-icon
+                  :icon="['far', 'copy']"
+                  size="2x"
+                  :style="{ color: '#fff' }"
+                  @click="copyToClipboard"
+                />
+              </span>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 
     <div
-      class="row"
       v-if="
         !!session.wrapPPCAddress &&
           !!session.confirmations &&
           session.confirmations.required > 0
       "
     >
-      <div class="col-xs-12 col-md-6">
-        <p>Confirmations</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div class="progress mt-2 custprogress">
-          <div
-            class="
-              progress-bar progress-bar-striped
-              bg-success
-              progress-bar-animated
-            "
-            role="progressbar"
-            :style="styleConfirmations"
-            aria-valuenow="confirmationCurrent"
-            aria-valuemin="0"
-            aria-valuemax="confirmationMax"
-          ></div>
-        </div>
-      </div>
+      <kprogress
+        status="success"
+        type="line"
+        :show-text="false"
+        line-height="4"
+        color="#fff"
+        bg-color="#393E46"
+        :percent="percentConfirmations"
+      >
+      </kprogress>
+      <div class="text-start wrapinput-label">CONFIRMATIONS</div>
     </div>
 
-    <div class="row" v-if="!!session.wrapPPCAddress">
-      <div class="col-xs-12 col-md-6">
-        <p>Witnesses signed</p>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div class="progress mt-2 custprogress">
-          <div
-            class="
-              progress-bar progress-bar-striped
-              bg-success
-              progress-bar-animated
-            "
-            role="progressbar"
-            :style="styleVerified"
-            aria-valuenow="witnessesVerified"
-            aria-valuemin="0"
-            aria-valuemax="3"
-          ></div>
-        </div>
-      </div>
+    <div class="mt-4" v-if="!!session.wrapPPCAddress">
+      <kprogress
+        status="success"
+        type="line"
+        :show-text="false"
+        line-height="4"
+        color="#fff"
+        bg-color="#393E46"
+        :percent="percentVerified"
+      >
+      </kprogress>
+      <div class="text-start wrapinput-label">WITNESSES SIGNED</div>
     </div>
 
     <div class="row" v-if="!session._id">
       <div class="col-xs-12 mt-3">
         <button
+          v-show="validForm"
           type="button"
-          :class="{ btn: true, 'btn-success': true }"
+          class="btn btn-outline-success"
           @click="wrap"
           :disabled="!validForm"
         >
-          Wrap Peercoin
+          WRAP PEERCOIN
         </button>
       </div>
     </div>
-
-    <expiration-warning :session="session" />
   </div>
 </template>
 
@@ -184,13 +220,17 @@ import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
+import kprogress from "@/components/kprogress.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
 
+  emits: ["wrap-step-current"],
+
   props: {
     propsessionid: String,
+    propnetwork: String,
   },
 
   data() {
@@ -203,6 +243,7 @@ export default {
   },
 
   async mounted() {
+    //  debugger;
     this.claimtokenStatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks();
@@ -213,19 +254,19 @@ export default {
 
     this.resetSession();
 
-    if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-      this.accounts = this.propsaccounts;
-    } else {
-      this.accounts = await this.getAccounts();
-    }
+    this.accounts = this.selectedAccount;
+
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
+      console.log("ationETHAddress" + this.destinationETHAddress);
     }
 
     if (!!this.propsessionid) {
       this.session._id = this.propsessionid;
       await this.getSession(this.session._id);
       this.network = this.session.network;
+
+      this.$store.commit("setNetwork", this.network);
       this.amount = this.session.amount;
     }
 
@@ -250,6 +291,25 @@ export default {
       return "Wrap Peercoin";
     },
 
+    selectedNetworkDescription() {
+      const nw = this.$store.state.network;
+      if (!!nw && this.networks.length > 0) {
+        const ne = this.networks.find((n) => n.key === nw);
+        if (!!ne) {
+          return ne.description;
+        }
+      }
+      return "";
+    },
+
+    //returns a array with selected account
+    selectedAccount() {
+      if (!!this.$store.state.account) {
+        return [this.$store.state.account];
+      }
+      return [];
+    },
+
     confirmationMax() {
       try {
         if (!this.session || !this.session.confirmations) return 3;
@@ -269,26 +329,23 @@ export default {
         let cur = this.session.confirmations.current;
 
         if (typeof cur === "string" || cur instanceof String)
-          return parseInt(cur);
-        else return cur;
+          return Math.min(100.0, parseInt(cur));
+        else return Math.min(100.0, cur);
       } catch (err) {
         return 0;
       }
     },
 
-    styleConfirmations() {
-      return {
-        width:
-          Math.ceil(
-            100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
-          ) + "%",
-      };
+    percentConfirmations() {
+      const cur = Math.ceil(
+        100.0 * this.confirmationCurrent * (1.0 / this.confirmationMax)
+      );
+      return Math.min(100.0, cur);
     },
 
-    styleVerified() {
-      return {
-        width: Math.ceil(100.0 * this.witnessesVerified * (1.0 / 3.0)) + "%",
-      };
+    percentVerified() {
+      const cur = Math.ceil(100.0 * this.witnessesVerified * (1.0 / 3.0));
+      return Math.min(100.0, cur);
     },
 
     showProgressbar() {
@@ -598,6 +655,7 @@ export default {
     ExpirationWarning,
     FontAwesomeIcon,
     LoadingOverlay,
+    kprogress,
   },
 };
 </script>
@@ -618,6 +676,41 @@ export default {
     color: #8f3e10;
     background-color: transparent;
     border-color: #8f3e10;
+  }
+}
+.accounttext {
+  font-size: 63%;
+}
+.accounttext-lg {
+  font-size: 100%;
+}
+.moverightpadding {
+  padding-left: 20px;
+}
+.moveleftpadding {
+  padding-right: 20px;
+}
+.foxy-down {
+  position: relative;
+  top: 23px;
+}
+.foxy-down-lg {
+  position: relative;
+
+  top: 28px;
+}
+.moveup {
+  position: relative;
+  top: -19px;
+}
+
+.copyaddress {
+  position: relative;
+  top: -32px;
+
+  &:hover {
+    cursor: pointer;
+    top: -34px;
   }
 }
 </style>

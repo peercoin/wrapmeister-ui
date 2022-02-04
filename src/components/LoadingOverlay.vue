@@ -7,8 +7,8 @@
   >
     <component v-if="customLoader" :is="customLoader"></component>
     <div v-else>
-      <div class="loading-circle"></div>
-      <p class="loading-text">{{ text }}</p>
+      <div v-if="!!text" class="loading-circle"></div>
+      <p v-if="!!text" class="loading-text">{{ text }}</p>
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@ export default {
     loading: Boolean,
     text: String,
   },
+
   data() {
     return {
       dark: false,
@@ -30,6 +31,7 @@ export default {
       customLoader: null,
     };
   },
+
   computed: {
     bc() {
       return (
@@ -54,6 +56,8 @@ export default {
   z-index: 9300;
   flex-direction: column;
   user-select: none;
+  background-color: rgb(24, 109, 21)!important;
+  opacity: 0.5;
 }
 .loading-circle {
   width: 50px;
@@ -65,7 +69,7 @@ export default {
 }
 .loading-text {
   margin-top: 15px;
-  color: #2f2b2b;
+  color: #2c2f2b;
   font-size: 14px;
   font-weight: 200%;
   text-align: center;

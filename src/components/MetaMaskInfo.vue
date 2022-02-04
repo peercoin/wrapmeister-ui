@@ -1,15 +1,22 @@
 <template>
   <div class="ftralert ftralert-warning">
     <div class="row">
-      <div class="col-xs-12 col-lg-3">
+      <div class="col-12 my-2">
         <img
           alt="MetaMask"
           height="35"
           src="../assets/metamask-logo-horizontal.svg"
         />
       </div>
-      <div class="col-xs-12 col-lg-9">
-        <p v-html="missingPlugin"></p>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="outer">
+          <div class="inner">
+            <p class="mt-2 maxwidthexplain " v-html="missingPlugin"></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -20,10 +27,10 @@ export default {
   computed: {
     missingPlugin() {
       let intro =
-        "This website is built on top of MetaMask, an extension for accessing Ethereum enabled distributed applications in your browser!";
-
-      intro +=
-        " Please install the <a href='https://metamask.io/download.html'>extension</a> to proceed.";
+        "This website is built with MetaMask, " +
+        "a browser extension which allows for Ethereum enabled " +
+        "distributed applications in your browser. " +
+        "Please install the <a style='color: #fff' href='https://metamask.io/download.html'>extension</a> to proceed.";
 
       return intro;
     },
@@ -35,16 +42,22 @@ export default {
 .ftralert {
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 1px;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
+  border: 0x solid transparent;
+  border-radius: 10px;
 }
 .ftralert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
+  color: #fff;
+  background-color: #3cb054;
   border-color: #faebcc;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
+}
+.maxwidthexplain {
+  max-width: 295px;
+}
+.inner {
+  display: table;
+  margin: 0 auto;
+}
+.outer {
+  width: 100%;
 }
 </style>
