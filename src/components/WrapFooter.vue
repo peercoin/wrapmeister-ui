@@ -49,6 +49,7 @@
       :class="{
         FixBottom: fixed,
       }"
+      :style="fullwidthnoscrollbar"
     >
       <div class="container text-center">
         <div class="row my-2">
@@ -104,18 +105,26 @@ export default {
 
   props: {
     fixed: Boolean,
+    innerwidth: Number,
+  },
+
+  computed: {
+    fullwidthnoscrollbar() {
+      return { width: this.innerwidth + "px" };
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .Site-footer {
-  width: 100%;
   background-color: #3cb054;
   color: #ffffff;
   &.FixBottom {
     position: absolute;
     bottom: 0px;
+    // padding-top: 5px;
+    // padding-bottom: 5px;
   }
 }
 .footerlink {

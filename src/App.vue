@@ -5,7 +5,10 @@
       <wrap-header />
       <router-view />
     </div>
-    <wrap-footer :fixed="this.clientHeight > this.heightApp" />
+    <wrap-footer
+      :fixed="this.clientHeight > this.heightApp"
+      :innerwidth="actualInnerWidth"
+    ></wrap-footer>
   </div>
 </template>
 
@@ -55,17 +58,23 @@ export default {
       this.widthApp = this.$refs.sitecontent.offsetWidth;
       this.actualInnerWidth = document.body.clientWidth; // El. width minus scrollbar width
 
-     // console.log(this.heightApp, this.widthApp, this.actualInnerWidth);
+      // console.log(this.heightApp, this.widthApp, this.actualInnerWidth);
     },
   },
 
   computed: {
     centeredWhenCapped() {
-      if (this.actualInnerWidth > 0 && (this.actualInnerWidth - this.widthApp) > 1) {
+      if (
+        this.actualInnerWidth > 0 &&
+        this.actualInnerWidth - this.widthApp > 1
+      ) {
         const offset = Math.floor(
           0.5 * (this.actualInnerWidth - this.widthApp)
         );
-        return { position: "relative", left: offset + "px" };
+        return {
+          position: "relative",
+          left: offset + "px",
+        };
       }
 
       return {};

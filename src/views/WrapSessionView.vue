@@ -44,7 +44,7 @@
                   :propsessionid="propsessionid"
                   :propnetwork="propnetwork"
                   @wrap-step-current="setWrapStatus"
-                />
+                ></wrap-peercoin>
               </div>
             </div>
           </div>
