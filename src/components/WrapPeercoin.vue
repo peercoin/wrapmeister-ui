@@ -280,6 +280,8 @@ export default {
     } else {
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
+    //test
+    //this.popupModal = true;
   },
 
   async unmounted() {

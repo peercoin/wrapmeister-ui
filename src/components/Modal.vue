@@ -78,7 +78,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(39, 97, 11, 0.7);
+  background-color: rgba(115, 234, 117, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
