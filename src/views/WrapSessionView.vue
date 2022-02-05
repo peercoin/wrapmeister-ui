@@ -14,18 +14,18 @@
               <div class="col-3 text-start">
                 <font-awesome-icon
                   :icon="['fas', 'arrow-circle-left']"
-                  size="1x"
+                  size="2x"
                   class="headericon"
                   @click="onBackClick"
                 />
               </div>
-              <div class="col-6">
+              <div class="col-6 fw-bold">
                 WRAP PEERCOIN
               </div>
               <div class="col-3 text-end">
                 <font-awesome-icon
                   :icon="['fas', 'question-circle']"
-                  size="1x"
+                  size="2x"
                   class="headericon"
                   @click="toggleHelp"
                 />

@@ -8,12 +8,12 @@
               <div class="col-3 text-start">
                 <font-awesome-icon
                   :icon="['fas', 'arrow-circle-left']"
-                  size="1x"
+                  size="2x"
                   class="headericon"
                   @click="gotoHome"
                 />
               </div>
-              <div class="col-6">
+              <div class="col-6 fw-bold">
                 UNWRAP PEERCOIN
               </div>
               <div class="col-3 text-end"></div>
