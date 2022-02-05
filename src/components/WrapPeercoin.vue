@@ -7,8 +7,13 @@
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
       confirmtext="CONTINUE"
-      body="Proceed to MetaMask extension to mint your wPPC tokens."
-    ></modal>
+    >
+      <template v-slot:body>
+        <p class="fw-bolder">
+          Proceed to MetaMask extension to mint your wPPC tokens.
+        </p>
+      </template>
+    </modal>
 
     <expiration-warning :session="session" />
 
