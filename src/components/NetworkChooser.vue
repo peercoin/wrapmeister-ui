@@ -292,6 +292,10 @@ export default {
   background: #3cb054;
   //font-size: 14px;
 }
+.dropdown-ppc-style  span.option__title {
+    color: #fff;
+}
+ 
 </style>
 
 <style lang="scss" scoped>
@@ -318,5 +322,6 @@ export default {
   padding-top: 5px;
   text-align: left;
   width: 100%;
+   color: #fff;
 }
 </style>
