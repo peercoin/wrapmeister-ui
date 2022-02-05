@@ -91,6 +91,7 @@ export default {
   position: absolute;
   left: 0px;
   width: 100%;
+  height: 1px;
   //background-color: aqua;
 }
 .iconleaf {
