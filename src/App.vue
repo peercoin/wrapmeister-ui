@@ -170,7 +170,7 @@ body {
   outline: 0;
   background: transparent;
   border-radius: 0px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 2px solid #fff;
   padding: 5px 5px 0px 5px;
   &:focus {
     box-shadow: none;
@@ -178,7 +178,7 @@ body {
     color: #fff;
   }
   &.invalid {
-    border-bottom: 1px solid rgb(223, 98, 98);
+    border-bottom: 2px solid rgb(223, 98, 98);
   }
 }
 
