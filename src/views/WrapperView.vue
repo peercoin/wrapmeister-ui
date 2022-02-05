@@ -125,7 +125,7 @@ export default {
       const network = this.$store.state.network;
       const ne = this.networks.find((nw) => nw.key === network);
 
-      const tokenAddress = this.$store.state.account;
+      const tokenAddress = ne.contract;
       const tokenSymbol = ne.tokenSymbol;
       const tokenDecimals = ne.tokenDecimals;
       const tokenImage = ne.tokenImage;
