@@ -6,11 +6,12 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <font-awesome-icon
-                  :icon="['fas', 'arrow-circle-left']"
-                  size="2x"
+                <img
+                  alt="back"
+                  height="24"
+                  src="../assets/back.svg"
                   class="headericon"
-                  @click="onBackClick"
+                  @click.stop="onBackClick"
                 />
               </div>
               <div class="col-6 fw-bold">
@@ -41,7 +42,6 @@
 import WrapHeader from "@/components/WrapHeader.vue";
 import SignWrapPeercoin from "@/components/SignWrapPeercoin.vue";
 import { getNetworks } from "@/Endpoints.js";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   props: {
@@ -121,7 +121,6 @@ export default {
   components: {
     SignWrapPeercoin,
     WrapHeader,
-    FontAwesomeIcon,
   },
 };
 </script>

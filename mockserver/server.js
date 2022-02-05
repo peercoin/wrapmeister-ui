@@ -88,8 +88,8 @@ app.post("/api/v1/unwrap", function(req, res, next) {
 });
 
 function unfinishedSessions(req, res, next) {
-  res.json({ data: [] });
- /* 
+ /*  res.json({ data: [] });*/
+ 
   var today = new Date();
   today.setHours(today.getHours() + 1);
   var today2 = new Date();
@@ -163,7 +163,7 @@ function unfinishedSessions(req, res, next) {
     ],
   };
   res.json(mockResponse);
-*/
+
 }
 
 app.get("/api/v1/storage-address", function(req, res, next) {

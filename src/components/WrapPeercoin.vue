@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xs-12 py-3 mb-3">
+  <div class="col-xs-12 py-3 mb-3 px-5">
     <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
     <loading-overlay :loading="!!claimtokenStatus" :text="claimtokenStatus" />
     <modal
@@ -89,7 +89,7 @@
     <div v-if="!!session.wrapPPCAddress" class="mb-5">
       <vue-q-r-code-component
         v-if="!!URIencodeWrapPPCAddress"
-        :size="250"
+        :size="200"
         :text="URIencodeWrapPPCAddress"
       />
     </div>

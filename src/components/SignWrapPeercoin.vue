@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xs-12 body-mid py-3">
+  <div class="col-xs-12 body-mid py-3 px-5">
     <div class="d-sm-none text-start moveup">
       <img
         class="foxy-down"

@@ -12,22 +12,24 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <font-awesome-icon
-                  :icon="['fas', 'arrow-circle-left']"
-                  size="2x"
+                <img
+                  alt="Peercoin"
+                  height="24"
+                  src="../assets/back.svg"
                   class="headericon"
-                  @click="onBackClick"
+                  @click.stop="onBackClick"
                 />
               </div>
               <div class="col-6 fw-bold">
                 WRAP PEERCOIN
               </div>
               <div class="col-3 text-end">
-                <font-awesome-icon
-                  :icon="['fas', 'question-circle']"
-                  size="2x"
+                <img
+                  alt="Peercoin"
+                  height="24"
+                  src="../assets/info.svg"
                   class="headericon"
-                  @click="toggleHelp"
+                  @click.stop="toggleHelp"
                 />
               </div>
             </div>
@@ -70,15 +72,12 @@ import Steps from "@/components/Steps.vue";
 import SlideoutPanel from "@/components/SlideoutPanel.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import { getNetworks } from "@/Endpoints.js";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 //this view is to continue a existing wrapsession. todo Also to create a new one.
 export default {
   components: {
     WrapPeercoin,
-
     MultiStepsProgress,
-    FontAwesomeIcon,
     Steps,
     SlideoutPanel,
   },
@@ -97,12 +96,10 @@ export default {
   },
 
   created() {
-
     this.eventBus.on("goto-home", this.gotoHome);
   },
 
   async mounted() {
-
     //set a default network if empty, aka user refreshes page:
     if (!this.$store.state.network) {
       const networks = getNetworks().filter((nw) => nw.active);

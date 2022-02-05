@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xs-12 py-3">
+  <div class="col-xs-12 py-3 px-5">
     <loading-overlay :loading="!!unwrapstatus" :text="unwrapstatus" />
     <modal
       v-if="popupModal"
@@ -289,9 +289,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.accounttext {
+  font-size: 63%;
+}
+.accounttext-lg {
+  font-size: 100%;
+}
 .moverightpadding {
   padding-left: 20px;
 }
+.moveleftpadding {
+  padding-right: 20px;
+}
+
 .foxy-down {
   position: relative;
   top: 23px;
