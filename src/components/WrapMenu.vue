@@ -2,8 +2,8 @@
   <div class="banner">
     <div class="container">
       <div class="d-sm-none">
-        <div class="row justify-content-md-center mt-3">
-          <div class="d-grid gap-2 mt-2">
+        <div class="row justify-content-md-center mt-1">
+          <div class="d-grid gap-2 mt-3">
             <button
               class="btn btn-success btn-lg"
               type="button"
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="d-none d-sm-block">
-        <div class="row justify-content-md-center mt-3">
+        <div class="row justify-content-md-center mt-3 pt-2">
           <div class="row justify-content-center">
             <div class="col-md-5">
               <div class="d-grid gap-2 mt-2">

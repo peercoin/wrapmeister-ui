@@ -32,7 +32,7 @@
       type="text"
       v-model="amount"
       :readonly="!!session && !!session._id"
-       @keypress="onlyForCurrency"
+      @keypress="onlyForCurrency"
     />
     <div class="wrapinput-label-container text-start">
       <label for="sessionamount" class="form-label wrapinput-label "
@@ -109,11 +109,12 @@
             </td>
             <td align="right">
               <span class="copyaddress">
-                <font-awesome-icon
-                  :icon="['far', 'copy']"
-                  size="2x"
-                  :style="{ color: '#fff' }"
-                  @click="copyToClipboard"
+                <img
+                  alt="copy"
+                  height="18"
+                  src="../assets/copy.svg"
+                  class="iconleafffffffff"
+                  @click.stop="copyToClipboard"
                 />
               </span>
             </td>
@@ -144,11 +145,12 @@
             </td>
             <td align="right">
               <span class="copyaddress">
-                <font-awesome-icon
-                  :icon="['far', 'copy']"
-                  size="2x"
-                  :style="{ color: '#fff' }"
-                  @click="copyToClipboard"
+                <img
+                  alt="copy"
+                  height="18"
+                  src="../assets/copy.svg"
+                  class="iconleafffffffff"
+                  @click.stop="copyToClipboard"
                 />
               </span>
             </td>
@@ -170,7 +172,7 @@
         :show-text="false"
         line-height="4"
         color="#fff"
-        bg-color="#393E46"
+        bg-color="#adb5bd"
         :percent="percentConfirmations"
       >
       </kprogress>
@@ -184,7 +186,7 @@
         :show-text="false"
         line-height="4"
         color="#fff"
-        bg-color="#393E46"
+        bg-color="#adb5bd"
         :percent="percentVerified"
       >
       </kprogress>
