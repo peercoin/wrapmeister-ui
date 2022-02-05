@@ -275,7 +275,7 @@ export default {
   // line-height: 20px;
   // border: none;
   // border-radius: 5px;
-  background: #e3f3e6;
+  background: #3cb054;
   // padding: 0 0 0 5px;
   // width: calc(100%);
   // transition: border 0.1s ease;
@@ -289,7 +289,7 @@ export default {
   // padding: 8px 40px 0 8px;
   //border-radius: 5px;
   border: 1px solid #e8e8e8;
-  background: #e3f3e6;
+  background: #3cb054;
   //font-size: 14px;
 }
 </style>
