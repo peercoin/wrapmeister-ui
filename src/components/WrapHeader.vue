@@ -24,7 +24,7 @@
 
     <div class="d-none d-sm-block">
       <div class="row px-3 my-2">
-        <div class="col-1 text-start">
+        <div class="col-3 text-start">
           <img
             alt="Peercoin"
             height="75"
@@ -34,8 +34,8 @@
           />
         </div>
 
-        <div class="col-11">
-          <p class="page-title mt-2">{{ curSelectedTitle }}</p>
+        <div class="col-7">
+          <div class="page-title floating-title ">{{ curSelectedTitle }}</div>
         </div>
       </div>
     </div>
@@ -86,6 +86,12 @@ export default {
   &.smaller {
     font-size: 1.4rem;
   }
+}
+.floating-title {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  //background-color: aqua;
 }
 .iconleaf {
   &:hover {
