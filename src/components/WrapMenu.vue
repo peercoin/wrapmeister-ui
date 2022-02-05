@@ -218,7 +218,7 @@ export default {
   max-width: 295px;
 }
 .warranty {
-  font-size: 70%;
+  font-size: 80%;
   color: #fff;
 }
 // .inner {
