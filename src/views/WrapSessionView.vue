@@ -53,7 +53,7 @@
     <div>
       <slideout-panel
         ref="slideoutpanel"
-        color-icon="#222"
+        color-icon="#3cb054"
         @hideSlideOutPanel="onHideSlideOutPanel"
       >
         <template v-slot:panelslot>
