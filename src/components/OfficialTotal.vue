@@ -1,14 +1,14 @@
-<template> 
- <collapse-transition>
-  <div v-if="propsaccounts && !!token" class="row g-0">
-    <div class="col-md-12">
-      <div class="totalofficialppc" @click="onClick">
-        <span class="allcaps">official wrapped peercoin token: </span
-        ><strong>{{ token }}</strong>
+<template>
+  <collapse-transition>
+    <div v-if="propsaccounts && !!token" class="row g-0">
+      <div class="col-md-12">
+        <div class="totalofficialppc" @click="onClick">
+          <span class="allcaps">official wrapped peercoin token: </span
+          ><strong>{{ token }}</strong>
+        </div>
       </div>
     </div>
-  </div>
-    </collapse-transition>
+  </collapse-transition>
 </template>
 
 <script>
@@ -24,13 +24,13 @@ export default {
     return {
       endpoints: wrapEndpoints,
       token: "",
+      retrycount: 1,
     };
   },
 
   mounted() {
     this.retryInit();
   },
-
 
   watch: {
     "$store.state.network": {
@@ -45,11 +45,16 @@ export default {
     retryInit() {
       this.inititialise();
 
-      if (!this.token) {
-        window.setTimeout(() => {
-          this.retryInit();
-        }, 1200);
-      }
+      this.$nextTick(() => {
+        if (!this.token) {
+          if (this.retrycount < 10) {
+            window.setTimeout(() => {
+              this.retryInit();
+            }, 1200 * this.retrycount);
+          }
+        }
+        this.retrycount++;
+      });
     },
 
     inititialise() {
@@ -74,7 +79,7 @@ export default {
     },
   },
 
-    components: {
+  components: {
     CollapseTransition,
   },
 };

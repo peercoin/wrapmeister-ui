@@ -314,6 +314,9 @@ export default {
   color: #fff;
   //background-color: #061988;
 }
+</style>
+
+<style lang="scss" scoped>
 .arrowcaret {
   position: absolute;
   width: 40px;
@@ -324,9 +327,6 @@ export default {
   text-align: center;
   transition: transform 0.2s ease;
 }
-</style>
-
-<style lang="scss" scoped>
 .option__image {
   height: 21px;
   padding-right: 7px;

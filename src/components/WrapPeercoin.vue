@@ -228,7 +228,6 @@ import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
 import kprogress from "@/components/kprogress.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
@@ -250,7 +249,6 @@ export default {
   },
 
   async mounted() {
-    //  debugger;
     this.claimtokenStatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks();
@@ -265,7 +263,6 @@ export default {
 
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
-      console.log("ationETHAddress" + this.destinationETHAddress);
     }
 
     if (!!this.propsessionid) {
@@ -536,7 +533,7 @@ export default {
     },
 
     async onModalConfirm() {
-      console.log(this.session);
+     // console.log(this.session);
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
@@ -662,7 +659,6 @@ export default {
     Countdown,
     Modal,
     ExpirationWarning,
-    FontAwesomeIcon,
     LoadingOverlay,
     kprogress,
   },
