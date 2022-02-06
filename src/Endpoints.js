@@ -57,7 +57,7 @@ export function getSignAccounts() {
     "0x1953382ea3Cf65A07853c45De5e55fE540b599cC",
     "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
     "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407",
-    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508"
+    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508",
   ];
 }
 
@@ -92,7 +92,7 @@ export function getNetworks() {
     {
       key: "MATIC_TESTNET",
       description: "Polygon (Matic) - Testnet",
-      active: true,//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!rollback this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      active: false,
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl: "",
