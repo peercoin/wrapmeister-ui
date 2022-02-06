@@ -145,7 +145,7 @@ export default {
 }
 
 .dropdown-ppc-style .multiselect__option--highlight {
-  background-color: #3cb054;
+  background-color: #ade2b7;
 }
 
 .dropdown-ppc-style .multiselect__option--disabled {
@@ -258,25 +258,21 @@ export default {
 .dropdown-ppc-style
   .multiselect__option--selected.multiselect__option--highlight {
   background-color: #ade2b7;
-  color: #0a0909;
 }
 
 .dropdown-ppc-style
   .multiselect__option--selected.multiselect__option--highlight:after {
   background-color: #ade2b7;
-  color: #0a0909;
 }
 
 .dropdown-ppc-style
   .multiselect__option--group-selected.multiselect__option--highlight {
   background-color: #ade2b7;
-  color: #0a0909;
 }
 
 .dropdown-ppc-style
   .multiselect__option--group-selected.multiselect__option--highlight:after {
   background-color: #ade2b7;
-  color: #0a0909;
 }
 .dropdown-ppc-style .multiselect__placeholder {
   color: inherit;
