@@ -58,7 +58,7 @@
       </div>
 
       <div class="my-3 g-0" v-if="(isSigner || isOwner) && showSessions">
-        <h5>Sign overview</h5>
+        <h5>SIGN OVERVIEW</h5>
         <sign-session-overview :propsaccounts="propsaccounts" />
       </div>
 

@@ -126,10 +126,10 @@ export default {
   // font-weight: normal;
   // font-size: 14px;
   // line-height: 14px;
-
+  font-weight: bold;
   color: #fff;
 }
 .currentstep {
-  color: #222;
+  font-weight: bold;
 }
 </style>
