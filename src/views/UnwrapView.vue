@@ -6,14 +6,15 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <font-awesome-icon
-                  :icon="['fas', 'arrow-circle-left']"
-                  size="1x"
+                <img
+                  alt="Peercoin"
+                  height="24"
+                  src="../assets/back.svg"
                   class="headericon"
-                  @click="gotoHome"
+                  @click.stop="gotoHome"
                 />
               </div>
-              <div class="col-6">
+              <div class="col-6 fw-bold">
                 UNWRAP PEERCOIN
               </div>
               <div class="col-3 text-end"></div>
@@ -39,13 +40,11 @@
 <script>
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import { getNetworks } from "@/Endpoints.js";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 //this view is to show the unwrap form
 export default {
   components: {
     UnwrapPeercoin,
-    FontAwesomeIcon,
   },
 
   props: {

@@ -111,7 +111,7 @@ hr.connect {
   width: 16.66666%;
   float: left;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
 }
 #progressbar li:before {
   content: counter(step);

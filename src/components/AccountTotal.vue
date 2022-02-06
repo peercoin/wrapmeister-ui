@@ -33,6 +33,7 @@ export default {
       amount: "",
       amountStorage: "",
       peercoinAddressStorage: "",
+      retrycount: 1,
     };
   },
 
@@ -44,6 +45,8 @@ export default {
     "$store.state.network": {
       handler: function(nv, oldValue) {
         //console.log("inititialise account total", nv);
+        this.amount = "";
+        this.amountStorage = "";
         this.inititialise();
       },
       immediate: true,
@@ -54,11 +57,17 @@ export default {
     async retryInit() {
       await this.inititialise();
 
-      if (!this.amount || !this.amountStorage) {
-        window.setTimeout(() => {
-          this.retryInit();
-        }, 1200);
-      }
+      this.$nextTick(() => {
+        //console.warn(this.amount, this.amountStorage);
+        if (!this.amount || !this.amountStorage) {
+          if (this.retrycount < 10) {
+            window.setTimeout(() => {
+              this.retryInit();
+            }, 1200 * this.retrycount);
+          }
+        }
+        this.retrycount++;
+      });
     },
 
     async inititialise() {
@@ -82,7 +91,7 @@ export default {
             parseInt(query.data.result, 10) * (1.0 / 10 ** digits),
             digits
           );
-          this.amount = "" + !!amountnumber ? amountnumber : "";
+          this.amount = amountnumber > 0 ? "" + amountnumber : "";
         }
 
         const storagedata = await axios.get(this.endpoints().storageAddress);

@@ -2,8 +2,8 @@
   <div class="banner">
     <div class="container">
       <div class="d-sm-none">
-        <div class="row justify-content-md-center mt-3">
-          <div class="d-grid gap-2 mt-2">
+        <div class="row justify-content-md-center mt-1">
+          <div class="d-grid gap-2 mt-3">
             <button
               class="btn btn-success btn-lg"
               type="button"
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="d-none d-sm-block">
-        <div class="row justify-content-md-center mt-3">
+        <div class="row justify-content-md-center mt-3 pt-2">
           <div class="row justify-content-center">
             <div class="col-md-5">
               <div class="d-grid gap-2 mt-2">
@@ -58,7 +58,7 @@
       </div>
 
       <div class="my-3 g-0" v-if="(isSigner || isOwner) && showSessions">
-        <h5>Sign overview</h5>
+        <h5>SIGN OVERVIEW</h5>
         <sign-session-overview :propsaccounts="propsaccounts" />
       </div>
 
@@ -218,7 +218,7 @@ export default {
   max-width: 295px;
 }
 .warranty {
-  font-size: 70%;
+  font-size: 80%;
   color: #fff;
 }
 // .inner {

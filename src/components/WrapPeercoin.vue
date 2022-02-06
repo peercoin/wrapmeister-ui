@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xs-12 py-3 mb-3">
+  <div class="col-xs-12 py-3 mb-3 px-5">
     <countdown v-if="showProgressbar" :status="0.01 * countDown"></countdown>
     <loading-overlay :loading="!!claimtokenStatus" :text="claimtokenStatus" />
     <modal
@@ -7,8 +7,13 @@
       @modalconfirm="onModalConfirm"
       @modalclose="onModalClose"
       confirmtext="CONTINUE"
-      body="Proceed to MetaMask extension to mint your wPPC tokens."
-    ></modal>
+    >
+      <template v-slot:body>
+        <p class="fw-bolder">
+          Proceed to MetaMask extension to mint your wPPC tokens.
+        </p>
+      </template>
+    </modal>
 
     <expiration-warning :session="session" />
 
@@ -32,7 +37,7 @@
       type="text"
       v-model="amount"
       :readonly="!!session && !!session._id"
-       @keypress="onlyForCurrency"
+      @keypress="onlyForCurrency"
     />
     <div class="wrapinput-label-container text-start">
       <label for="sessionamount" class="form-label wrapinput-label "
@@ -84,7 +89,7 @@
     <div v-if="!!session.wrapPPCAddress" class="mb-5">
       <vue-q-r-code-component
         v-if="!!URIencodeWrapPPCAddress"
-        :size="250"
+        :size="200"
         :text="URIencodeWrapPPCAddress"
       />
     </div>
@@ -109,11 +114,12 @@
             </td>
             <td align="right">
               <span class="copyaddress">
-                <font-awesome-icon
-                  :icon="['far', 'copy']"
-                  size="2x"
-                  :style="{ color: '#fff' }"
-                  @click="copyToClipboard"
+                <img
+                  alt="copy"
+                  height="18"
+                  src="../assets/copy.svg"
+                  class="iconleafffffffff"
+                  @click.stop="copyToClipboard"
                 />
               </span>
             </td>
@@ -144,11 +150,12 @@
             </td>
             <td align="right">
               <span class="copyaddress">
-                <font-awesome-icon
-                  :icon="['far', 'copy']"
-                  size="2x"
-                  :style="{ color: '#fff' }"
-                  @click="copyToClipboard"
+                <img
+                  alt="copy"
+                  height="18"
+                  src="../assets/copy.svg"
+                  class="iconleafffffffff"
+                  @click.stop="copyToClipboard"
                 />
               </span>
             </td>
@@ -168,9 +175,9 @@
         status="success"
         type="line"
         :show-text="false"
-        line-height="4"
+        :line-height="4"
         color="#fff"
-        bg-color="#393E46"
+        bg-color="#adb5bd"
         :percent="percentConfirmations"
       >
       </kprogress>
@@ -182,9 +189,9 @@
         status="success"
         type="line"
         :show-text="false"
-        line-height="4"
+        :line-height="4"
         color="#fff"
-        bg-color="#393E46"
+        bg-color="#adb5bd"
         :percent="percentVerified"
       >
       </kprogress>
@@ -221,7 +228,6 @@ import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import ExpirationWarning from "@/components/ExpirationWarning.vue";
 import kprogress from "@/components/kprogress.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   extends: BaseWrapper,
@@ -243,7 +249,6 @@ export default {
   },
 
   async mounted() {
-    //  debugger;
     this.claimtokenStatus = "";
     this.requestId = this.newId();
     this.networks = getNetworks();
@@ -258,7 +263,6 @@ export default {
 
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
-      console.log("ationETHAddress" + this.destinationETHAddress);
     }
 
     if (!!this.propsessionid) {
@@ -278,6 +282,8 @@ export default {
     } else {
       this.countDownHandle = setIntervalAsync(this.onCountDown, 350);
     }
+    //test
+    //this.popupModal = true;
   },
 
   async unmounted() {
@@ -527,7 +533,7 @@ export default {
     },
 
     async onModalConfirm() {
-      console.log(this.session);
+     // console.log(this.session);
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
@@ -653,7 +659,6 @@ export default {
     Countdown,
     Modal,
     ExpirationWarning,
-    FontAwesomeIcon,
     LoadingOverlay,
     kprogress,
   },

@@ -4,6 +4,19 @@
       <div class="col-md-6 text-start fs-5">
         <network-chooser />
       </div>
+      <collapse-transition>
+        <div class="col-md-6 fs-5" v-if="showAddButton">
+          <div class="d-grid gap-2">
+            <button
+              class="btn btn-success "
+              @click="addTokenToMetamask"
+              type="button"
+            >
+              Add wPPC TOKEN TO METAMASK
+            </button>
+          </div>
+        </div>
+      </collapse-transition>
     </div>
   </div>
 
@@ -58,6 +71,7 @@
 </template>
 
 <script>
+import CollapseTransition from "@/components/CollapseTransition.vue";
 import MetaMaskInfo from "@/components/MetaMaskInfo.vue";
 import MetaMaskConnect from "@/components/MetaMaskConnect.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
@@ -72,18 +86,23 @@ export default {
     propsaccounts: Array, //fallback
   },
 
+  data() {
+    return {
+      networks: [],
+    };
+  },
+
   created() {
     this.eventBus.on("goto-home", this.gotoHome);
+    this.networks = getNetworks().filter((nw) => nw.active);
   },
 
   mounted() {
     //set a default network if empty:
     if (!this.$store.state.network) {
-      const networks = getNetworks().filter((nw) => nw.active);
-
-      if (!!networks && networks.length > 0) {
+      if (!!this.networks && this.networks.length > 0) {
         //pick first
-        const network = networks[0].key;
+        const network = this.networks[0].key;
         this.$store.commit("setNetwork", network);
       }
     }
@@ -102,6 +121,50 @@ export default {
   },
 
   methods: {
+    async addTokenToMetamask() {
+      const network = this.$store.state.network;
+      const ne = this.networks.find((nw) => nw.key === network);
+
+      const tokenAddress = ne.contract;
+      const tokenSymbol = ne.tokenSymbol;
+      const tokenDecimals = ne.tokenDecimals;
+      const tokenImage = ne.tokenImage;
+
+      try {
+        // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+        const wasAdded = await ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20", // Initially only supports ERC20, but eventually more!
+            options: {
+              address: tokenAddress, // The address that the token is at.
+              symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+              decimals: tokenDecimals, // The number of decimals in the token
+              image: tokenImage, // A string url of the token logo
+            },
+          },
+        });
+
+        if (wasAdded) {
+          this.eventBus.emit("add-toastr", {
+            text: "Click Add Token to register in MetaMask",
+            type: "success",
+          });
+        } else {
+          this.eventBus.emit("add-toastr", {
+            text: "Unable to register token",
+            type: "error",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        this.eventBus.emit("add-toastr", {
+          text: "Unable to register token",
+          type: "error",
+        });
+      }
+    },
+
     gotoHome() {
       if (this.selectedAccount.length > 0) {
         this.$router.push({
@@ -110,8 +173,7 @@ export default {
             selectedaccount: this.selectedAccount,
           },
         });
-      }
-      else {
+      } else {
         this.$router.push({
           name: "Home",
         });
@@ -154,6 +216,28 @@ export default {
   },
   ///////////////COMPUTED/////////////////////////////////
   computed: {
+    showAddButton() {
+      if (
+        !!this.metaMaskEnabled &&
+        this.networks.length > 0 &&
+        !!this.$store.state.account &&
+        !!this.$store.state.network
+      ) {
+        const network = this.$store.state.network;
+        const ne = this.networks.find((nw) => nw.key === network);
+
+        return (
+          !!ne &&
+          ne.hasOwnProperty("tokenSymbol") &&
+          ne.hasOwnProperty("tokenDecimals") &&
+          ne.hasOwnProperty("tokenImage") &&
+          !!ne.tokenSymbol &&
+          !!ne.tokenDecimals &&
+          !!ne.tokenImage
+        );
+      }
+      return false;
+    },
     curNetwork() {
       return this.$store.state.network;
     },
@@ -173,7 +257,7 @@ export default {
       }
 
       if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
-        console.warn("account from props");
+        //console.warn("account from props");
         return this.propsaccounts;
       }
 
@@ -210,7 +294,7 @@ export default {
   },
 
   components: {
-    //CollapseTransition,
+    CollapseTransition,
     MetaMaskInfo,
     OfficialTotal,
     AccountTotal,

@@ -4,6 +4,7 @@
     v-model="curSelected"
     label="network"
     track-by="network"
+    :searchable="false"
     :options="availableNetworks"
     :option-height="104"
     placeholder="Select smart contract platform"
@@ -13,6 +14,17 @@
     :allow-empty="false"
     @select="onOptionSelectChange"
   >
+    <template v-slot:caret="slotProps">
+      <span class="arrowcaret">
+        <img
+          alt="Peercoin"
+          height="7"
+          src="../assets/arrowdown.svg"
+          @mousedown.prevent.stop="slotProps.toggle"
+        />
+      </span>
+    </template>
+
     <template v-slot:singleLabel="slotProps">
       <img
         v-if="!!slotProps && !!slotProps.option && !!slotProps.option.img"
@@ -128,10 +140,12 @@ export default {
   font-size: 14px;
   padding: 6px 12px;
   min-height: 20px;
+  color: #2f2f2f;
+  background-color: #3cb054;
 }
 
 .dropdown-ppc-style .multiselect__option--highlight {
-  background-color: #3cb054;
+  background-color: #ade2b7;
 }
 
 .dropdown-ppc-style .multiselect__option--disabled {
@@ -237,28 +251,28 @@ export default {
 }
 
 .dropdown-ppc-style .multiselect__option--selected {
-  background: #cccccc;
-  color: #4e4e4e;
+  background: #3cb054;
+  color: #fff;
 }
 
 .dropdown-ppc-style
   .multiselect__option--selected.multiselect__option--highlight {
-  background: #3cb054;
+  background-color: #ade2b7;
 }
 
 .dropdown-ppc-style
   .multiselect__option--selected.multiselect__option--highlight:after {
-  background: #3cb054;
+  background-color: #ade2b7;
 }
 
 .dropdown-ppc-style
   .multiselect__option--group-selected.multiselect__option--highlight {
-  background: #3cb054;
+  background-color: #ade2b7;
 }
 
 .dropdown-ppc-style
   .multiselect__option--group-selected.multiselect__option--highlight:after {
-  background: #3cb054;
+  background-color: #ade2b7;
 }
 .dropdown-ppc-style .multiselect__placeholder {
   color: inherit;
@@ -275,7 +289,7 @@ export default {
   // line-height: 20px;
   // border: none;
   // border-radius: 5px;
-  background: #e3f3e6;
+  background: #3cb054;
   // padding: 0 0 0 5px;
   // width: calc(100%);
   // transition: border 0.1s ease;
@@ -289,12 +303,26 @@ export default {
   // padding: 8px 40px 0 8px;
   //border-radius: 5px;
   border: 1px solid #e8e8e8;
-  background: #e3f3e6;
+  background: #3cb054;
   //font-size: 14px;
+}
+.dropdown-ppc-style span.option__title {
+  color: #fff;
+  //background-color: #061988;
 }
 </style>
 
 <style lang="scss" scoped>
+.arrowcaret {
+  position: absolute;
+  width: 40px;
+  height: 38px;
+  right: 1px;
+  top: 1px;
+  padding: 4px 8px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
 .option__image {
   height: 21px;
   padding-right: 7px;
@@ -318,5 +346,8 @@ export default {
   padding-top: 5px;
   text-align: left;
   width: 100%;
+  color: #fff;
+  //background-color: #7c2d14;
 }
+//multiselect__option--highlight multiselect__option--selected multiselect__option
 </style>

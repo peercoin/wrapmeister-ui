@@ -11,11 +11,7 @@
   >
     <div class="row">
       <div class="col-xs-3 col-md-2">
-        <font-awesome-icon
-          icon="exclamation-triangle"
-          size="3x"
-          :style="{ color: '#3cb054' }"
-        />
+        <img alt="warning" height="46" src="../assets/warning.svg" />
       </div>
       <div class="col-xs-9 col-md-10 mt-2">
         <div class="row">
@@ -23,7 +19,7 @@
             :class="{
               'col-lg-8': time.length <= 6,
               'col-12': time.length > 6,
-   'fs-6':true
+              'fs-6': true,
             }"
           >
             {{ missingCoins }}
@@ -33,7 +29,7 @@
             :class="{
               'col-lg-4': time.length <= 6,
               'col-12': time.length > 6,
-            'fw-bolder':true
+              'fw-bolder': true,
             }"
           >
             {{ time }}
@@ -45,7 +41,6 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"; //todo
 import { roundTo } from "@/helpers.js";
 
 export default {
@@ -130,10 +125,6 @@ export default {
 
       return `Please deposit ${remaining} ${pluralremain} PPC within given time limit`;
     },
-  },
-
-  components: {
-    FontAwesomeIcon,
   },
 };
 </script>

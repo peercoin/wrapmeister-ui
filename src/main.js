@@ -3,15 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import mitt from "mitt";
 import { library } from "@fortawesome/fontawesome-svg-core";
+// import {
+//   faTimes,
+// } from "@fortawesome/free-solid-svg-icons";
+//import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import {
-  faCheckSquare,
-  faExclamationTriangle,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { faCopy } from "@fortawesome/free-regular-svg-icons";
-import {
-  faQuestionCircle,
-  faArrowCircleLeft,
+  // faQuestionCircle,
+  // faArrowCircleLeft,
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -22,15 +20,12 @@ import {
 import store from "./store";
 
 library.add(
-  faCheckSquare,
-  faExclamationTriangle,
-  faCopy,
   faDiscord,
-  faQuestionCircle,
+  // faQuestionCircle,
   faGithub,
   faTelegramPlane,
-  faTimes,
-  faArrowCircleLeft,
+  //faTimes,
+  //faArrowCircleLeft,
   faTimesCircle
 );
 

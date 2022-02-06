@@ -1,9 +1,14 @@
 <template>
   <div class="Site-content" ref="sitecontent">
-    <notifications />
-    <wrap-header />
-    <router-view />
-    <wrap-footer :fixed="this.clientHeight > this.heightApp" />
+    <div :style="centeredWhenCapped">
+      <notifications />
+      <wrap-header />
+      <router-view />
+    </div>
+    <wrap-footer
+      :fixed="this.clientHeight > this.heightApp"
+      :innerwidth="actualInnerWidth"
+    ></wrap-footer>
   </div>
 </template>
 
@@ -24,6 +29,8 @@ export default {
     return {
       clientHeight: 0,
       heightApp: 0,
+      widthApp: 0,
+      actualInnerWidth: 0,
       deboucedGetDimension: null,
       resizeObserver: null,
     };
@@ -37,17 +44,40 @@ export default {
     this.resizeObserver = new ResizeObserver(() => {
       this.getDimensions();
     });
-    this.resizeObserver.observe(this.$refs.sitecontent);
+    this.resizeObserver.observe(document.body);
   },
 
   unmounted() {
-    resizeObserver = null;
+    this.resizeObserver.unobserve(document.body);
   },
 
   methods: {
     getDimensions() {
       this.clientHeight = document.documentElement.clientHeight;
       this.heightApp = this.$refs.sitecontent.offsetHeight;
+      this.widthApp = this.$refs.sitecontent.offsetWidth;
+      this.actualInnerWidth = document.body.clientWidth; // El. width minus scrollbar width
+
+      // console.log(this.heightApp, this.widthApp, this.actualInnerWidth);
+    },
+  },
+
+  computed: {
+    centeredWhenCapped() {
+      if (
+        this.actualInnerWidth > 0 &&
+        this.actualInnerWidth - this.widthApp > 1
+      ) {
+        const offset = Math.floor(
+          0.5 * (this.actualInnerWidth - this.widthApp)
+        );
+        return {
+          position: "relative",
+          left: offset + "px",
+        };
+      }
+
+      return {};
     },
   },
 };
@@ -104,9 +134,9 @@ body {
 
 .Site-content {
   min-height: 85%;
+  max-width: 1000px;
 }
 
- 
 .btn-success {
   color: #fff;
   border-radius: 8px;
@@ -149,23 +179,23 @@ body {
   outline: 0;
   background: transparent;
   border-radius: 0px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 2px solid #fff;
   padding: 5px 5px 0px 5px;
   &:focus {
     box-shadow: none;
     border-color: #fff;
-    color:#fff;
+    color: #fff;
   }
-    &.invalid {
-      border-bottom: 1px solid rgb(223, 98, 98);
+  &.invalid {
+    border-bottom: 2px solid rgb(223, 98, 98);
   }
 }
 
-.wrapinput-label-container{
+.wrapinput-label-container {
   width: 100%;
 }
 
-.wrapinput-label{
+.wrapinput-label {
   font-size: 70%;
   font-weight: 600;
 }
