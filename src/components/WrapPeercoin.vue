@@ -533,7 +533,7 @@ export default {
     },
 
     async onModalConfirm() {
-     // console.log(this.session);
+      // console.log(this.session);
       if (
         !this.comfirmedProceedMetaMask &&
         !!this.session.wrapPPCAddress &&
@@ -571,6 +571,9 @@ export default {
         this.session = response.data.data;
 
         const success = response && !response.error;
+
+        this.stepStatus = this.getWrapStatus();
+        this.$emit("wrap-step-current", this.stepStatus);
 
         this.eventBus.emit("add-toastr", {
           text: response.data.message,
