@@ -21,7 +21,7 @@
   </div>
 
   <div class="container mb-3" v-if="!metaMaskEnabled">
-    <div class="row my-3 mx-1">
+    <div class="row my-3">
       <div class="col-md-12">
         <meta-mask-info />
       </div>

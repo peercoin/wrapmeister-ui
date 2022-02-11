@@ -15,188 +15,267 @@
       </template>
     </modal>
 
-    <expiration-warning :session="session" />
+    <div class="d-sm-none text-start">
+      <expiration-warning class="mt-1" :session="session" />
 
-    <input
-      id="sessionnetwork"
-      class="form-control wrapinput"
-      type="text"
-      :value="selectedNetworkDescription"
-      readonly
-    />
-    <div class="wrapinput-label-container text-start">
-      <label for="sessionnetwork" class="form-label wrapinput-label "
-        >SMART CONTRACT PLATFORM</label
-      >
-    </div>
-
-    <input
-      id="sessionamount"
-      class="form-control wrapinput"
-      :class="{ invalid: !validAmount }"
-      type="text"
-      v-model="amount"
-      :readonly="!!session && !!session._id"
-      @keypress="onlyForCurrency"
-    />
-    <div class="wrapinput-label-container text-start">
-      <label for="sessionamount" class="form-label wrapinput-label "
-        >AMOUNT</label
-      >
-    </div>
-
-    <div class="d-sm-none text-start moveup">
-      <img
-        class="foxy-down"
-        alt="MetaMask"
-        height="15"
-        src="../assets/metamask-fox.svg"
-      />
       <input
-        id="sessionaccount"
-        class="form-control wrapinput accounttext moverightpadding"
+        id="sessionnetwork"
+        class="form-control wrapinput"
         type="text"
-        :value="destinationETHAddress"
+        :value="selectedNetworkDescription"
         readonly
       />
       <div class="wrapinput-label-container text-start">
-        <label for="sessionaccount" class="form-label wrapinput-label "
-          >CONNECTED ACCOUNT</label
+        <label for="sessionnetwork" class="form-label wrapinput-label "
+          >SMART CONTRACT PLATFORM</label
         >
       </div>
-    </div>
-    <div class="d-none d-sm-block text-start moveup">
-      <img
-        class="foxy-down-lg"
-        alt="MetaMask"
-        height="15"
-        src="../assets/metamask-fox.svg"
-      />
+
       <input
-        id="sessionaccount"
-        class="form-control wrapinput accounttext-lg moverightpadding"
-        type="text"
-        :value="destinationETHAddress"
-        readonly
+        id="sessionamount"
+        class="form-control wrapinput"
+        :class="{ invalid: !validAmount }"
+        type="number"
+        v-model="amount"
+        :readonly="!!session && !!session._id"
+        @keypress="onlyForCurrency"
       />
-      <div class="wrapinput-label-container  text-start">
-        <label for="sessionaccount" class="form-label wrapinput-label "
-          >CONNECTED ACCOUNT</label
+      <div class="wrapinput-label-container text-start">
+        <label for="sessionamount" class="form-label wrapinput-label "
+          >AMOUNT</label
         >
       </div>
+
+      <div class="text-start moveup">
+        <img
+          class="foxy-down"
+          alt="MetaMask"
+          height="15"
+          src="../assets/metamask-fox.svg"
+        />
+        <input
+          id="sessionaccount"
+          class="form-control wrapinput accounttext moverightpadding"
+          type="text"
+          :value="destinationETHAddress"
+          readonly
+        />
+        <div class="wrapinput-label-container text-start">
+          <label for="sessionaccount" class="form-label wrapinput-label "
+            >CONNECTED ACCOUNT</label
+          >
+        </div>
+      </div>
+
+      <div v-if="!!session.wrapPPCAddress" class="mb-3">
+        <vue-q-r-code-component
+          v-if="!!URIencodeWrapPPCAddress"
+          :size="200"
+          :text="URIencodeWrapPPCAddress"
+        />
+      </div>
+
+      <div v-if="!!session.wrapPPCAddress" class="nothing">
+        <input
+          id="sessiondepositaddress"
+          class="form-control wrapinput accounttext moveleftpadding"
+          type="text"
+          v-model="session.wrapPPCAddress"
+          readonly
+        />
+        <div class="wrapinput-label-container text-start">
+          <table width="100%">
+            <tr>
+              <td witdh="90%">
+                <label
+                  for="sessiondepositaddress"
+                  class="form-label wrapinput-label "
+                  >PEERCOIN DEPOSIT ADDRESS
+                </label>
+              </td>
+              <td align="right">
+                <span class="copyaddress">
+                  <img
+                    alt="copy"
+                    height="18"
+                    src="../assets/copy.svg"
+                    @click.stop="copyToClipboard"
+                  />
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div
+        v-if="
+          !!session.wrapPPCAddress &&
+            !!session.confirmations &&
+            session.confirmations.required > 0
+        "
+        class="mt-3"
+      >
+        <kprogress
+          status="success"
+          type="line"
+          :show-text="false"
+          :line-height="4"
+          color="#fff"
+          bg-color="#adb5bd"
+          :percent="percentConfirmations"
+        >
+        </kprogress>
+        <div class="text-start wrapinput-label">CONFIRMATIONS</div>
+      </div>
+
+      <div class="mt-4" v-if="!!session.wrapPPCAddress">
+        <kprogress
+          status="success"
+          type="line"
+          :show-text="false"
+          :line-height="4"
+          color="#fff"
+          bg-color="#adb5bd"
+          :percent="percentVerified"
+        >
+        </kprogress>
+        <div class="text-start wrapinput-label">WITNESSES SIGNED</div>
+      </div>
     </div>
 
-    <div v-if="!!session.wrapPPCAddress" class="mb-5">
-      <vue-q-r-code-component
-        v-if="!!URIencodeWrapPPCAddress"
-        :size="200"
-        :text="URIencodeWrapPPCAddress"
-      />
-    </div>
+    <!-- sm view or larger: -->
 
-    <div v-if="!!session.wrapPPCAddress" class="d-sm-none text-start moveup">
+    <div class="d-none d-sm-block text-start px-5">
+      <expiration-warning class="mt-1" :session="session" />
+
       <input
-        id="sessiondepositaddress"
-        class="form-control wrapinput accounttext moveleftpadding"
+        id="sessionnetwork"
+        class="form-control wrapinput"
         type="text"
-        v-model="session.wrapPPCAddress"
+        :value="selectedNetworkDescription"
         readonly
       />
       <div class="wrapinput-label-container text-start">
-        <table width="100%">
-          <tr>
-            <td witdh="90%">
-              <label
-                for="sessiondepositaddress"
-                class="form-label wrapinput-label "
-                >PEERCOIN DEPOSIT ADDRESS
-              </label>
-            </td>
-            <td align="right">
-              <span class="copyaddress">
-                <img
-                  alt="copy"
-                  height="18"
-                  src="../assets/copy.svg"
-                  class="iconleafffffffff"
-                  @click.stop="copyToClipboard"
-                />
-              </span>
-            </td>
-          </tr>
-        </table>
+        <label for="sessionnetwork" class="form-label wrapinput-label "
+          >SMART CONTRACT PLATFORM</label
+        >
       </div>
-    </div>
-    <div
-      v-if="!!session.wrapPPCAddress"
-      class="d-none d-sm-block text-start moveup mt-2"
-    >
+
       <input
-        id="sessiondepositaddress"
-        class="form-control wrapinput accounttext-lg moveleftpadding"
-        type="text"
-        v-model="session.wrapPPCAddress"
-        readonly
+        id="sessionamount"
+        class="form-control wrapinput"
+        :class="{ invalid: !validAmount }"
+        type="number"
+        v-model="amount"
+        :readonly="!!session && !!session._id"
+        @keypress="onlyForCurrency"
       />
       <div class="wrapinput-label-container text-start">
-        <table width="100%">
-          <tr>
-            <td witdh="90%">
-              <label
-                for="sessiondepositaddress"
-                class="form-label wrapinput-label "
-                >PEERCOIN DEPOSIT ADDRESS
-              </label>
-            </td>
-            <td align="right">
-              <span class="copyaddress">
-                <img
-                  alt="copy"
-                  height="18"
-                  src="../assets/copy.svg"
-                  class="iconleafffffffff"
-                  @click.stop="copyToClipboard"
-                />
-              </span>
-            </td>
-          </tr>
-        </table>
+        <label for="sessionamount" class="form-label wrapinput-label "
+          >AMOUNT</label
+        >
+      </div>
+
+      <div class="text-start moveup">
+        <img
+          class="foxy-down-lg"
+          alt="MetaMask"
+          height="15"
+          src="../assets/metamask-fox.svg"
+        />
+        <input
+          id="sessionaccount"
+          class="form-control wrapinput accounttext-lg moverightpadding"
+          type="text"
+          :value="destinationETHAddress"
+          readonly
+        />
+        <div class="wrapinput-label-container  text-start">
+          <label for="sessionaccount" class="form-label wrapinput-label "
+            >CONNECTED ACCOUNT</label
+          >
+        </div>
+      </div>
+
+      <div v-if="!!session.wrapPPCAddress" class="mb-3">
+        <vue-q-r-code-component
+          v-if="!!URIencodeWrapPPCAddress"
+          :size="200"
+          :text="URIencodeWrapPPCAddress"
+        />
+      </div>
+
+      <div v-if="!!session.wrapPPCAddress" class="xxx">
+        <input
+          id="sessiondepositaddress"
+          class="form-control wrapinput accounttext-lg moveleftpadding"
+          type="text"
+          v-model="session.wrapPPCAddress"
+          readonly
+        />
+        <div class="wrapinput-label-container text-start">
+          <table width="100%">
+            <tr>
+              <td witdh="90%">
+                <label
+                  for="sessiondepositaddress"
+                  class="form-label wrapinput-label "
+                  >PEERCOIN DEPOSIT ADDRESS
+                </label>
+              </td>
+              <td align="right">
+                <span class="copyaddress">
+                  <img
+                    alt="copy"
+                    height="18"
+                    src="../assets/copy.svg"
+                    @click.stop="copyToClipboard"
+                  />
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div
+        v-if="
+          !!session.wrapPPCAddress &&
+            !!session.confirmations &&
+            session.confirmations.required > 0
+        "
+        class="mt-3"
+      >
+        <kprogress
+          status="success"
+          type="line"
+          :show-text="false"
+          :line-height="4"
+          color="#fff"
+          bg-color="#adb5bd"
+          :percent="percentConfirmations"
+        >
+        </kprogress>
+        <div class="text-start wrapinput-label">CONFIRMATIONS</div>
+      </div>
+
+      <div class="mt-4" v-if="!!session.wrapPPCAddress">
+        <kprogress
+          status="success"
+          type="line"
+          :show-text="false"
+          :line-height="4"
+          color="#fff"
+          bg-color="#adb5bd"
+          :percent="percentVerified"
+        >
+        </kprogress>
+        <div class="text-start wrapinput-label">WITNESSES SIGNED</div>
       </div>
     </div>
 
-    <div
-      v-if="
-        !!session.wrapPPCAddress &&
-          !!session.confirmations &&
-          session.confirmations.required > 0
-      "
-    >
-      <kprogress
-        status="success"
-        type="line"
-        :show-text="false"
-        :line-height="4"
-        color="#fff"
-        bg-color="#adb5bd"
-        :percent="percentConfirmations"
-      >
-      </kprogress>
-      <div class="text-start wrapinput-label">CONFIRMATIONS</div>
-    </div>
-
-    <div class="mt-4" v-if="!!session.wrapPPCAddress">
-      <kprogress
-        status="success"
-        type="line"
-        :show-text="false"
-        :line-height="4"
-        color="#fff"
-        bg-color="#adb5bd"
-        :percent="percentVerified"
-      >
-      </kprogress>
-      <div class="text-start wrapinput-label">WITNESSES SIGNED</div>
-    </div>
+    <!-- all views -->
 
     <div class="row" v-if="!session._id">
       <div class="col-xs-12 mt-3">

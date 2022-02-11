@@ -72,6 +72,7 @@ import Steps from "@/components/Steps.vue";
 import SlideoutPanel from "@/components/SlideoutPanel.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
 import { getNetworks } from "@/Endpoints.js";
+import Web3 from "web3";
 
 //this view is to continue a existing wrapsession. todo Also to create a new one.
 export default {
@@ -134,14 +135,25 @@ export default {
           method: "eth_requestAccounts",
         });
         try {
-          const web3 = new Web3(ethereum);
-          const accounts = await web3.eth.getAccounts();
+          const accounts = await this.getAccounts();
 
           this.$store.commit("setAccount", accounts[0]);
         } catch (error) {
           console.log(error);
         }
       }
+    }
+
+    const accounts = await this.getAccounts();
+    if (
+      !this.$store.state.account ||
+      !accounts.includes(this.$store.state.account)
+    ) {
+      this.$store.commit("setAccount", "");
+      console.warn("not allowed!!!!!!!!!!!!!");
+
+      this.gotoHome();
+      return;
     }
   },
 
@@ -150,6 +162,23 @@ export default {
   },
 
   methods: {
+    async getAccounts() {
+      if (window.ethereum) {
+        try {
+          await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+
+          const web3 = new Web3(ethereum);
+          return await web3.eth.getAccounts();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      return [];
+    },
+
     gotoHome() {
       if (!!this.$store.state.account) {
         this.$router.push({

@@ -47,19 +47,29 @@ export default {
     return {
       testing: false, // restore this before commit
       address: "",
-      account: null,
+      account: null,  
       voteStatus: "",
       network: "",
+      web3: null,
     };
   },
 
-  mounted() {
+  async mounted() {
     if (Array.isArray(this.propsaccounts) && this.propsaccounts.length > 0) {
       this.account = this.propsaccounts[0];
     }
 
     if (!!this.$store.state.network) {
       this.network = this.$store.state.network;
+    }
+ 
+    const accounts = await this.getAccounts();
+    if (!this.account || !accounts.includes(this.account)) {
+      this.$store.commit("setAccount", "");
+      console.warn("not allowed!!!!!!!!!!!!!");
+
+      this.gotoHome();
+      return;
     }
 
     this.$nextTick(() => {
@@ -72,6 +82,23 @@ export default {
   },
 
   methods: {
+    async getAccounts() {
+      if (window.ethereum) {
+        try {
+          await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+
+          this.web3 = new Web3(ethereum);
+          return await this.web3.eth.getAccounts();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      return [];
+    },
+
     gotoHome() {
       this.$router.push({
         name: "Home",

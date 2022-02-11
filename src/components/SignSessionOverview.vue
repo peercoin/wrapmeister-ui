@@ -109,6 +109,8 @@
 
 <script>
 import axios from "axios";
+import Web3 from "web3";
+
 import {
   wrapEndpoints,
   getSignAccounts,
@@ -136,11 +138,45 @@ export default {
 
   async mounted() {
     await this.getWrapSessions();
+
+    if (this.propsaccounts.length > 0) {
+      const account = this.propsaccounts[0];
+      const accounts = await this.getAccounts();
+      if (!account || !accounts.includes(account)) {
+        this.$store.commit("setAccount", "");
+        console.warn("not allowed!!!!!!!!!!!!!");
+
+        this.gotoHome();
+      }
+    }
   },
 
   methods: {
+    gotoHome() {
+      this.$router.push({
+        name: "Home",
+      });
+    },
+
+    async getAccounts() {
+      if (window.ethereum) {
+        try {
+          await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+
+          this.web3 = new Web3(ethereum);
+          return await this.web3.eth.getAccounts();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      return [];
+    },
+
     async getWrapSessions() {
-      if (this.propsaccounts.length === 0) return [];
+      if (this.propsaccounts.length === 0) return;
 
       try {
         const id = this.propsaccounts[0];
