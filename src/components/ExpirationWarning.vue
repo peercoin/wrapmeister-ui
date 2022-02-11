@@ -9,7 +9,7 @@
         session.depositedAmount < session.amount
     "
   >
-    <div class="row">
+    <div class="row text-center">
       <div class="col-xs-3 col-md-2">
         <img alt="warning" height="46" src="../assets/warning.svg" />
       </div>

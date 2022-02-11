@@ -5,8 +5,9 @@
       <wrap-header />
       <router-view />
     </div>
+
     <wrap-footer
-      :fixed="this.clientHeight > this.heightApp"
+      :innerheigth="heightApp"
       :innerwidth="actualInnerWidth"
     ></wrap-footer>
   </div>
@@ -27,7 +28,6 @@ export default {
 
   data() {
     return {
-      clientHeight: 0,
       heightApp: 0,
       widthApp: 0,
       actualInnerWidth: 0,
@@ -53,12 +53,12 @@ export default {
 
   methods: {
     getDimensions() {
-      this.clientHeight = document.documentElement.clientHeight;
-      this.heightApp = this.$refs.sitecontent.offsetHeight;
-      this.widthApp = this.$refs.sitecontent.offsetWidth;
+      this.heightApp = this.$refs.sitecontent.clientHeight; // El. width minus scrollbar
+
       this.actualInnerWidth = document.body.clientWidth; // El. width minus scrollbar width
 
-      // console.log(this.heightApp, this.widthApp, this.actualInnerWidth);
+      this.widthApp = this.$refs.sitecontent.offsetWidth;
+      //});
     },
   },
 
@@ -111,7 +111,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
+  min-height: 100vh;
 }
 
 html {
@@ -121,8 +121,8 @@ html {
   line-height: 1.7;
   -webkit-text-size-adjust: 100%;
   color: #ffffff;
-  height: 100%;
-  min-height: 100%;
+  //height: 100%;
+  // min-height: 100%;
   background-color: #efefef !important;
 }
 
@@ -130,10 +130,11 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: 1rem;
   background-color: #efefef !important;
+  min-height: 100vh;
 }
 
 .Site-content {
-  min-height: 85%;
+  min-height: 100vh;
   max-width: 1000px;
 }
 
@@ -186,6 +187,9 @@ body {
     border-color: #fff;
     color: #fff;
   }
+  &:focus-visible {
+    background-color: #3cb054 !important;
+  }
   &.invalid {
     border-bottom: 2px solid rgb(223, 98, 98);
   }
@@ -198,5 +202,17 @@ body {
 .wrapinput-label {
   font-size: 70%;
   font-weight: 600;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>
