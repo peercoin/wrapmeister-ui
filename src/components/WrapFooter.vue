@@ -62,7 +62,7 @@
             <div class="col-sm-6 text-start">
               <span
                 ><a class="footerlink" href="https://peercoin.net"
-                  >Peercoin.</a
+                  >Peercoin.net</a
                 ></span
               >
 
