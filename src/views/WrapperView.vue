@@ -55,9 +55,12 @@
     </div>
   </div>
 
-  <div class="container mb-3" v-if="showMenu">
+  <div
+    class="container mb-3"
+    v-if="showMenu || (metaMaskEnabled && selectedAccount.length === 0)"
+  >
     <div class="row my-3 g-0">
-      <div v-if="showMenu" class="row g-0">
+      <div class="row g-0">
         <div class="col-md-12">
           <div class="faq" @click="onFaqClick">
             <span>FAQ</span>
