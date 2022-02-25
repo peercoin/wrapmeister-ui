@@ -1,4 +1,5 @@
 <template>
+  <wrap-header />
   <div class="container mt-5">
     <loading-overlay :loading="!!voteStatus" :text="voteStatus" />
     <div class="body-vote py-3">
@@ -37,7 +38,7 @@ import LoadingOverlay from "@/components/LoadingOverlay.vue";
 import Web3 from "web3";
 import ABI from "@/abi/erc20.json";
 import { getContractAddress } from "@/Endpoints.js";
-
+import WrapHeader from "@/components/WrapHeader.vue";
 export default {
   props: {
     propsaccounts: Array,
@@ -47,7 +48,7 @@ export default {
     return {
       testing: false, // restore this before commit
       address: "",
-      account: null,  
+      account: null,
       voteStatus: "",
       network: "",
       web3: null,
@@ -62,7 +63,7 @@ export default {
     if (!!this.$store.state.network) {
       this.network = this.$store.state.network;
     }
- 
+
     const accounts = await this.getAccounts();
     if (!this.account || !accounts.includes(this.account)) {
       this.$store.commit("setAccount", "");
@@ -174,6 +175,7 @@ export default {
 
   components: {
     LoadingOverlay,
+    WrapHeader,
   },
 };
 </script>

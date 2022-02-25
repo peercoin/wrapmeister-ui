@@ -37,6 +37,10 @@
         <div class="col-7">
           <div class="page-title floating-title ">{{ curSelectedTitle }}</div>
         </div>
+
+        <div v-if="!!title" class="col-2 text-end">
+          <arrow-left fillcolor="#3cb054" @click.stop="gotoHome" />
+        </div>
       </div>
     </div>
   </div>
@@ -44,10 +48,24 @@
 
 <script>
 import { getNetworks } from "@/Endpoints.js";
+import ArrowLeft from "@/components/ArrowLeft.vue";
 
 export default {
+  components: {
+    ArrowLeft,
+  },
+
+  props: {
+    title: {
+      type: String,
+      default: "",
+    },
+  },
+
   computed: {
     curSelectedTitle() {
+      if (!!this.title) return this.title;
+
       let network = this.$store.state.network;
 
       if (!!network) {
@@ -92,7 +110,6 @@ export default {
   left: 0px;
   width: 100%;
   height: 1px;
-  //background-color: aqua;
 }
 .iconleaf {
   &:hover {

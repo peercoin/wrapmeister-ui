@@ -2,7 +2,7 @@
   <div class="Site-content" ref="sitecontent">
     <div :style="centeredWhenCapped">
       <notifications />
-      <wrap-header />
+
       <router-view />
     </div>
 
@@ -16,13 +16,11 @@
 <script>
 import Notifications from "@/components/Notifications.vue";
 import WrapFooter from "@/components/WrapFooter.vue";
-import WrapHeader from "@/components/WrapHeader.vue";
 import { debounce } from "@/helpers.js";
 
 export default {
   components: {
     Notifications,
-    WrapHeader,
     WrapFooter,
   },
 
