@@ -1,4 +1,5 @@
 <template>
+  <wrap-header />
   <div class="wrapview">
     <div class="container mb-3">
       <div class="row my-3 mx-1">
@@ -6,13 +7,7 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <img
-                  alt="Peercoin"
-                  height="24"
-                  src="../assets/back.svg"
-                  class="headericon"
-                  @click.stop="gotoHome"
-                />
+                <arrow-left @click.stop="gotoHome" />
               </div>
               <div class="col-6 fw-bold">
                 UNWRAP PEERCOIN
@@ -39,6 +34,8 @@
 
 <script>
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
+import WrapHeader from "@/components/WrapHeader.vue";
+import ArrowLeft from "@/components/ArrowLeft.vue";
 import { getNetworks } from "@/Endpoints.js";
 import Web3 from "web3";
 
@@ -46,6 +43,8 @@ import Web3 from "web3";
 export default {
   components: {
     UnwrapPeercoin,
+    WrapHeader,
+    ArrowLeft,
   },
 
   props: {

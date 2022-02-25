@@ -1,4 +1,5 @@
 <template>
+  <wrap-header />
   <div class="wrapview">
     <div class="container mb-3">
       <div class="row my-3 mx-1">
@@ -6,13 +7,7 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <img
-                  alt="back"
-                  height="24"
-                  src="../assets/back.svg"
-                  class="headericon"
-                  @click.stop="onBackClick"
-                />
+                <arrow-left @click.stop="gotoHome" />
               </div>
               <div class="col-6 fw-bold">
                 SIGN WRAP PEERCOIN
@@ -40,6 +35,7 @@
 <script>
 //this page is used for signing wrap sessions
 import WrapHeader from "@/components/WrapHeader.vue";
+import ArrowLeft from "@/components/ArrowLeft.vue";
 import SignWrapPeercoin from "@/components/SignWrapPeercoin.vue";
 import { getNetworks } from "@/Endpoints.js";
 import Web3 from "web3";
@@ -140,15 +136,12 @@ export default {
         },
       });
     },
-
-    onBackClick() {
-      this.gotoHome();
-    },
   },
 
   components: {
     SignWrapPeercoin,
     WrapHeader,
+    ArrowLeft,
   },
 };
 </script>

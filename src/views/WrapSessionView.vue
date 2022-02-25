@@ -1,4 +1,5 @@
 <template>
+  <wrap-header />
   <div class="wrapview">
     <div class="container mb-3">
       <div class="row my-3 mx-1">
@@ -12,13 +13,7 @@
           <div class="greenwrapcontainer">
             <div class="row gx-0">
               <div class="col-3 text-start">
-                <img
-                  alt="Peercoin"
-                  height="24"
-                  src="../assets/back.svg"
-                  class="headericon"
-                  @click.stop="onBackClick"
-                />
+                <arrow-left @click.stop="gotoHome" />
               </div>
               <div class="col-6 fw-bold">
                 WRAP PEERCOIN
@@ -69,8 +64,10 @@
 <script>
 import MultiStepsProgress from "@/components/MultiStepsProgress.vue";
 import Steps from "@/components/Steps.vue";
+import WrapHeader from "@/components/WrapHeader.vue";
 import SlideoutPanel from "@/components/SlideoutPanel.vue";
 import WrapPeercoin from "@/components/WrapPeercoin.vue";
+import ArrowLeft from "@/components/ArrowLeft.vue";
 import { getNetworks } from "@/Endpoints.js";
 import Web3 from "web3";
 
@@ -81,6 +78,8 @@ export default {
     MultiStepsProgress,
     Steps,
     SlideoutPanel,
+    WrapHeader,
+    ArrowLeft,
   },
 
   props: {
@@ -210,10 +209,6 @@ export default {
 
     onHideSlideOutPanel(panelresult) {
       //this.showHelp = false;
-    },
-
-    onBackClick() {
-      this.gotoHome();
     },
 
     setWrapStatus(status) {

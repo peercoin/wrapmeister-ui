@@ -1,4 +1,5 @@
 <template>
+  <wrap-header />
   <div class="container my-3">
     <div class="row mb-2 px-1">
       <div class="col-md-6 text-start fs-5">
@@ -56,6 +57,18 @@
 
   <div class="container mb-3" v-if="showMenu">
     <div class="row my-3 g-0">
+      <div v-if="showMenu" class="row g-0">
+        <div class="col-md-12">
+          <div class="faq" @click="onFaqClick">
+            <span>FAQ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-3" v-if="showMenu">
+    <div class="row my-3 g-0">
       <official-total
         v-if="selectedAccount.length > 0"
         :propsaccounts="selectedAccount"
@@ -77,6 +90,7 @@ import MetaMaskConnect from "@/components/MetaMaskConnect.vue";
 import OfficialTotal from "@/components/OfficialTotal.vue";
 import AccountTotal from "@/components/AccountTotal.vue";
 import WrapMenu from "@/components/WrapMenu.vue";
+import WrapHeader from "@/components/WrapHeader.vue";
 import NetworkChooser from "@/components/NetworkChooser.vue"; //todo
 import { getNetworks, getSignAccounts, getOwnerAccounts } from "@/Endpoints.js";
 
@@ -182,6 +196,12 @@ export default {
 
     onBackClick() {
       this.gotoHome();
+    },
+
+    onFaqClick() {
+      this.$router.push({
+        name: "FAQ",
+      });
     },
 
     setCurrentAccount(curAccount) {
@@ -301,6 +321,27 @@ export default {
     NetworkChooser, //todo
     MetaMaskConnect,
     WrapMenu,
+    WrapHeader,
   },
 };
 </script>
+<style lang="scss" scoped>
+.faq {
+  padding-bottom: 7px;
+  padding-top: 7px;
+
+  border: 1px solid #3cb054;
+  // background-color: #fff;
+  text-align: center;
+  opacity: 1;
+  font-size: 14px;
+  background-color: #3cb054;
+  color: white;
+  border-radius: 8px;
+  &:hover {
+    cursor: pointer;
+    background-color: #efefef;
+    color: #3cb054;
+  }
+}
+</style>

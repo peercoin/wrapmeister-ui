@@ -64,6 +64,11 @@ const routes = [
       propsaccounts: route.params.selectedaccount,
     }),
   },
+  {
+    path: "/faq",
+    name: "FAQ",
+    component: () => import("../views/FAQView.vue"),
+  },
 ];
 
 const router = createRouter({
