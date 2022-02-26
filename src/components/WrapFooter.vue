@@ -20,6 +20,9 @@
                   >Forum</a
                 ></span
               >
+              <span class="ms-5"
+                ><router-link class="footerlink" to="/faq">FAQ</router-link>
+              </span>
             </div>
 
             <div class="col-12 my-1 text-center">
@@ -71,6 +74,10 @@
                   >Forum</a
                 ></span
               >
+
+              <span class="ms-5"
+                ><router-link class="footerlink" to="/faq">FAQ</router-link>
+              </span>
             </div>
 
             <div class="col-sm-6 text-end">
@@ -112,8 +119,8 @@ export default {
   },
 
   props: {
-    innerwidth: Number, 
-    innerheigth: Number, 
+    innerwidth: Number,
+    innerheigth: Number,
   },
 
   data() {
