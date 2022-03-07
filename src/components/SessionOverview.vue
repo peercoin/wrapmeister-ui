@@ -139,7 +139,7 @@ export default {
       try {
         const id = this.propsaccounts[0];
 
-        const res = await axios.get(this.endpoints(id).openwrapsessions);
+        const res = await axios.get(this.endpoints(id).openwrapsessions, {headers: {network: this.$store.state.network}});
 
         if (!!res && !!res.data && !!res.data.data) {
           let sessions = res.data.data;

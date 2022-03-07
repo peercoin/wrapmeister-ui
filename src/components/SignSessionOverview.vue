@@ -182,7 +182,7 @@ export default {
         const id = this.propsaccounts[0];
 
         if (!!id && (this.testing || getSignAccounts().includes(id))) {
-          const res = await axios.get(this.endpoints(id).signwrapsessions);
+          const res = await axios.get(this.endpoints(id).signwrapsessions, {headers: {network: this.$store.state.network}});
 
           if (!!res && !!res.data && !!res.data.data) {
             let sessions = res.data.data;
