@@ -5,6 +5,7 @@ const APP_WRAPPERHOST = isDeveloping
   : "https://wrapmeister.peercoin.net";
 
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; //not yet used anywhere
+console.log(process.env);
 
 const isNullOrEmpty = function (value) {
   return !(typeof value === "string" && value.length > 0);
