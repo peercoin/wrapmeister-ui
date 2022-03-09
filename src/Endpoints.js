@@ -1,12 +1,16 @@
 //todo change these vars:
-const isDeveloping = false; // <---------------!!!!!!!!!!!!!!!!!!!!
+const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+const isTesting = true; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
-  : "https://dev-wrapmeister.peercoin.net";
+  : isTesting
+  ? "https://dev-wrapmeister.peercoin.net"
+  : "https://wrapmeister.peercoin.net";
 
 const APP_WRAPPERHOSTWSS = "ws://localhost:3000"; //not yet used anywhere
 
-const isNullOrEmpty = function (value) {
+const isNullOrEmpty = function(value) {
   return !(typeof value === "string" && value.length > 0);
 };
 
@@ -60,14 +64,12 @@ export function getSignAccounts() {
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
     "0xfCab1090e039D4B44c3862F46b7d55bC256AB041",
     "0x2313D59CbEfd6c6eB5A72Ad439c0e3D0CB03d536",
-    "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df"
+    "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df",
   ];
 }
 export function getOwnerAccounts() {
   //return ["0xF02594A6335E7340109d75E771D7716c395bd995"];
-  return [
-    "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
-  ];
+  return ["0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"];
 }
 
 //todo change these vars:
