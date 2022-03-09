@@ -115,6 +115,10 @@ export function getNetworks() {
       viewContractUrl: "",
       accountTotalUrl: "",
       officialTotalUrl: "",
+      tokenSymbol: "wPPC",
+      tokenDecimals: 6,
+      tokenImage:
+        "https://raw.githubusercontent.com/peercoin/media/master/Peercoin%202020%20Logo%20Files/01.%20Icon%20Only/Inside%20Circle/Transparent/Green%20Icon/peercoin-icon-green-transparent.svg",
     },
     {
       key: "ETH_MAINNET",
