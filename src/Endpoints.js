@@ -56,15 +56,13 @@ export function wrapEndpoints(id) {
 //todo: returns a list of special accounts who may sign sessions
 export function getSignAccounts() {
   return [
-    /*"0x25c1cA465E71A5C9c162ce3030E48b546f867617",
-    "0x1953382ea3Cf65A07853c45De5e55fE540b599cC",
-    "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
-    "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407",
-    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508",*/
     "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80",
     "0xfCab1090e039D4B44c3862F46b7d55bC256AB041",
     "0x2313D59CbEfd6c6eB5A72Ad439c0e3D0CB03d536",
     "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df",
+    "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
+    "0xddFbc2dd1692e16Fd60e442a7251461903393A69"
+    
   ];
 }
 export function getOwnerAccounts() {
