@@ -1,113 +1,122 @@
 <template>
-  <div v-if="showTable" class="table-overview">
-    <div class="d-sm-none">
-      <table
-        cellpadding="0"
-        cellspacing="0"
-        border="0"
-        v-for="item in mysessions"
-        class="tbl-content mb-3"
-        :class="{ clickable: item.status === 'open' }"
-        @click="onRowClick(item)"
-        :key="item.sessionId"
-      >
-        <tr>
-          <td class="tbl-header">
-            <span class="headertext">Sign Wrap session</span>
-          </td>
-          <td>{{ item.sessionId }}</td>
-        </tr>
+  <collapse-transition>
+    <div v-if="showTable" class="table-overview">
+      <div class="d-sm-none">
+        <table
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          v-for="item in mysessions"
+          class="tbl-content mb-3"
+          :class="{ clickable: item.status === 'open' }"
+          @click="onRowClick(item)"
+          :key="item.sessionId"
+        >
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Sign Wrap session</span>
+            </td>
+            <td>{{ item.sessionId }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Amount</span></td>
-          <td>{{ item.amount }}</td>
-        </tr>
+          <tr>
+            <td class="tbl-header"><span class="headertext">Amount</span></td>
+            <td>{{ item.amount }}</td>
+          </tr>
 
-        <tr v-for="txId in item.txIds" :key="txId">
-          <td class="tbl-header">
-            <span class="headertext">Transaction</span>
-          </td>
-          <td class="to-upper">
-            <a
-              @click.stop=""
-              :href="item.explorerUrl + txId"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ txId || "..." }}</a
-            >
-          </td>
-        </tr>
+          <tr v-for="txId in item.txIds" :key="txId">
+            <td class="tbl-header">
+              <span class="headertext">Transaction</span>
+            </td>
+            <td class="to-upper">
+              <a
+                @click.stop=""
+                :href="item.explorerUrl + txId"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ txId || "..." }}</a
+              >
+            </td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Witness A</span></td>
-          <td>{{ item.signatureA ? "signed" : "..." }}</td>
-        </tr>
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Witness A</span>
+            </td>
+            <td>{{ item.signatureA ? "signed" : "..." }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Witness B</span></td>
-          <td>{{ item.signatureB ? "signed" : "..." }}</td>
-        </tr>
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Witness B</span>
+            </td>
+            <td>{{ item.signatureB ? "signed" : "..." }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Witness C</span></td>
-          <td>{{ item.signatureC ? "signed" : "..." }}</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="d-none d-sm-block">
-      <div class="tbl-header">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <thead>
-            <tr>
-              <th>Sign Wrap session</th>
-              <th>Amount</th>
-              <th>Transactions</th>
-              <th>Witnesses</th>
-            </tr>
-          </thead>
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Witness C</span>
+            </td>
+            <td>{{ item.signatureC ? "signed" : "..." }}</td>
+          </tr>
         </table>
       </div>
-      <div class="tbl-content">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <tbody>
-            <tr
-              v-for="item in mysessions"
-              :class="{ clickable: item.status === 'open' }"
-              @click="onRowClick(item)"
-              :key="item.sessionId"
-            >
-              <td>{{ item.shortsessionId }}</td>
-              <td>{{ item.amount }}</td>
-              <td>
-                <ul style="list-style-type:none;padding-left:0px;">
-                  <li v-for="txId in item.txIds" :key="txId">
-                    <a
-                      @click.stop=""
-                      :href="item.explorerUrl + txId"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >{{ txId || "..." }}</a
-                    >
-                  </li>
-                </ul>
-              </td>
-              <td>
-                <ul style="list-style-type:none;padding-left:0px;">
-                  <li>{{ item.signatureA ? "signed" : "..." }}</li>
-                  <li>{{ item.signatureB ? "signed" : "..." }}</li>
-                  <li>{{ item.signatureC ? "signed" : "..." }}</li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div class="d-none d-sm-block">
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>Sign Wrap session</th>
+                <th>Amount</th>
+                <th>Transactions</th>
+                <th>Witnesses</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr
+                v-for="item in mysessions"
+                :class="{ clickable: item.status === 'open' }"
+                @click="onRowClick(item)"
+                :key="item.sessionId"
+              >
+                <td>{{ item.shortsessionId }}</td>
+                <td>{{ item.amount }}</td>
+                <td>
+                  <ul style="list-style-type:none;padding-left:0px;">
+                    <li v-for="txId in item.txIds" :key="txId">
+                      <a
+                        @click.stop=""
+                        :href="item.explorerUrl + txId"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >{{ txId || "..." }}</a
+                      >
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <ul style="list-style-type:none;padding-left:0px;">
+                    <li>{{ item.signatureA ? "signed" : "..." }}</li>
+                    <li>{{ item.signatureB ? "signed" : "..." }}</li>
+                    <li>{{ item.signatureC ? "signed" : "..." }}</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  </collapse-transition>
 </template>
 
 <script>
+import CollapseTransition from "@/components/CollapseTransition.vue";
 import axios from "axios";
 import Web3 from "web3";
 
@@ -120,6 +129,18 @@ import {
 export default {
   props: {
     propsaccounts: Array, // will use first account only
+  },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv, oldValue) {
+        // console.log("getWrapSessions ", nv);
+        this.mysessions = [];
+
+        this.getWrapSessions();
+      },
+      immediate: true,
+    },
   },
 
   data() {
@@ -182,7 +203,9 @@ export default {
         const id = this.propsaccounts[0];
 
         if (!!id && (this.testing || getSignAccounts().includes(id))) {
-          const res = await axios.get(this.endpoints(id).signwrapsessions, {headers: {network: this.$store.state.network}});
+          const res = await axios.get(this.endpoints(id).signwrapsessions, {
+            headers: { network: this.$store.state.network },
+          });
 
           if (!!res && !!res.data && !!res.data.data) {
             let sessions = res.data.data;
@@ -257,6 +280,10 @@ export default {
         });
       }
     },
+  },
+
+  components: {
+    CollapseTransition,
   },
 };
 </script>
