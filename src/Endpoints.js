@@ -15,7 +15,7 @@ const isNullOrEmpty = function(value) {
 };
 
 export function getMinAmount() {
-  return isDeveloping ? 1.0 : 10.0;
+  return isDeveloping || isTesting ? 1.0 : 10.0;
 }
 
 export function getContractAddress(network) {
@@ -62,13 +62,15 @@ export function getSignAccounts() {
     "0xc6999670a636fb21F3ba1D49F8b185424EAEE5Df",
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
     "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
-    "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1"
-    
+    "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
   ];
 }
 export function getOwnerAccounts() {
-  //return ["0xF02594A6335E7340109d75E771D7716c395bd995"];
-  return ["0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"];
+  isDeveloping
+    ? "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"
+    : isTesting
+    ? "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"
+    : "0xF02594A6335E7340109d75E771D7716c395bd995";
 }
 
 //todo change these vars:
