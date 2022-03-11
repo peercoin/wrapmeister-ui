@@ -66,7 +66,7 @@ export function getSignAccounts() {
   ];
 }
 export function getOwnerAccounts() {
-  isDeveloping
+  return isDeveloping
     ? "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"
     : isTesting
     ? "0x8809465617E09405a1af06C2d93C2bcE0Ce5Ac80"
