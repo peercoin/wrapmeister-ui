@@ -94,7 +94,7 @@ export default {
           this.amount = amountnumber > 0 ? "" + amountnumber : "";
         }
 
-        const storagedata = await axios.get(this.endpoints().storageAddress);
+        const storagedata = await axios.get(this.endpoints().storageAddress, {headers: {network: nw}});
         if (!!storagedata && !!storagedata.data && !!storagedata.data.data) {
           this.peercoinAddressStorage = storagedata.data.data;
 

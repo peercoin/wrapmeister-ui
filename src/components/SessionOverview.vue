@@ -1,75 +1,80 @@
 <template>
-  <div v-if="showTable" class="table-overview">
-    <div class="d-sm-none">
-      <table
-        cellpadding="0"
-        cellspacing="0"
-        border="0"
-        v-for="item in mysessions"
-        class="tbl-content mb-3"
-        :class="{ clickable: item.status === 'open' }"
-        @click="onRowClick(item)"
-        :key="item.sessionId"
-      >
-        <tr>
-          <td class="tbl-header">
-            <span class="headertext">Wrap session</span>
-          </td>
-          <td>{{ item.sessionId }}</td>
-        </tr>
+  <collapse-transition>
+    <div v-if="showTable" class="table-overview">
+      <div class="d-sm-none">
+        <table
+          cellpadding="0"
+          cellspacing="0"
+          border="0"
+          v-for="item in mysessions"
+          class="tbl-content mb-3"
+          :class="{ clickable: item.status === 'open' }"
+          @click="onRowClick(item)"
+          :key="item.sessionId"
+        >
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Wrap session</span>
+            </td>
+            <td>{{ item.sessionId }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Direction</span></td>
-          <td class="to-upper">{{ item.direction }}</td>
-        </tr>
+          <tr>
+            <td class="tbl-header">
+              <span class="headertext">Direction</span>
+            </td>
+            <td class="to-upper">{{ item.direction }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Amount</span></td>
-          <td>{{ item.amount }}</td>
-        </tr>
+          <tr>
+            <td class="tbl-header"><span class="headertext">Amount</span></td>
+            <td>{{ item.amount }}</td>
+          </tr>
 
-        <tr>
-          <td class="tbl-header"><span class="headertext">Status</span></td>
-          <td class="to-upper">{{ item.status }}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="d-none d-sm-block">
-      <div class="tbl-header">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <thead>
-            <tr>
-              <th>Wrap session</th>
-              <th>Direction</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+          <tr>
+            <td class="tbl-header"><span class="headertext">Status</span></td>
+            <td class="to-upper">{{ item.status }}</td>
+          </tr>
         </table>
       </div>
-      <div class="tbl-content ">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <tbody>
-            <tr
-              v-for="item in mysessions"
-              :class="{ clickable: item.status === 'open' }"
-              @click="onRowClick(item)"
-              :key="item.sessionId"
-            >
-              <td>{{ item.shortsessionId }}</td>
-              <td class="to-upper">{{ item.direction }}</td>
-              <td>{{ item.amount }}</td>
-              <td class="to-upper">{{ item.status }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="d-none d-sm-block">
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>Wrap session</th>
+                <th>Direction</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content ">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr
+                v-for="item in mysessions"
+                :class="{ clickable: item.status === 'open' }"
+                @click="onRowClick(item)"
+                :key="item.sessionId"
+              >
+                <td>{{ item.shortsessionId }}</td>
+                <td class="to-upper">{{ item.direction }}</td>
+                <td>{{ item.amount }}</td>
+                <td class="to-upper">{{ item.status }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <div class="filler"></div>
     </div>
-    <div class="filler"></div>
-  </div>
+  </collapse-transition>
 </template>
 
 <script>
+import CollapseTransition from "@/components/CollapseTransition.vue";
 import axios from "axios";
 import { wrapEndpoints } from "@/Endpoints.js";
 import Web3 from "web3";
@@ -79,6 +84,18 @@ export default {
 
   props: {
     propsaccounts: Array, // will use first account only, which is always 1 as selectedAccount contains 1
+  },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv, oldValue) {
+        // console.log("getWrapSessions ", nv);
+        this.mysessions = [];
+
+        this.getWrapSessions();
+      },
+      immediate: true,
+    },
   },
 
   data() {
@@ -139,7 +156,9 @@ export default {
       try {
         const id = this.propsaccounts[0];
 
-        const res = await axios.get(this.endpoints(id).openwrapsessions);
+        const res = await axios.get(this.endpoints(id).openwrapsessions, {
+          headers: { network: this.$store.state.network },
+        });
 
         if (!!res && !!res.data && !!res.data.data) {
           let sessions = res.data.data;
@@ -210,6 +229,10 @@ export default {
       }
       return id;
     },
+  },
+
+  components: {
+    CollapseTransition,
   },
 };
 </script>
