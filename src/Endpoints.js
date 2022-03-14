@@ -100,7 +100,7 @@ export function getNetworks() {
     {
       key: "MATIC_TESTNET",
       description: "Polygon (Matic) - Testnet",
-      active: true,
+      active: false,
       contract: "0x21d28F6bf00762857081b2F628227C8d059C6557",
       pagetitle: "Peercoin ↔ Polygon (Matic) Bridge",
       viewContractUrl: "",
@@ -142,7 +142,7 @@ export function getNetworks() {
     {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
-      active: true,
+      active: false,
       contract: "0x922C1c68355e8B1b1769388Ad096bd4171CB08ee",
       pagetitle: "Peercoin - Ethereum Bridge",
       viewContractUrl:
