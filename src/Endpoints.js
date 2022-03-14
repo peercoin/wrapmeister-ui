@@ -63,6 +63,8 @@ export function getSignAccounts() {
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
     "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
+    "0x25c1cA465E71A5C9c162ce3030E48b546f867617",
+    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508"
   ];
 }
 export function getOwnerAccounts() {
