@@ -63,6 +63,8 @@ export function getSignAccounts() {
     "0xf6882FB86c017d708BADFBE816442411B2ad2dd7",
     "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
+    "0x25c1cA465E71A5C9c162ce3030E48b546f867617",
+    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508"
   ];
 }
 export function getOwnerAccounts() {
@@ -77,6 +79,24 @@ export function getOwnerAccounts() {
 //default is the first active network
 export function getNetworks() {
   return [
+    {
+      key: "ETH_MAINNET",
+      description: "Ethereum (ETH)",
+      active: true,
+      contract: "0x044d078F1c86508e13328842Cc75AC021B272958",
+      pagetitle: "Peercoin - Ethereum Bridge",
+      viewContractUrl:
+        "https://etherscan.io/address/0x044d078F1c86508e13328842Cc75AC021B272958",
+      accountTotalUrl:
+        "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x044d078F1c86508e13328842Cc75AC021B272958&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
+      officialTotalUrl:
+        "https://etherscan.io/token/0x044d078F1c86508e13328842Cc75AC021B272958?a={{{id}}}",
+
+      tokenSymbol: "wPPC",
+      tokenDecimals: 6,
+      tokenImage:
+        "https://raw.githubusercontent.com/peercoin/media/master/Peercoin%202020%20Logo%20Files/01.%20Icon%20Only/Inside%20Circle/Transparent/Green%20Icon/peercoin-icon-green-transparent.svg",
+    },
     {
       key: "BSC_TESTNET",
       description: "Binance Smart Chain (BSC) - Testnet",
@@ -116,24 +136,6 @@ export function getNetworks() {
       viewContractUrl: "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
       accountTotalUrl: "https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65&apikey=C8GGCB1EJABJ5TXC3WTKGUGTHUUISWCJ11",
       officialTotalUrl: "https://polygonscan.com/token/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65?a={{{id}}}",
-      tokenSymbol: "wPPC",
-      tokenDecimals: 6,
-      tokenImage:
-        "https://raw.githubusercontent.com/peercoin/media/master/Peercoin%202020%20Logo%20Files/01.%20Icon%20Only/Inside%20Circle/Transparent/Green%20Icon/peercoin-icon-green-transparent.svg",
-    },
-    {
-      key: "ETH_MAINNET",
-      description: "Ethereum (ETH)",
-      active: true,
-      contract: "0x044d078F1c86508e13328842Cc75AC021B272958",
-      pagetitle: "Peercoin - Ethereum Bridge",
-      viewContractUrl:
-        "https://etherscan.io/address/0x044d078F1c86508e13328842Cc75AC021B272958",
-      accountTotalUrl:
-        "https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x044d078F1c86508e13328842Cc75AC021B272958&apikey=DMB9CZKSZP56AJK2Z7BZPHH61ZVQ58IYHQ",
-      officialTotalUrl:
-        "https://etherscan.io/token/0x044d078F1c86508e13328842Cc75AC021B272958?a={{{id}}}",
-
       tokenSymbol: "wPPC",
       tokenDecimals: 6,
       tokenImage:
