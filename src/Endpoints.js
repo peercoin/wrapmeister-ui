@@ -114,8 +114,8 @@ export function getNetworks() {
       contract: "0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
       pagetitle: "Peercoin ↔ Polygon Bridge",
       viewContractUrl: "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
-      accountTotalUrl: "",
-      officialTotalUrl: "",
+      accountTotalUrl: "https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65&apikey=C8GGCB1EJABJ5TXC3WTKGUGTHUUISWCJ11",
+      officialTotalUrl: "https://polygonscan.com/token/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65?a={{{id}}}",
       tokenSymbol: "wPPC",
       tokenDecimals: 6,
       tokenImage:
