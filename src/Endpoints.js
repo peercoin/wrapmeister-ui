@@ -64,7 +64,7 @@ export function getSignAccounts() {
     "0xddFbc2dd1692e16Fd60e442a7251461903393A69",
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
     "0x25c1cA465E71A5C9c162ce3030E48b546f867617",
-    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508"
+    "0x2fdA056131C98AACb6893fbbbA772D7379f5B508",
   ];
 }
 export function getOwnerAccounts() {
@@ -135,11 +135,18 @@ export function getNetworks() {
       description: "Polygon (Matic)",
       active: true,
       chainId: "0x89",
+      chainName: "Polygon Mainnet",
+      nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+      rpcUrls: ["https://polygon-rpc.com"],
+      blockExplorerUrls: ["https://www.polygonscan.com"],
       contract: "0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
       pagetitle: "Peercoin ↔ Polygon Bridge",
-      viewContractUrl: "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
-      accountTotalUrl: "https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65&apikey=C8GGCB1EJABJ5TXC3WTKGUGTHUUISWCJ11",
-      officialTotalUrl: "https://polygonscan.com/token/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65?a={{{id}}}",
+      viewContractUrl:
+        "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
+      accountTotalUrl:
+        "https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65&apikey=C8GGCB1EJABJ5TXC3WTKGUGTHUUISWCJ11",
+      officialTotalUrl:
+        "https://polygonscan.com/token/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65?a={{{id}}}",
       tokenSymbol: "wPPC",
       tokenDecimals: 6,
       tokenImage:

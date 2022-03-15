@@ -127,8 +127,8 @@ export default {
       await this.switchEthereumChain(newoption.network);
     },
 
-    async switchEthereumChain(network) {
-      if (!window.ethereum || !network) return;
+    async switchEthereumChain(network) { 
+      if (!this.$store.state.account || !window.ethereum || !network) return;
       const ne = getNetworks().find((nw) => nw.key === network);
       if (!ne || !ne.chainId) return;
 
@@ -138,28 +138,32 @@ export default {
           params: [{ chainId: ne.chainId }],
         });
       } catch (e) {
-        // if (e.code === 4902) {
-        //   try {
-        //     await window.ethereum.request({
-        //       method: 'wallet_addEthereumChain',
-        //       params: [
-        //         {
-        //           chainId: '0x61',
-        //           chainName: 'Smart Chain - Testnet',
-        //           nativeCurrency: {
-        //             name: 'Binance',
-        //             symbol: 'BNB', // 2-6 characters long
-        //             decimals: 18
-        //           },
-        //           blockExplorerUrls: ['https://testnet.bscscan.com'],
-        //           rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-        //         },
-        //       ],
-        //     });
-        //   } catch (addError) {
-        //     console.error(addError);
-        //   }
-        // }
+        if (
+          e.code === 4902 &&
+          !!ne.chainId &&
+          !!ne.chainName &&
+          !!ne.nativeCurrency &&
+          !!ne.blockExplorerUrls &&
+          !!ne.rpcUrls
+        ) {
+          console.log("wallet_addEthereumChain");
+          try {
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: ne.chainId,
+                  chainName: ne.chainName,
+                  nativeCurrency: ne.nativeCurrency,
+                  blockExplorerUrls: ne.blockExplorerUrls,
+                  rpcUrls: ne.rpcUrls,
+                },
+              ],
+            });
+          } catch (addError) {
+            console.error(addError);
+          }
+        }
         //console.error(e);
       }
     },
