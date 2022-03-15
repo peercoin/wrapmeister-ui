@@ -122,8 +122,46 @@ export default {
   },
 
   methods: {
-    onOptionSelectChange: function(newoption) {
+    async onOptionSelectChange(newoption) {
       this.$store.commit("setNetwork", newoption.network);
+      await this.switchEthereumChain(newoption.network);
+    },
+
+    async switchEthereumChain(network) {
+      if (!window.ethereum || !network) return;
+      const ne = getNetworks().find((nw) => nw.key === network);
+      if (!ne || !ne.chainId) return;
+
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: ne.chainId }],
+        });
+      } catch (e) {
+        // if (e.code === 4902) {
+        //   try {
+        //     await window.ethereum.request({
+        //       method: 'wallet_addEthereumChain',
+        //       params: [
+        //         {
+        //           chainId: '0x61',
+        //           chainName: 'Smart Chain - Testnet',
+        //           nativeCurrency: {
+        //             name: 'Binance',
+        //             symbol: 'BNB', // 2-6 characters long
+        //             decimals: 18
+        //           },
+        //           blockExplorerUrls: ['https://testnet.bscscan.com'],
+        //           rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+        //         },
+        //       ],
+        //     });
+        //   } catch (addError) {
+        //     console.error(addError);
+        //   }
+        // }
+        //console.error(e);
+      }
     },
   },
 

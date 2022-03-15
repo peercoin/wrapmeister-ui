@@ -102,12 +102,12 @@ export default {
           if (isValidAddress(this.peercoinAddressStorage, "prod")) {
             storageDetails = await axios.get(
               this.endpoints(this.peercoinAddressStorage)
-                .APIaddressPeercoinExplorer
+                .apiaddressPeercoinExplorer
             );
           } else if (isValidAddress(this.peercoinAddressStorage, "both")) {
             storageDetails = await axios.get(
               this.endpoints(this.peercoinAddressStorage)
-                .APIaddressPeercoinExplorerTest
+                .apiaddressPeercoinExplorerTest
             );
           }
 
