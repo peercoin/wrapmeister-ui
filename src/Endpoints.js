@@ -1,6 +1,6 @@
 //todo change these vars:
 const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
-const isTesting = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+const isTesting = true; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
 
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
@@ -44,8 +44,8 @@ export function wrapEndpoints(id) {
     session: `${_host}/api/v1/sessions/${id}`,
     addressPeercoinExplorerTest: `https://tblockbook.peercoin.net/address/${id}`, //id is address
     addressPeercoinExplorer: `https://blockbook.peercoin.net/address/${id}`, //id is address
-    APIaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
-    APIaddressPeercoinExplorer: `https://blockbook.peercoin.net/api/address/${id}`, //id is address
+    apiaddressPeercoinExplorerTest: `https://tblockbook.peercoin.net/api/address/${id}`, //id is address
+    apiaddressPeercoinExplorer: `https://blockbook.peercoin.net/api/address/${id}`, //id is address
     openwrapsessions: `${_host}/api/v1/sessions?address[]=${id}`, // id is metamask account here
     signwrapsessions: `${_host}/api/v1/sessions/unsigned`,
     sign: `${_host}/api/v1/sessions/${id}/sign`, // id is metamask account here
@@ -83,6 +83,7 @@ export function getNetworks() {
       key: "ETH_MAINNET",
       description: "Ethereum (ETH)",
       active: true,
+      chainId: "0x1",
       contract: "0x044d078F1c86508e13328842Cc75AC021B272958",
       pagetitle: "Peercoin - Ethereum Bridge",
       viewContractUrl:
@@ -101,6 +102,7 @@ export function getNetworks() {
       key: "BSC_TESTNET",
       description: "Binance Smart Chain (BSC) - Testnet",
       active: false,
+      chainId: "0x61",
       contract: "0xd11C56F90481062D3e99eA72Df816Dc768BaAeE1",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl: "",
@@ -111,6 +113,7 @@ export function getNetworks() {
       key: "BSC_MAINNET",
       description: "Binance Smart Chain (BSC)",
       active: false,
+      chainId: "0x38",
       contract: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       pagetitle: "Peercoin ↔ Ethereum Bridge",
       viewContractUrl: "",
@@ -131,6 +134,7 @@ export function getNetworks() {
       key: "MATIC_MAINNET",
       description: "Polygon (Matic)",
       active: true,
+      chainId: "0x89",
       contract: "0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
       pagetitle: "Peercoin ↔ Polygon Bridge",
       viewContractUrl: "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
