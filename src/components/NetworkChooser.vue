@@ -146,7 +146,7 @@ export default {
           !!ne.blockExplorerUrls &&
           !!ne.rpcUrls
         ) {
-          console.log("wallet_addEthereumChain");
+          //console.log("wallet_addEthereumChain");
           try {
             await window.ethereum.request({
               method: "wallet_addEthereumChain",
