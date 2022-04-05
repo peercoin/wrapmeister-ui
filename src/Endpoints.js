@@ -1,6 +1,6 @@
 //todo change these vars:
 const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
-const isTesting = true; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+const isTesting = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
 
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
@@ -65,6 +65,7 @@ export function getSignAccounts() {
     "0x2A4727fA1b6B13F670093a8bF91631cf0c7F46E1",
     "0x25c1cA465E71A5C9c162ce3030E48b546f867617",
     "0x2fdA056131C98AACb6893fbbbA772D7379f5B508",
+    "0x7b79850b6d3aB66edaffF2a21860972a1dD2e407"
   ];
 }
 export function getOwnerAccounts() {
