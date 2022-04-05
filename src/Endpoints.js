@@ -1,6 +1,6 @@
 //todo change these vars:
 const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
-const isTesting = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+const isTesting = true; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
 
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
