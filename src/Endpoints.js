@@ -97,7 +97,7 @@ export function getNetworks() {
       tokenSymbol: "wPPC",
       tokenDecimals: 6,
       tokenImage:
-        "https://raw.githubusercontent.com/peercoin/media/12d41c4/Peercoin%202021%20Logo%20Files/01.%20Leaf%20Logo%20Only/Inside%20Circle/peercoin-icon-green-transparent.svg",
+        "https://www.peercoin.net/img/logos/icononly/insidecircle/Transparent/GreenIcon/peercoin-icon-green-transparent.svg",
     },
     {
       key: "BSC_TESTNET",
@@ -151,7 +151,7 @@ export function getNetworks() {
       tokenSymbol: "wPPC",
       tokenDecimals: 6,
       tokenImage:
-        "https://raw.githubusercontent.com/peercoin/media/12d41c4/Peercoin%202021%20Logo%20Files/01.%20Leaf%20Logo%20Only/Inside%20Circle/peercoin-icon-green-transparent.svg",
+        "https://www.peercoin.net/img/logos/icononly/insidecircle/Transparent/GreenIcon/peercoin-icon-green-transparent.svg",
     },
     {
       key: "ETH_TESTNET",
