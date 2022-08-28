@@ -1,6 +1,6 @@
 //todo change these vars:
 const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
-const isTesting = true; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+const isTesting = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
 
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"
@@ -15,7 +15,7 @@ const isNullOrEmpty = function(value) {
 };
 
 export function getMinAmount() {
-  return isDeveloping || isTesting ? 1.0 : 10.0;
+  return isDeveloping || isTesting ? 1.0 : 50.0;
 }
 
 export function getContractAddress(network) {
