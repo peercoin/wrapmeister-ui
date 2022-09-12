@@ -25,7 +25,7 @@
       <input
         id="sessionamount"
         class="form-control wrapinput"
-        :class="{ invalid: !validAmount }"
+        :class="{ invalid: !aboveMinAmount }"
         type="number"
         v-model="amount"
         @keypress="onlyForCurrency"
@@ -90,7 +90,7 @@
       <input
         id="sessionamount"
         class="form-control wrapinput"
-        :class="{ invalid: !validAmount }"
+        :class="{ invalid: !aboveMinAmount }"
         type="number"
         v-model="amount"
         @keypress="onlyForCurrency"
@@ -209,6 +209,10 @@ export default {
         }
       }
       return "";
+    },
+
+    aboveMinAmount() {
+      return this.validAmount && !this.minAmountNotExceeded;
     },
 
     validForm() {

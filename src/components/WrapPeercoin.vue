@@ -34,7 +34,7 @@
       <input
         id="sessionamount"
         class="form-control wrapinput"
-        :class="{ invalid: !validAmount }"
+        :class="{ invalid: !aboveMinAmount }"
         type="number"
         v-model="amount"
         :readonly="!!session && !!session._id"
@@ -165,7 +165,7 @@
       <input
         id="sessionamount"
         class="form-control wrapinput"
-        :class="{ invalid: !validAmount }"
+        :class="{ invalid: !aboveMinAmount }"
         type="number"
         v-model="amount"
         :readonly="!!session && !!session._id"
@@ -498,6 +498,10 @@ export default {
         );
       }
       return "";
+    },
+
+    aboveMinAmount() {
+      return this.validAmount && !this.minAmountNotExceeded;
     },
 
     validForm() {
