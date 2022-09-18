@@ -274,7 +274,7 @@ export default {
         this.gotoHome(
           "Successfully burned " +
             this.amount +
-            " wPPC. Please be patient as your Peercoins are unwrapped. This process can take up to 12 hours."
+            " wPPC. Please be patient as your Peercoins are unwrapped. This process can take up to 24 hours."
         );
       } catch (error) {
         this.unwrapstatus = "";
