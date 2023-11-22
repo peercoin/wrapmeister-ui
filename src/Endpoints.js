@@ -15,7 +15,7 @@ const isNullOrEmpty = function(value) {
 };
 
 export function getMinAmount() {
-  return isDeveloping || isTesting ? 1.0 : 50.0;
+  return isDeveloping || isTesting ? 1.0 : 250.0;
 }
 
 export function getContractAddress(network) {
