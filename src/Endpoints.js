@@ -121,38 +121,7 @@ export function getNetworks() {
       accountTotalUrl: "",
       officialTotalUrl: "",
     },
-    {
-      key: "MATIC_TESTNET",
-      description: "Polygon (Matic) - Testnet",
-      active: false,
-      contract: "0x21d28F6bf00762857081b2F628227C8d059C6557",
-      pagetitle: "Peercoin ↔ Polygon (Matic) Bridge",
-      viewContractUrl: "",
-      accountTotalUrl: "",
-      officialTotalUrl: "",
-    },
-    {
-      key: "MATIC_MAINNET",
-      description: "Polygon (Matic)",
-      active: true,
-      chainId: "0x89",
-      chainName: "Polygon Mainnet",
-      nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-      rpcUrls: ["https://polygon-rpc.com"],
-      blockExplorerUrls: ["https://www.polygonscan.com"],
-      contract: "0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
-      pagetitle: "Peercoin ↔ Polygon Bridge",
-      viewContractUrl:
-        "https://polygonscan.com/address/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65",
-      accountTotalUrl:
-        "https://api.polygonscan.com/api?module=stats&action=tokensupply&contractaddress=0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65&apikey=C8GGCB1EJABJ5TXC3WTKGUGTHUUISWCJ11",
-      officialTotalUrl:
-        "https://polygonscan.com/token/0x91E7E32C710661C44ae44D10Aa86135d91C3Ed65?a={{{id}}}",
-      tokenSymbol: "wPPC",
-      tokenDecimals: 6,
-      tokenImage:
-        "https://www.peercoin.net/img/logos/icononly/insidecircle/Transparent/GreenIcon/peercoin-icon-green-transparent.svg",
-    },
+
     {
       key: "ETH_TESTNET",
       description: "Ethereum (ETH) - Testnet",
