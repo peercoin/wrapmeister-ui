@@ -180,7 +180,9 @@ export default {
     },
 
     onWrapClick() {
-    //  this.$emit("wrapaction-current", 1);
+       //  this.$emit("wrapaction-current", 1);
+       const url = "https://talk.peercoin.net/t/wrapmeister-wrap-side-outage/16670";
+       window.open(url, '_blank').focus();
     },
 
     onUnwrapClick() {
