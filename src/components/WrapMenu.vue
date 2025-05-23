@@ -180,7 +180,7 @@ export default {
     },
 
     onWrapClick() {
-      this.$emit("wrapaction-current", 1);
+    //  this.$emit("wrapaction-current", 1);
     },
 
     onUnwrapClick() {
