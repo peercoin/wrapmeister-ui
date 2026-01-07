@@ -22,6 +22,7 @@
                 <unwrap-peercoin
                   :propsaccounts="selectedAccount"
                   :propnetwork="propnetwork"
+                  :on-burn-tokens="burnTokens"
                 />
               </div>
             </div>
@@ -36,8 +37,9 @@
 import UnwrapPeercoin from "@/components/UnwrapPeercoin.vue";
 import WrapHeader from "@/components/WrapHeader.vue";
 import ArrowLeft from "@/components/ArrowLeft.vue";
-import { getNetworks } from "@/Endpoints.js";
+import { getContractAddress, getNetworks } from "@/Endpoints.js";
 import Web3 from "web3";
+import ABI from "@/abi/erc20.json";
 
 //this view is to show the unwrap form
 export default {
@@ -133,6 +135,84 @@ export default {
       }
 
       return [];
+    },
+
+    async burnTokens({ session, destinationPPCAddress, amount }) {
+      if (!window.ethereum) {
+        this.eventBus.emit("add-toastr", {
+          text: "MetaMask is required to burn tokens",
+          type: "error",
+        });
+        return false;
+      }
+
+      if (
+        !session ||
+        !session.amount ||
+        !session.network ||
+        !destinationPPCAddress
+      ) {
+        this.eventBus.emit("add-toastr", {
+          text: "Missing unwrap details",
+          type: "error",
+        });
+        return false;
+      }
+
+      const contractAddress = getContractAddress(session.network);
+      if (!contractAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: `No contract address found for network ${session.network}`,
+          type: "error",
+        });
+        return false;
+      }
+
+      const fromAddress = session.ERC20Address || this.$store.state.account;
+      if (!fromAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: "No connected account found in MetaMask",
+          type: "error",
+        });
+        return false;
+      }
+
+      const displayAmount = amount || session.amount;
+
+      try {
+        await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        const web3 = new Web3(ethereum);
+        const contract = new web3.eth.Contract(ABI, contractAddress, {
+          from: fromAddress,
+        });
+
+        const decimals = await contract.methods.decimals().call();
+
+        await contract.methods
+          .burnTokens(session.amount * 10 ** decimals, destinationPPCAddress)
+          .send();
+
+        this.eventBus.emit("add-toastr", {
+          text:
+            "Successfully burned " +
+            displayAmount +
+            " wPPC. Please be patient as your Peercoins are unwrapped. This process can take up to 24 hours.",
+          type: "success",
+        });
+
+        this.gotoHome();
+        return true;
+      } catch (error) {
+        console.log(error);
+        this.eventBus.emit("add-toastr", {
+          text: "Unable to burn tokens",
+          type: "error",
+        });
+        return false;
+      }
     },
 
     gotoHome() {
