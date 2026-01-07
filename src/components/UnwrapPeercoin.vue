@@ -139,13 +139,13 @@
 
     <!-- all views -->
 
-    <div class="row mb-2" v-show="validForm && !callingunwrap">
+    <div class="row mb-2" v-show="!callingunwrap">
       <div class="col-xs-12 mt-3">
         <button
           type="button"
           :class="{ btn: true, 'btn-outline-success': true }"
           @click="unwrap"
-          :disabled="!validForm"
+          :disabled="callingunwrap"
         >
           REDEEM WRAPPED PEERCOIN
         </button>
@@ -194,6 +194,15 @@ export default {
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
     }
+  },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv) {
+        this.network = nv || "";
+      },
+      immediate: true,
+    },
   },
 
   computed: {
@@ -257,12 +266,54 @@ export default {
     },
 
     async unwrap() {
-      if (!this.validForm || !this.onBurnTokens) return;
+      if (this.callingunwrap || !this.onBurnTokens) return;
+
+      const selectedNetwork = this.$store.state.network || this.network;
+      if (!selectedNetwork) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please select a network",
+          type: "error",
+        });
+        return;
+      }
+      this.network = selectedNetwork;
+
+      if (!this.validAmount) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please enter a valid amount",
+          type: "error",
+        });
+        return;
+      }
+
+      if (this.minAmountNotExceeded) {
+        this.eventBus.emit("add-toastr", {
+          text: `Minimum unwrap amount is ${this.minAmount} wPPC`,
+          type: "error",
+        });
+        return;
+      }
+
+      if (!this.validPPCAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please enter a valid Peercoin address",
+          type: "error",
+        });
+        return;
+      }
+
+      if (!this.destinationETHAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please connect MetaMask",
+          type: "error",
+        });
+        return;
+      }
 
       this.callingunwrap = true;
       this.session = {
         amount: parseFloat(this.amount),
-        network: this.network,
+        network: selectedNetwork,
         ERC20Address: this.destinationETHAddress,
       };
       // show popup, then burn tokens:
