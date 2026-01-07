@@ -189,10 +189,8 @@ export default {
           from: fromAddress,
         });
 
-        const decimals = await contract.methods.decimals().call();
-
         await contract.methods
-          .burnTokens(session.amount * 10 ** decimals, destinationPPCAddress)
+          .burnTokens(session.amount * 10 ** 6, destinationPPCAddress)
           .send();
 
         this.eventBus.emit("add-toastr", {
