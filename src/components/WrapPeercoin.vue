@@ -301,7 +301,11 @@ import { clearIntervalAsync } from "set-interval-async";
 import VueQRCodeComponent from "vue-qrcode-component";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
 import Countdown from "@/components/Countdown.vue";
-import { getNetworks, getContractAddress } from "@/Endpoints.js";
+import {
+  getNetworks,
+  getContractAddress,
+  isBackendEnabled,
+} from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
@@ -537,6 +541,7 @@ export default {
 
     async getSession(id) {
       if (!id) return;
+      if (!isBackendEnabled()) return;
 
       try {
         const res = await axios.get(this.endpoints(id).session);
@@ -632,6 +637,14 @@ export default {
     },
 
     async wrap() {
+      if (!isBackendEnabled()) {
+        this.eventBus.emit("add-toastr", {
+          text: "Wrapping is disabled while the backend is offline",
+          type: "error",
+        });
+        return;
+      }
+
       let nb = parseFloat(this.amount);
       const data = {
         amount: nb,

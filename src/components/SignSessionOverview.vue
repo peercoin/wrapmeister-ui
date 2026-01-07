@@ -124,6 +124,7 @@ import {
   wrapEndpoints,
   getSignAccounts,
   getPeercoinExplorerUrl,
+  isBackendEnabled,
 } from "@/Endpoints.js";
 
 export default {
@@ -198,6 +199,10 @@ export default {
 
     async getWrapSessions() {
       if (this.propsaccounts.length === 0) return;
+      if (!isBackendEnabled()) {
+        this.mysessions = [];
+        return;
+      }
 
       try {
         const id = this.propsaccounts[0];
