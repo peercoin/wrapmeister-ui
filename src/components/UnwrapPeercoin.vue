@@ -236,11 +236,20 @@ export default {
   },
 
   methods: {
+    resetBurnState() {
+      this.comfirmedProceedMetaMask = false;
+      this.callingunwrap = false;
+      this.unwrapstatus = "";
+    },
+
     async onModalConfirm() {
       if (!this.comfirmedProceedMetaMask) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
-        if (!this.onBurnTokens) return;
+        if (!this.onBurnTokens) {
+          this.resetBurnState();
+          return;
+        }
 
         this.unwrapstatus = "Burning tokens on MetaMask";
         try {
@@ -250,8 +259,7 @@ export default {
             amount: this.amount,
           });
         } finally {
-          this.unwrapstatus = "";
-          this.callingunwrap = false;
+          this.resetBurnState();
         }
       }
     },
@@ -262,7 +270,7 @@ export default {
 
     onModalClose() {
       this.popupModal = false;
-      this.callingunwrap = false;
+      this.resetBurnState();
     },
 
     async unwrap() {
