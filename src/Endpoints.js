@@ -1,6 +1,11 @@
 //todo change these vars:
 const isDeveloping = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
 const isTesting = false; // <----------false for production-----!!!!!!!!!!!!!!!!!!!!
+export const BACKEND_ENABLED = false;
+
+export function isBackendEnabled() {
+  return BACKEND_ENABLED;
+}
 
 const APP_WRAPPERHOST = isDeveloping
   ? "http://localhost:3000"

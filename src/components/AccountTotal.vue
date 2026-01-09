@@ -22,7 +22,12 @@
 import axios from "axios";
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import { roundTo } from "@/helpers.js";
-import { getContractAddress, wrapEndpoints, getNetworks } from "@/Endpoints.js";
+import {
+  getContractAddress,
+  wrapEndpoints,
+  getNetworks,
+  isBackendEnabled,
+} from "@/Endpoints.js";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 
 export default {
@@ -94,7 +99,11 @@ export default {
           this.amount = amountnumber > 0 ? "" + amountnumber : "";
         }
 
-        const storagedata = await axios.get(this.endpoints().storageAddress, {headers: {network: nw}});
+        if (!isBackendEnabled()) return;
+
+        const storagedata = await axios.get(this.endpoints().storageAddress, {
+          headers: { network: nw },
+        });
         if (!!storagedata && !!storagedata.data && !!storagedata.data.data) {
           this.peercoinAddressStorage = storagedata.data.data;
 

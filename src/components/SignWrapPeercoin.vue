@@ -91,6 +91,7 @@ import {
   getNetworks,
   getContractAddress,
   getSignAccounts,
+  isBackendEnabled,
 } from "@/Endpoints.js";
 import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
@@ -175,6 +176,7 @@ export default {
   methods: {
     async getSession(id) {
       if (!id) return;
+      if (!isBackendEnabled()) return;
 
       try {
         const res = await axios.get(this.endpoints(id).session);
@@ -197,6 +199,15 @@ export default {
     },
 
     async sign() {
+      if (!isBackendEnabled()) {
+        this.eventBus.emit("add-toastr", {
+          text: "Signing is disabled while the backend is offline",
+          type: "error",
+        });
+        this.isSigning = false;
+        return;
+      }
+
       if (this.isSigning) return;
       this.isSigning = true;
       if (!this.web3) this.web3 = new Web3(ethereum);
