@@ -139,13 +139,13 @@
 
     <!-- all views -->
 
-    <div class="row mb-2" v-show="validForm && !callingunwrap">
+    <div class="row mb-2" v-show="!callingunwrap">
       <div class="col-xs-12 mt-3">
         <button
           type="button"
           :class="{ btn: true, 'btn-outline-success': true }"
           @click="unwrap"
-          :disabled="!validForm"
+          :disabled="callingunwrap"
         >
           REDEEM WRAPPED PEERCOIN
         </button>
@@ -155,17 +155,18 @@
 </template>
 
 <script>
-import Web3 from "web3";
-import axios from "axios";
-
-import { getNetworks, getContractAddress } from "@/Endpoints.js";
+import { getNetworks } from "@/Endpoints.js";
 import Modal from "@/components/Modal.vue";
-import ABI from "@/abi/erc20.json";
 import BaseWrapper from "@/components/BaseWrapper.vue";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
 
 export default {
   extends: BaseWrapper,
+
+  props: {
+    propsaccounts: Array,
+    onBurnTokens: Function,
+  },
 
   data() {
     return {
@@ -193,6 +194,15 @@ export default {
     if (Array.isArray(this.accounts) && this.accounts.length > 0) {
       this.destinationETHAddress = this.accounts[0];
     }
+  },
+
+  watch: {
+    "$store.state.network": {
+      handler: function(nv) {
+        this.network = nv || "";
+      },
+      immediate: true,
+    },
   },
 
   computed: {
@@ -226,11 +236,31 @@ export default {
   },
 
   methods: {
+    resetBurnState() {
+      this.comfirmedProceedMetaMask = false;
+      this.callingunwrap = false;
+      this.unwrapstatus = "";
+    },
+
     async onModalConfirm() {
       if (!this.comfirmedProceedMetaMask) {
         this.popupModal = false;
         this.comfirmedProceedMetaMask = true;
-        await this.burnTokens();
+        if (!this.onBurnTokens) {
+          this.resetBurnState();
+          return;
+        }
+
+        this.unwrapstatus = "Burning tokens on MetaMask";
+        try {
+          await this.onBurnTokens({
+            session: this.session,
+            destinationPPCAddress: this.destinationPPCAddress,
+            amount: this.amount,
+          });
+        } finally {
+          this.resetBurnState();
+        }
       }
     },
 
@@ -238,99 +268,64 @@ export default {
       this.popupModal = true;
     },
 
-    async burnTokens() {
-      this.unwrapstatus = "Burning tokens on MetaMask";
-      this.accounts = await this.getAccounts();
-
-      if (!this.accounts || this.accounts.length < 1) {
-        return;
-      }
-
-      const contractAddress = getContractAddress(this.session.network);
-      if (!contractAddress) {
-        return console.error(
-          "No contract address found for network: " + this.session.network
-        );
-      }
-
-      try {
-        if (!this.web3) this.web3 = new Web3(ethereum);
-
-        const contract = new this.web3.eth.Contract(ABI, contractAddress, {
-          from: this.session.ERC20Address,
-        });
-
-        const decimals = await contract.methods.decimals().call();
-
-        const result = await contract.methods
-          .burnTokens(
-            this.session.amount * 10 ** decimals,
-            this.destinationPPCAddress
-          )
-          .send();
-
-        this.unwrapstatus = "";
-        this.resetSession();
-        this.gotoHome(
-          "Successfully burned " +
-            this.amount +
-            " wPPC. Please be patient as your Peercoins are unwrapped. This process can take up to 24 hours."
-        );
-      } catch (error) {
-        this.unwrapstatus = "";
-      }
+    onModalClose() {
+      this.popupModal = false;
+      this.resetBurnState();
     },
 
     async unwrap() {
-      try {
-        this.callingunwrap = true;
+      if (this.callingunwrap || !this.onBurnTokens) return;
 
-        const response = await axios.post(this.endpoints().unwrap, null, {
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Expires: "0",
-            network: this.network,
-            "Idempotency-Key": this.requestId,
-          },
-          params: {
-            amount: this.amount,
-            PPCAddress: this.destinationPPCAddress,
-            ERC20Address: this.destinationETHAddress,
-          },
-        });
-
-        if (
-          !!response &&
-          !!response &&
-          !!response.data &&
-          !!response.data.data //&& !!response.data.data._id
-        ) {
-          const success =
-            !!response && !!response.data && !!response.data.message;
-
-          this.eventBus.emit("add-toastr", {
-            text: success ? response.data.message : `Unable to unwrap`,
-            type: success ? "success" : "error",
-          });
-
-          this.session = response.data.data;
-          // show popup, then burn tokens:
-          this.enableMetaMaskConfirmationModal();
-        }
-      } catch (err) {
-        if (
-          !!err.response &&
-          !!err.response.data &&
-          !!err.response.data.message
-        )
-          console.warn(err.response.data.message);
-
+      const selectedNetwork = this.$store.state.network || this.network;
+      if (!selectedNetwork) {
         this.eventBus.emit("add-toastr", {
-          text: `Unable to unwrap`,
+          text: "Please select a network",
           type: "error",
         });
+        return;
       }
+      this.network = selectedNetwork;
+
+      if (!this.validAmount) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please enter a valid amount",
+          type: "error",
+        });
+        return;
+      }
+
+      if (this.minAmountNotExceeded) {
+        this.eventBus.emit("add-toastr", {
+          text: `Minimum unwrap amount is ${this.minAmount} wPPC`,
+          type: "error",
+        });
+        return;
+      }
+
+      if (!this.validPPCAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please enter a valid Peercoin address",
+          type: "error",
+        });
+        return;
+      }
+
+      if (!this.destinationETHAddress) {
+        this.eventBus.emit("add-toastr", {
+          text: "Please connect MetaMask",
+          type: "error",
+        });
+        return;
+      }
+
+      this.callingunwrap = true;
+      this.session = {
+        amount: parseFloat(this.amount),
+        network: selectedNetwork,
+        ERC20Address: this.destinationETHAddress,
+      };
+      // show popup, then burn tokens:
+      this.enableMetaMaskConfirmationModal();
     },
   },
 

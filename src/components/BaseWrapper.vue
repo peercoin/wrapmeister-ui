@@ -1,7 +1,7 @@
 <template></template>
 
 <script>
-import { wrapEndpoints, getMinAmount } from "@/Endpoints.js";
+import { wrapEndpoints, getMinAmount, isBackendEnabled } from "@/Endpoints.js";
 import { isValidAddress } from "../crypto/peercoin-address-validation.js";
 import Web3 from "web3";
 
@@ -164,6 +164,7 @@ export default {
 
     // call u want a websocket connection()
     connect() {
+      if (!isBackendEnabled()) return;
       if (this.websocket !== null) return;
 
       if ("WebSocket" in window && !!this.endpoints().websocket) {

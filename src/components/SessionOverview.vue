@@ -76,7 +76,7 @@
 <script>
 import CollapseTransition from "@/components/CollapseTransition.vue";
 import axios from "axios";
-import { wrapEndpoints } from "@/Endpoints.js";
+import { wrapEndpoints, isBackendEnabled } from "@/Endpoints.js";
 import Web3 from "web3";
 
 export default {
@@ -152,6 +152,11 @@ export default {
 
     async getWrapSessions() {
       if (this.propsaccounts.length === 0) return;
+      if (!isBackendEnabled()) {
+        this.mysessions = [];
+        this.$emit("nrofsessions", 0);
+        return;
+      }
 
       try {
         const id = this.propsaccounts[0];
